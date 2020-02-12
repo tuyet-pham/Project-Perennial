@@ -1,9 +1,10 @@
 # Project Perenial
 
 **[Project Overview]**
-This project would be an automated watering system that measures the moisture in the soil. We would create a web application and allow the user to set up a timer to water the plant at various times throughout the week. We could add a system that allows the web application to manage various types of plants depending on what plant the user is taking care of. More features could always be added to improve home automation.
+```This project would be an automated watering system that measures the moisture in the soil. We would create a web application and allow the user to set up a timer to water the plant at various times throughout the week. We could add a system that allows the web application to manage various types of plants depending on what plant the user is taking care of. More features could always be added to improve home automation.
+```
 
-**[ Supplies/Hardware]**
+**[Supplies/Hardware]**
 1. Moisture Sensor 
 2. Mini water pumps
 3. Arduino Board
