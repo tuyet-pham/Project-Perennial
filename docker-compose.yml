@@ -1,0 +1,46 @@
+version: "3.2"
+
+# ---- Database
+services:
+  backend:
+    image: couchdb:latest
+    ports:
+      - 5986:5986
+      - 5984:5984
+    expose:
+      - 5986
+      - 5984
+    volumes:  
+      - project-perenial_db:/opt/couchdb/data
+      ## new database here
+    restart: always
+
+# ---- Django
+  django:
+    build: ./django
+    volumes:
+      - ./django:/app/django
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
+    command: python3 manage.py runserver 0.0.0.0:8000
+
+# ---- ReactJS
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend/my-app:/app
+      - node-modules:/app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - django
+    command: npm start
+
+# ---- Our volumes
+volumes:
+  project-perenial_db: 
+  node-modules:
