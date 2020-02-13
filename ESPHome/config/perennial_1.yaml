@@ -1,0 +1,36 @@
+esphome:
+  name: perennial_1
+  platform: ESP32
+  board: nodemcu-32s
+
+wifi:
+  networks:
+  - ssid: "GOTTFEM"
+    password: "password1"
+  - ssid: "Frontier5696"
+    password: "5919390335"
+  - ssid: "Tuyet1"
+    password: "apple123"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Perennial 1 Fallback Hotspot"
+    password: "eQFxPdt1HtJl"
+
+captive_portal:
+
+web_server:
+  port: 80
+
+api:
+
+# Enable logging
+logger:
+
+ota:
+
+sensor:
+  - platform: adc
+    pin: A0
+    name: "Living Room Brightness"
+    update_interval: 60s
