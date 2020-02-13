@@ -10,7 +10,7 @@ services:
     expose:
       - 5986
       - 5984
-    volumes:  
+    volumes:
       - project-perenial_db:/opt/couchdb/data
       ## new database here
     restart: always
@@ -31,7 +31,7 @@ services:
     build: ./frontend
     volumes:
       - ./frontend/my-app:/app
-      - node-modules:/app/node_modules
+      - ./frontend/my-app/node-modules:/app/node_modules
     ports:
       - "3000:3000"
     environment:
@@ -42,5 +42,5 @@ services:
 
 # ---- Our volumes
 volumes:
-  project-perenial_db: 
+  project-perenial_db:
   node-modules:
