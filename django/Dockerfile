@@ -4,10 +4,8 @@ FROM python:3.8-alpine
 # Adding backend directory to make absolute filepaths consistent across services
 WORKDIR /app/django
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        postgresql-client \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update \
+#     && apt-get upgrade
 
 # Install Python dependencies
 COPY requirements.txt /app/django

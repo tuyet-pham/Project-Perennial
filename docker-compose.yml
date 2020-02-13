@@ -25,13 +25,15 @@ services:
     stdin_open: true
     tty: true
     command: python3 manage.py runserver 0.0.0.0:8000
+    depends_on: 
+      - db
 
 # ---- ReactJS
   react:
-    build: ./frontend
+    build: ./reactfrontend/
     volumes:
-      - ./frontend/my-app:/app
-      - ./reactfrontend/node-modules:/app/node_modules
+      - ./reactfrontend/my-app:/app
+      - ./reactfrontend/my-app/node-modules:/app/node_modules
     ports:
       - "3000:3000"
     environment:
