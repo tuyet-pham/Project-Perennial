@@ -2,7 +2,7 @@ version: "3.2"
 
 # ---- Database
 services:
-  backend:
+  db:
     image: couchdb:latest
     ports:
       - 5986:5986
@@ -27,11 +27,11 @@ services:
     command: python3 manage.py runserver 0.0.0.0:8000
 
 # ---- ReactJS
-  frontend:
+  react:
     build: ./frontend
     volumes:
       - ./frontend/my-app:/app
-      - ./frontend/my-app/node-modules:/app/node_modules
+      - ./reactfrontend/node-modules:/app/node_modules
     ports:
       - "3000:3000"
     environment:
