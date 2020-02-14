@@ -21,7 +21,9 @@ services:
     volumes:
       - ./django:/app/django
     ports:
-      - "8000:8000"
+      - 8000:8000
+    expose:
+      - 8000
     stdin_open: true
     tty: true
     command: python3 manage.py runserver 0.0.0.0:8000
@@ -33,9 +35,9 @@ services:
     build: ./reactfrontend/
     volumes:
       - ./reactfrontend/my-app:/app
-      - ./reactfrontend/my-app/node-modules:/app/node_modules
+      - ./reactfrontend/my-app/node-modules:/app/node-modules
     ports:
-      - "3000:3000"
+      - 3000:3000
     environment:
       - NODE_ENV=development
     depends_on:
