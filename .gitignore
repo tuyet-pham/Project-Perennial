@@ -1,0 +1,11 @@
+# git
+.vscode
+*.csv
+.env
+env
+venv
+.mypy_cache
+__pycache__
+
+# dependencies
+/node_modules
