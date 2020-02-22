@@ -16,15 +16,14 @@ services:
     restart: always
 
 # ---- Django
-  django:
-    build: ./django
+  djangobackend:
+    build: ./djangobackend
     volumes:
-      - ./django:/app/django
+      - ./djangobackend/:/app/django
     ports:
       - 8000:8000
-    expose:
-      - 8000
     stdin_open: true
+    restart: always
     tty: true
     command: python3 manage.py runserver 0.0.0.0:8000
     depends_on: 
@@ -41,7 +40,7 @@ services:
     environment:
       - NODE_ENV=development
     depends_on:
-      - django
+      - djangobackend
     command: npm start
 
 # ---- Our volumes
