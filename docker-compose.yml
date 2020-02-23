@@ -43,7 +43,7 @@ services:
       - djangobackend
     command: npm start
 
-# ---- Our volumes
+# ---- Volumes
 volumes:
   project-perenial_db:
   node-modules:
