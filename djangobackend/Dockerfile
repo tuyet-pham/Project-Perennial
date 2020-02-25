@@ -6,7 +6,9 @@ WORKDIR /app/django
 
 RUN apk update \
     && apk add --virtual build-deps gcc python-dev musl-dev
-        
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Install Python dependencies
 COPY requirements.txt /app/django
@@ -15,8 +17,6 @@ RUN pip3 install --upgrade pip -r requirements.txt
 
 # Add the rest of the code
 COPY . /app/django
-
-RUN python manage.py migrate 
 
 # Make port 8000 available for the app
 EXPOSE 8000
