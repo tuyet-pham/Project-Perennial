@@ -17,11 +17,12 @@ afterEach(() => {
     container = null;
 })
 
-it('renders', () => {
-    act(() => {
-        render('BottomNav',container);
-    });
-    expect(container.textContent).toBe('FOOTER')
+it('bottom nav renders', () => {
+  let container;
+  act(() => {
+      container = render(<BottomNav />);
+  });
+  expect(container.textContent).toBe('FOOTER')
 })
 
 /*
