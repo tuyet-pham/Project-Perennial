@@ -2,14 +2,14 @@ import React from 'react';
 import './App.css';
 import {
   BrowserRouter as Router,
-  Switch,
-  Route
+  // Switch,
+  // Route
 } from 'react-router-dom';
-import BottomNav from './components/BottomNav';
+//import BottomNav from './components/BottomNav';
 import PageTemplate from './PageTemplate';
-import Monitor from './pages/Monitor';
-import AddPlant from './pages/AddPlant';
-import Options from './pages/Options';
+//import Monitor from './pages/Monitor';
+// import AddPlant from './pages/AddPlant';
+// import Options from './pages/Options';
 import Home from './pages/Home';
 
 function App() {
