@@ -11,6 +11,8 @@ wifi:
     password: "5919390335"
   - ssid: "Tuyet1"
     password: "apple123"
+  - ssid: "NETGEAR71"
+    password: "largebox284"
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
@@ -21,8 +23,19 @@ captive_portal:
 
 web_server:
   port: 80
-
-api:
+  
+mqtt:
+  broker: 'thslion.xyz'
+  username: perennial
+  password: projectperennial
+  client_id: perennial_1
+  
+  birth_message:
+    topic: perennial/availability
+    payload: online
+  will_message:
+    topic: perennial/availability
+    payload: offline
 
 # Enable logging
 logger:
@@ -32,5 +45,7 @@ ota:
 sensor:
   - platform: adc
     pin: A0
-    name: "Living Room Brightness"
-    update_interval: 60s
+    name: "Moisture"
+    update_interval: 10s
+    attenuation: 11db
+    state_topic: perennial/moisture
