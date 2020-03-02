@@ -1,4 +1,4 @@
-import ReactDOM, { unmountComponentAtNode } from 'react-dom';
+import { unmountComponentAtNode } from 'react-dom';
 import React from 'react';
 import { render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
@@ -10,6 +10,14 @@ let container = null;
 beforeEach(() => {
   container = document.createElement('div');
   document.body.appendChild(container);
+
+  render(
+    <MemoryRouter>
+      <BottomNav />
+    </MemoryRouter>,
+    container
+  );
+
 });
 
 afterEach(() => {
@@ -19,79 +27,43 @@ afterEach(() => {
 });
 
 test('navigates home when Home is selected', async => {
-  const root = document.createElement('div');
-  document.body.appendChild(root);
-
-  render(
-    <MemoryRouter>
-      <BottomNav />
-    </MemoryRouter>,
-    root
-  );
 
   act(() => {
     const link = document.querySelector('#home');
     link.dispatchEvent(new MouseEvent('click', {bubbles: true}));
   });
 
-  expect(document.textContent).toBe('Home');
+  expect(location.pathname).toBe('/home');
 });
 
 test('navigates to add-a-plant when Add a Plant is selected', async => {
-  const root = document.createElement('div');
-  document.body.appendChild(root);
-
-  render(
-    <MemoryRouter>
-      <BottomNav />
-    </MemoryRouter>,
-    root
-  );
-
+  
   act(() => {
     const link = document.querySelector('#add-plant');
     link.dispatchEvent(new MouseEvent('click', {bubbles: true}));
   });
 
-  expect(document.textContent).toBe('Add a Plant');
+  expect(location.pathname).toBe('/add-plant');
 });
 
 test('navigates to Monitor when Monitor is selected', async => {
-  const root = document.createElement('div');
-  document.body.appendChild(root);
-
-  render(
-    <MemoryRouter>
-      <BottomNav />
-    </MemoryRouter>,
-    root
-  );
-
+  
   act(() => {
     const link = document.querySelector('#monitor');
     link.dispatchEvent(new MouseEvent('click', {bubbles: true}));
   });
 
-  expect(document.textContent).toBe('Monitor');
+  expect(location.pathname).toBe('/monitor');
 });
 
 test('navigates to Options when Options is selected', async => {
-  const root = document.createElement('div');
-  document.body.appendChild(root);
-
-  render(
-    <MemoryRouter>
-      <BottomNav />
-    </MemoryRouter>,
-    root
-  );
-
+  
   act(() => {
     const link = document.querySelector('#options');
     link.dispatchEvent(new MouseEvent('click', {bubbles: true}));
   });
 
-  expect(document.textContent).toBe('options');
+  expect(location.pathname).toBe('/options');
 });
 
 /*

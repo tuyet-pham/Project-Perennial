@@ -1,4 +1,5 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import {
   BrowserRouter as Router,
@@ -16,6 +17,7 @@ function App() {
   return (
     <div className="App">
       <Router>
+        {/* <PageTemplate path="/" component={Home} /> */}
         <PageTemplate path="/home" component={Home} />
       </Router>
     </div>
