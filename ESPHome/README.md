@@ -5,7 +5,7 @@ ESPHome Dashboard only runs on unix machines. (NOT WINDOWS)
 perennial_1.yaml is the yaml for the device.
 
 ### Start ESPHome with Dashboard
-1. Inside ESPHome directory
+1. cd Inside ESPHome directory
 2. `python3 -m venv .env`
 3. `source .env/bin/activate`
 4. `pip install --upgrade pip`
