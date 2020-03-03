@@ -3,6 +3,7 @@ version: "3.2"
 # ---- Database
 services:
   db:
+    container_name: db_data
     image: couchdb:latest
     ports:
       - 5986:5986
@@ -42,6 +43,14 @@ services:
     depends_on:
       - djangobackend
     command: npm start
+
+  data:
+    build: ./data
+    volumes:
+      - ./data:/app/data
+    links:
+      - db
+    command: ./perennialData.sh
 
 # ---- Our volumes
 volumes:
