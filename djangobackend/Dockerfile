@@ -7,12 +7,12 @@ WORKDIR /app/django
 RUN apk update \
     && apk add --virtual build-deps gcc python-dev musl-dev
 
+#running extra commands
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Install Python dependencies
 COPY requirements.txt /app/django
-
 RUN pip3 install --upgrade pip -r requirements.txt
 
 # Add the rest of the code

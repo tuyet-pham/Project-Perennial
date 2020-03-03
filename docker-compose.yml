@@ -11,8 +11,7 @@ services:
       - 5986
       - 5984
     volumes:
-      - project-perenial_db:/opt/couchdb/data
-      ## new database here
+      - couch-data:/opt/couchdb/data
     restart: always
 
 # ---- Django
@@ -22,6 +21,8 @@ services:
       - ./djangobackend/:/app/django
     ports:
       - 8000:8000
+    expose:
+      - 8000
     stdin_open: true
     restart: always
     tty: true
@@ -29,22 +30,27 @@ services:
     depends_on: 
       - db
     entrypoint: /entrypoint.sh
+    links:
+      - db
 
 # ---- ReactJS
   reactfrontend:
     build: ./reactfrontend
     volumes:
-      - ./reactfrontend:/app
-      - node-modules:/app/node_modules
+      - ./reactfrontend:/app/reactfrontend
+      - node-modules:/app/reactfrontend/node_modules
     ports:
       - 3000:3000
     environment:
       - NODE_ENV=development
+    links: 
+      - db
+      - djangobackend
     depends_on:
       - djangobackend
     command: npm start
 
 # ---- Volumes
 volumes:
-  project-perenial_db:
+  couch-data:
   node-modules:
