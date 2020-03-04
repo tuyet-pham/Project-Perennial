@@ -12,6 +12,9 @@ services:
       - 5984
     volumes:
       - couch-data:/opt/couchdb/data
+    environment: 
+      - COUCHDB_USER=${COUCHDB_USER}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
     restart: always
 
 # ---- Django

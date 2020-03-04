@@ -20,10 +20,33 @@ from rest_framework.authtoken.views import obtain_auth_token  # <-- Here
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <-- And here
 ]
 
+urlpatterns = [
+    path('login/', views.HelloView.as_view(), name='login'),
+]
 
 urlpatterns = [
-    path('hello/', views.HelloView.as_view(), name='hello'),
+    path('home/', views.HelloView.as_view(), name='home'),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <-- And here
+]
+
+urlpatterns = [
+    path('monitorplant/', views.HelloView.as_view(), name='monitorplant'),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <-- And here
+]
+
+urlpatterns = [
+    path('addPlant/', views.HelloView.as_view(), name='addPlant'),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <-- And here
+]
+
+urlpatterns = [
+    path('options/', views.HelloView.as_view(), name='options'),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <-- And here
+]
+
+urlpatterns = [
+    path('registry/', views.HelloView.as_view(), name='registry'),
 ]
