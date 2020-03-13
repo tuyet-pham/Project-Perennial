@@ -5,7 +5,7 @@ import './PageTemplate.css';
 function Header() {
     return (
         <div className="Header" id="header">
-            <FaLeaf aria-label="Project Perennial Icon"/>
+            <FaLeaf className="header-icon" aria-label="Project Perennial Icon"/>
             Header
         </div>
     );

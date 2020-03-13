@@ -16,3 +16,18 @@
     font-size: xx-large;
 }
 
+/* Header */
+.Header {
+    background-color: black;
+    color: white;
+    text-align: left;
+    height: 60px;
+    padding: 5px;
+    font-size: xx-large;
+    box-sizing: border-box;
+}
+
+.header-icon {
+    color: #72bb53;
+    margin: 5px;
+}
