@@ -7,9 +7,9 @@ import {
   // Route
 } from 'react-router-dom';
 import PageTemplate from './PageTemplate';
-//import Monitor from './pages/Monitor';
-// import AddPlant from './pages/AddPlant';
-// import Options from './pages/Options';
+import Monitor from './pages/Monitor';
+import AddPlant from './pages/AddPlant';
+import Options from './pages/Options';
 import Home from './pages/Home';
 
 function App() {
@@ -18,6 +18,9 @@ function App() {
       <Router>
         {/* <PageTemplate path="/" component={Home} /> */}
         <PageTemplate path="/home" component={Home} />
+        <PageTemplate path="/monitor" component={Monitor} />
+        <PageTemplate path="/add-plant" component={AddPlant} />
+        <PageTemplate path="/options" component={Options} />
       </Router>
     </div>
   );
