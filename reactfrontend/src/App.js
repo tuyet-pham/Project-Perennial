@@ -6,7 +6,6 @@ import {
   // Switch,
   // Route
 } from 'react-router-dom';
-//import BottomNav from './components/BottomNav';
 import PageTemplate from './PageTemplate';
 //import Monitor from './pages/Monitor';
 // import AddPlant from './pages/AddPlant';
