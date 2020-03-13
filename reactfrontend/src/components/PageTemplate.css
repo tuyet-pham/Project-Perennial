@@ -1,0 +1,18 @@
+
+/* Used for active link in bottom nav. */
+.selected {
+    background-color: #b1d898 !important;
+    color: #72bb53 !important;
+    height: 100%;
+    width: 100%;
+}
+
+/* Used for inactive links in bottom nav. */
+.unselected {
+    background-color: #72bb53;
+    color: white;
+    height: 100%;
+    width: 100%;
+    font-size: xx-large;
+}
+

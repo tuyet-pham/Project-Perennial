@@ -6,13 +6,13 @@ import {
   // Route
 } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './PageTemplate.css';
 import { FaHome, FaChartBar, FaPlus, FaTools} from 'react-icons/fa';
 
 const bottomNavStyle = {
-  backgroundColor: "black",
+  backgroundColor: "#72bb53",
   color: "white",
   borderTop: "1px solid white",
-  padding: "10px",
   position: "fixed",
   left: "0",
   bottom: "0",
@@ -20,37 +20,38 @@ const bottomNavStyle = {
   width: "100%"
 };
 
+const containerStyle = {
+  height: "100%",
+  width: "100vw",
+  padding: "0"
+}
+
+const rowStyle = {
+  height: "100%",
+  width: "100%",
+  margin: "auto"
+}
+
 
 function BottomNav() {
   return (
-    <div className="BottomNav">
-      <div style={bottomNavStyle}>
-        <div className="container">
-          <div className="row">
-            <div className="col">
-              <NavLink to="/home" id="home">
-                <FaHome aria-label="Home"/>
-              </NavLink>
-            </div>
-            <div className="col">
-              <NavLink to="/monitor" id="monitor">
-                <FaChartBar aria-label="Monitor"/>
-              </NavLink>
-            </div>
-            <div className="col">
-              <NavLink to="/add-plant" id="add-plant">
-                <FaPlus aria-label="Add Plant"/>
-              </NavLink>
-            </div>
-            <div className="col">
-              <NavLink to="/options" id="options">
-                <FaTools aria-label="Options"/>
-              </NavLink>
-            </div>
-          </div>
+    <div className="BottomNav" style={bottomNavStyle}>
+      <div className="container" style={containerStyle}>
+        <div className="row" style={rowStyle}>
+          <NavLink to="/home" id="home" className="col-3 unselected" activeClassName="selected">
+            <FaHome aria-label="Home"/>
+          </NavLink>
+          <NavLink to="/monitor" id="monitor" className="col-3 unselected"  activeClassName="selected">
+            <FaChartBar aria-label="Monitor"/>
+          </NavLink>
+          <NavLink to="/add-plant" id="add-plant" className="col-3 unselected"  activeClassName="selected">
+            <FaPlus aria-label="Add Plant"/>
+          </NavLink>
+          <NavLink to="/options" id="options" className="col-3 unselected"  activeClassName="selected">
+            <FaTools aria-label="Options"/>
+          </NavLink>
         </div>
       </div>
-
     </div>
   );
 }
