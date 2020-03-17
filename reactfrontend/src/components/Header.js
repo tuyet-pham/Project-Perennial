@@ -6,7 +6,9 @@ function Header(props) {
     const header_text = headerify(props.location.pathname);
     return (
         <div className="Header" id="header">
-            <FaLeaf className="header-icon" aria-label="Project Perennial Icon"/>
+            <a className="header-circle">
+                <FaLeaf className="header-icon" aria-label="Project Perennial Icon"/>
+            </a>
             {header_text}
         </div>
     );
