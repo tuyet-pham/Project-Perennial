@@ -60,5 +60,5 @@ services:
 
 # ---- Our volumes
 volumes:
-  couch-data:
+  db:
   node-modules:
