@@ -2,14 +2,14 @@
 The stucture for djangobackend is called a "Flat style". / directory is considered a project and sub directories are considered apps.
 
 $ tree
-.
-├── manage.py
-├── settings.py
-├── login/
-├── account/
-├── register/
-├── urls.py
-└── wsgi.py
+.<br>
+├── manage.py<br>
+├── settings.py<br>
+├── login/<br>
+├── account/<br>
+├── register/<br>
+├── urls.py<br>
+└── wsgi.py<br>
 
 
 [more on this topic](https://zindilis.com/blog/2017/01/06/django-anatomy-for-single-app.html)
