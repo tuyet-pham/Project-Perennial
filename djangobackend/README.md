@@ -21,9 +21,6 @@ $ tree
 [more on this topic](https://zindilis.com/blog/2017/01/06/django-anatomy-for-single-app.html)
 #### Routes Available
 
-- /auth/register
-- /auth/login
-
-- /user/home
-- /user/addplant
-- /user/options
+- /                       <--- Root route, Login Page
+- /register
+- /acount
