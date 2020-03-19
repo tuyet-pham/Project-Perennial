@@ -8,7 +8,6 @@ services:
       - COUCHDB_USER=${COUCHDB_USER}
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
     build: ./db
-    #image: couchdb:2.3.1
     ports:
       - 5986:5986
       - 5984:5984
@@ -17,8 +16,6 @@ services:
       - 5984
     volumes:
       - project-perenial_db:/opt/couchdb/data
-      # - ./db/:/opt/couchdb/etc
-      ## new database here
     restart: always
 
 # ---- Django
