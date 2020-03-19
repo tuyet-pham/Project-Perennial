@@ -4,9 +4,6 @@ version: "3.2"
 services:
   db:
     container_name: db_data
-    environment:
-      - COUCHDB_USER=${COUCHDB_USER}
-      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
     build: ./db
     ports:
       - 5986:5986
