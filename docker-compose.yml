@@ -1,7 +1,8 @@
 version: "3.2"
 
-# ---- Database
 services:
+
+# ---- Database
   db:
     container_name: db_data
     environment:
@@ -29,7 +30,7 @@ services:
     restart: always
     tty: true
     command: python3 manage.py runserver 0.0.0.0:8000
-    depends_on: 
+    depends_on:
       - db
 
 # ---- ReactJS
