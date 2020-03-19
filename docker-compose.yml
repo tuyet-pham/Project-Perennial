@@ -1,9 +1,11 @@
 version: "3.2"
 
-# ---- Database
 services:
+
+# ---- Database
   db:
-    image: couchdb:2.3.1
+    container_name: db_data
+    build: ./db
     ports:
       - 5986:5986
       - 5984:5984
@@ -11,10 +13,7 @@ services:
       - 5986
       - 5984
     volumes:
-      - couch-data:/opt/couchdb/data
-    # environment:
-    #   - COUCHDB_USER=${COUCHDB_USER}
-    #   - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
+      - project-perenial_db:/opt/couchdb/data
     restart: always
 
 # ---- Django
@@ -51,7 +50,15 @@ services:
       - djangobackend
     command: npm start
 
-# ---- Volumes
+  data:
+    build: ./data
+    volumes:
+      - ./data:/app/data
+    links:
+      - db
+    command: ./perennialData.sh
+
+# ---- Our volumes
 volumes:
   couch-data:
   node-modules:
