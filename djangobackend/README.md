@@ -1,7 +1,7 @@
 ## About Dir 
 The stucture for djangobackend is called "Flat style". / directory is considered a project and sub directories are considered apps.
 
-$ tree
+$ tree<br>
 .<br>
 ├── manage.py<br>
 ├── settings.py<br>
