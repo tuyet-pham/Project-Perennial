@@ -5,15 +5,9 @@ $ tree
 .
 ├── manage.py
 ├── settings.py
-├── home
-│   ├── admin.py
-│   ├── apps.py
-│   ├── __init__.py
-│   ├── migrations
-│   │   └── __init__.py
-│   ├── models.py
-│   ├── tests.py
-│   └── views.py
+├── login/
+├── account/
+├── register/
 ├── urls.py
 └── wsgi.py
 
