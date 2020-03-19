@@ -4,7 +4,8 @@ services:
 
 # ---- Database
   db:
-    image: couchdb:latest
+    container_name: db_data
+    build: ./db
     ports:
       - 5986:5986
       - 5984:5984
@@ -13,7 +14,6 @@ services:
       - 5984
     volumes:
       - project-perenial_db:/opt/couchdb/data
-      ## new database here
     restart: always
 
 # ---- Django
@@ -44,7 +44,15 @@ services:
       - djangobackend
     command: npm start
 
-# ---- Volumes
+  data:
+    build: ./data
+    volumes:
+      - ./data:/app/data
+    links:
+      - db
+    command: ./perennialData.sh
+
+# ---- Our volumes
 volumes:
   project-perenial_db:
   node-modules:
