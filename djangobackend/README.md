@@ -1,5 +1,5 @@
 ## About Dir 
-The stucture for djangobackend is called a "Flat style". / directory is considered a project and sub directories are considered apps.
+The stucture for djangobackend is called "Flat style". / directory is considered a project and sub directories are considered apps.
 
 $ tree
 .<br>
