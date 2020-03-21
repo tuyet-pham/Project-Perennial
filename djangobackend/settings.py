@@ -24,7 +24,7 @@ SECRET_KEY = 'v_gq(21bn7-b*xxp!)&*98qe6jg7*uu6_hcxqdx^@7rv4y-1g3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["0.0.0.0", "localhost"]
+ALLOWED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -37,10 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',                  # <-- To be able to connect to React
 
     # Third-Party Apps
     'rest_framework',
-    'rest_framework.authtoken',  # <--  Required for Authentication.
+    'rest_framework.authtoken',     # <--  Required for Authentication.
 
 
     # apps
@@ -60,6 +61,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',                # <--- To be able to connect to React
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -68,6 +70,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Whitelist localhost:3000 because that's where frontend will be served
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+    'http://localhost:8000',
+    'http://localhost:8080',
+)
 
 ROOT_URLCONF = 'urls'
 

@@ -13,6 +13,7 @@ COPY package.json /app/reactfrontend/package.json
 COPY package-lock.json /app/reactfrontend/package-lock.json
 RUN npm install
 RUN npm config set unsafe-perm true
+RUN npm install axios
 
 RUN npm install react-scripts@3.0.1 -g
 
