@@ -32,6 +32,9 @@ services:
     entrypoint: /entrypoint.sh
     links:
       - db
+    environment:
+      - COUCHDB_USER=${COUCHDB_USER}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
 
 # ---- ReactJS
   reactfrontend:
