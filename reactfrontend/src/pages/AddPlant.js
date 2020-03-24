@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PageTemplate from '../PageTemplate';
-import { FaCamera} from 'react-icons/fa'
+import { FaCamera} from 'react-icons/fa';
 
-function AddPlant(props) {
+function AddPlant() {
+    const [wateringCondition, setWateringCondition] = useState("");
+
     return (
       <PageTemplate>
         <form>
@@ -143,18 +145,18 @@ function AddPlant(props) {
                 <div className="col">
                   <div className="row">
                     <label>
-                      <input type="radio" name="condition" wateringCondition="moisture" onChange={handleChange} />Moisture level
+                      <input type="radio" name="condition" value="moisture" onChange={() => setWateringCondition("moisture")} />Moisture level
                     </label>
                   </div>
                   <div className="row">
                     <label>
-                      <input type="radio" name="condition" wateringCondition="time" onChange={handleChange} />Time elapsed
+                      <input type="radio" name="condition" value="time" onChange={() => setWateringCondition("time")} />Time elapsed
                     </label>
                   </div>
                 </div>
               </div>
               <div>
-                  <SetWateringConditions/>
+                  <SetWateringConditions wateringCondition={wateringCondition}/>
                   {/* Conditional render */}
               </div>
 
@@ -183,14 +185,19 @@ function addPlantIcon() {
 
 function handleChange(props) {
   console.log("Changed")
-  SetWateringConditions(props.wateringCondition);
+  console.log(props)
+  if(props.name == "condition")
+  {
+    console.log("set watering conditions")
+    SetWateringConditions(props.wateringCondition);
+  }
 }
   
-function SetWateringConditions(wateringCondition) {
+function SetWateringConditions(props) {
   //const wateringCondition="time"
   // const wateringCondition="moisture"
 
-  if(wateringCondition == "time") {
+  if(props.wateringCondition == "time") {
     return (
       <b>
         Water after X days.
