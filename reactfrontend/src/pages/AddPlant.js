@@ -2,7 +2,7 @@ import React from 'react';
 import PageTemplate from '../PageTemplate';
 import { FaCamera} from 'react-icons/fa'
 
-function AddPlant() {
+function AddPlant(props) {
     return (
       <PageTemplate>
         <form>
@@ -143,12 +143,12 @@ function AddPlant() {
                 <div className="col">
                   <div className="row">
                     <label>
-                      <input type="radio" name="condition" value="True" onChange={handleChange} />Moisture level
+                      <input type="radio" name="condition" wateringCondition="moisture" onChange={handleChange} />Moisture level
                     </label>
                   </div>
                   <div className="row">
                     <label>
-                      <input type="radio" name="condition" value="True" onChange={handleChange} />Time elapsed
+                      <input type="radio" name="condition" wateringCondition="time" onChange={handleChange} />Time elapsed
                     </label>
                   </div>
                 </div>
@@ -181,12 +181,13 @@ function addPlantIcon() {
   alert("Add plant icon");
 }
 
-function handleChange() {
+function handleChange(props) {
   console.log("Changed")
+  SetWateringConditions(props.wateringCondition);
 }
   
-function SetWateringConditions(props) {
-  const wateringCondition="time"
+function SetWateringConditions(wateringCondition) {
+  //const wateringCondition="time"
   // const wateringCondition="moisture"
 
   if(wateringCondition == "time") {
