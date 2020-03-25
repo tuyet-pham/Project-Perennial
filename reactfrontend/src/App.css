@@ -64,3 +64,32 @@
   font-size: xx-large;
   cursor: pointer;
 }
+
+
+/* Entries on Monitor page */
+
+.monitor-plant-card {
+  color: white;
+  font-size: large;
+  min-height: 60px;
+  width: 90% !important;
+  margin: 10px auto;
+  padding: 5px;
+  background-color: #3d3f3b;
+  box-shadow: 0 0 0pt 1pt #b1d898; /* rounded corners on outline */
+  border-radius: 5px;
+  text-align: left;
+}
+
+.monitor-plant-card-expanded {
+  color: white;
+  font-size: large;
+  min-height: 60px;
+  width: 90% !important;
+  margin: 10px auto;
+  padding: 5px;
+  background-color: #3d3f3b;
+  box-shadow: 0 0 0pt 1pt #b1d898; /* rounded corners on outline */
+  border-radius: 5px;
+  text-align: left;
+}
