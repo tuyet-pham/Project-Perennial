@@ -145,7 +145,7 @@ function AddPlant() {
                 <div className="col">
                   <div className="row">
                     <label>
-                      <input type="radio" name="condition" value="moisture" onChange={() => setWateringCondition("moisture")} />Moisture level
+                      <input defaultChecked type="radio" name="condition" value="moisture" onChange={() => setWateringCondition("moisture")} />Moisture level
                     </label>
                   </div>
                   <div className="row">
