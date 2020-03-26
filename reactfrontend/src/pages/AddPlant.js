@@ -3,8 +3,31 @@ import PageTemplate from '../PageTemplate';
 import { FaCamera} from 'react-icons/fa';
 
 function AddPlant() {
-    const [wateringCondition, setWateringCondition] = useState("");
+    // Hooks for form values: name, species, geolocation, indoorsoutdoors, wateringConditionTrigger, wateringConditionValue, additionalNotes
+    const [name, setName] = useState("");
+    const [species, setSpecies] = useState("");
+    const [geolocationCity, setGeolocationCity] = useState("");
+    const [geolocationState, setGeolocationState] = useState("");
+    const [indoorsOutdoors, setIndoorsOutdoors] = useState("indoors");
+    const [wateringConditionTrigger, setWateringConditionTrigger] = useState("moisture");
+    const [wateringConditionValue, setWateringConditionValue] = useState(0);
+    const [additionalNotes, setAdditionalNotes] = useState("");
 
+    // Handle submission 
+    const handleSubmit = (event) => {
+      event.preventDefault()
+      
+      console.log(name);
+      console.log(species);
+      console.log(geolocationCity);
+      console.log(geolocationState);
+      console.log(indoorsOutdoors);
+      console.log(wateringConditionTrigger);
+      console.log(wateringConditionValue);
+      console.log(additionalNotes);
+    }
+
+    // Forms with hooks reference: https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/
     return (
       <PageTemplate>
         <form>
@@ -19,8 +42,8 @@ function AddPlant() {
                 <div className="col-9">
                   <input 
                     type="text"
-                    onChange={handleChange}
                     placeholder="Name..."
+                    onChange={event => setName(event.target.value)}
                   />
                 </div>
               </div>
@@ -32,7 +55,7 @@ function AddPlant() {
               </h2>
               <div id="species-info" className="row">
                 <div className="col">
-                  <select name="species" onChange={handleChange}>
+                  <select name="species" onChange={event => setSpecies(event.target.value)}>
                     <option value="" disabled selected>Select species...</option>
                     <option value="Aloe vera">Aloe Vera</option>
                     <option value="Iris">Iris</option>
@@ -58,12 +81,12 @@ function AddPlant() {
                 <div className="col">
                   <input 
                     type="text"
-                    onChange={handleChange}
                     placeholder="City name..."
+                    onChange={event => setGeolocationCity(event.target.value)}
                   />
                 </div>
                 <div className="col">
-                <select name="species" onChange={handleChange}>
+                  <select name="state" onChange={event => setGeolocationState(event.target.value)}>
                     <option value="" disabled selected>State</option>
                     <option value="AL">AL</option>
                     <option value="AK">AK</option>
@@ -123,12 +146,12 @@ function AddPlant() {
                 </div>
                 <div className="col">
                   <label>
-                    <input type="radio" name="indoorsoutdors" value="indoors" onChange={handleChange} />Indoors
+                    <input defaultChecked type="radio" name="indoorsoutdors" value="indoors" onChange={event => setIndoorsOutdoors(event.target.value)} />Indoors
                   </label>
                 </div>
                 <div className="col">
                   <label>
-                    <input type="radio" name="indoorsoutdors" value="outdoors" onChange={handleChange} />Outdoors
+                    <input type="radio" name="indoorsoutdors" value="outdoors" onChange={event => setIndoorsOutdoors(event.target.value)} />Outdoors
                   </label>
                 </div>
               </div>
@@ -145,18 +168,18 @@ function AddPlant() {
                 <div className="col">
                   <div className="row">
                     <label>
-                      <input defaultChecked type="radio" name="condition" value="moisture" onChange={() => setWateringCondition("moisture")} />Moisture level
+                      <input defaultChecked type="radio" name="condition" value="moisture" onChange={() => setWateringConditionTrigger("moisture")} />Moisture level
                     </label>
                   </div>
                   <div className="row">
                     <label>
-                      <input type="radio" name="condition" value="time" onChange={() => setWateringCondition("time")} />Time elapsed
+                      <input type="radio" name="condition" value="time" onChange={() => setWateringConditionTrigger("time")} />Time elapsed
                     </label>
                   </div>
                 </div>
               </div>
               <div>
-                  <SetWateringConditions wateringCondition={wateringCondition}/>
+                  <SetWateringConditions wateringConditionTrigger={wateringConditionTrigger} setWateringConditionValue={setWateringConditionValue}/>
                   {/* Conditional render */}
               </div>
 
@@ -165,13 +188,19 @@ function AddPlant() {
               <h2>
                 Additional notes
               </h2>
-              <div id="additional-notes" className="row">
+              <div id="additional-notes" className="row" onChange={event => setAdditionalNotes(event.target.value)} >
                 <div className="col">
                   <label>
-                    <textarea onChange={handleChange} placeholder="Add a note..." />
+                    <textarea placeholder="Add a note..." />
                   </label>
                 </div>
               </div>
+
+              <br />
+
+              <button type="submit" value="Submit" class="btn btn-primary" onClick={handleSubmit}>
+                Submit
+              </button>
             </div>
           </div>
         </form>
@@ -179,39 +208,44 @@ function AddPlant() {
     );
 }
 
-function addPlantIcon() {
-  alert("Add plant icon");
-}
-
-function handleChange(props) {
-  console.log("Changed")
-  console.log(props)
-  if(props.name == "condition")
-  {
-    console.log("set watering conditions")
-    SetWateringConditions(props.wateringCondition);
-  }
-}
-  
+// Conditional watering trigger text
 function SetWateringConditions(props) {
-  //const wateringCondition="time"
-  // const wateringCondition="moisture"
 
-  if(props.wateringCondition == "time") {
+  if(props.wateringConditionTrigger == "time") {
     return (
       <b>
-        Water after X days.
+        Water after 
+        <input 
+          type="number"
+          placeholder="14"
+          min="1"
+          max="365"
+          onChange={event => props.setWateringConditionValue(event.target.value)}
+        />
+        days.
       </b>
     )
   }
   else {
     return (
       <b>
-        Water at X % moisture.
+        Water at 
+        <input 
+          type="number"
+          placeholder="0"
+          min="0"
+          max="99"
+          onChange={event => props.setWateringConditionValue(event.target.value)}
+        />
+        % moisture.
       </b>
     )
   }
 
+}
+
+function addPlantIcon() {
+  alert("Add plant icon");
 }
 
 export default AddPlant;
