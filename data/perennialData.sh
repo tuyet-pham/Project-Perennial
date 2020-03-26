@@ -6,8 +6,10 @@ done
 
 HOST="http://admin:password1@db_data:5984"
 
-curl -X PUT $HOST/user
-curl -X PUT $HOST/user/01 -d '{"id":"1425", "info":{"username":"Johnny67","email":"johnny76@gmail.com","hashpass":"2%ff840mgjke"}}'
+curl -X PUT $HOST/_users
+curl -X PUT $HOST/_users/01 -d '{"id":"1425", "info":{"username":"Johnny67","email":"johnny76@gmail.com","hashpass":"2%ff840mgjke"}}'
+curl -X PUT $HOST/_replicator
+curl -X PUT $HOST/_config
 curl -X PUT $HOST/plant_device
 curl -X PUT $HOST/plant_device/01 -d '{"id":"4751","user_id":"142","type":"plant","location":{"country":"United States","state":"Texas","city":"Denton","IP":"129.120.67.52"},"species":"cactus","water_conditions":{"min_moisture_level":"20.45"}}'
 curl -X PUT $HOST/plant_device_reading

@@ -9,11 +9,13 @@ services:
     ports:
       - 5986:5986
       - 5984:5984
+    environment:
+      - HOST=${HOST}
     expose:
       - 5986
       - 5984
     volumes:
-      - project-perenial_db:/opt/couchdb/data
+      - db:/opt/couchdb/data
     restart: always
 
 # ---- Django
