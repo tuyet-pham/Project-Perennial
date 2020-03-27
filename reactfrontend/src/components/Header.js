@@ -16,16 +16,16 @@ function Header(props) {
 
 /* Turn path into text for the header */
 function headerify(path) {
-    if(path == '/home') {
+    if(path === '/home') {
         return "Home"
     }
-    if(path == '/monitor') {
+    if(path === '/monitor') {
         return "Monitor"
     }
-    if(path == '/add-plant') {
+    if(path === '/add-plant') {
         return "Add a Plant"
     }
-    if(path == '/options') {
+    if(path === '/options') {
         return "Options"
     }
 

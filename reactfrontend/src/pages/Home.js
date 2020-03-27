@@ -85,7 +85,7 @@ function GuestGreeting(props) {
 
 function Notifications(props) {
   const notif_count = props.notifications;
-  if(notif_count == 0) {
+  if(notif_count === 0) {
     return (
       <br />
     );

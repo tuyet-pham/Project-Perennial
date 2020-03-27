@@ -211,7 +211,7 @@ function AddPlant() {
 // Conditional watering trigger text
 function SetWateringConditions(props) {
 
-  if(props.wateringConditionTrigger == "time") {
+  if(props.wateringConditionTrigger === "time") {
     return (
       <b>
         Water after 

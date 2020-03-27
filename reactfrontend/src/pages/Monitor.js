@@ -6,9 +6,9 @@ function Monitor() {
   // Dummy data - remove when API is integrated.
   // Reference: https://www.robinwieruch.de/conditional-rendering-react
   const demo_plants_list = [
-    {name:"Ferngully", moisture:"31%", temperature:"75", humidity:"52", updated:"Wed Mar 25 2020 13:12:26", reservoirEmpty:0},
-    {name:"Mr. Cactus", moisture:"25%", temperature:"80", humidity:"70", updated:"Tue Mar 24 2020 12:00:31", reservoirEmpty:1},
-    {name:"Audrey 2.0", moisture:"69%", temperature:"95", humidity:"90", updated:"Mon Mar 23 2020 10:46:47", reservoirEmpty:0}
+    {key:0, name:"Ferngully", moisture:"31%", temperature:"75", humidity:"52", updated:"Wed Mar 25 2020 13:12:26", reservoirEmpty:0},
+    {key:1, name:"Mr. Cactus", moisture:"25%", temperature:"80", humidity:"70", updated:"Tue Mar 24 2020 12:00:31", reservoirEmpty:1},
+    {key:2, name:"Audrey 2.0", moisture:"69%", temperature:"95", humidity:"90", updated:"Mon Mar 23 2020 10:46:47", reservoirEmpty:0}
   ];
 
   return (
@@ -52,7 +52,7 @@ function PlantCardList({ list }) {
     return (
       <div>
         {list.map(plant => (
-          <PlantCard plant={plant} />
+          <PlantCard key={plant.key} plant={plant} />
         ))}
       </div>
     )
@@ -81,7 +81,7 @@ function PlantCard({ plant }) {
 
   if(expandStatus === 1) {
     return (
-      <div className={"container " + ( expandStatus === 1 ? "monitor-plant-card-expanded" : "monitor-plant-card" )} onClick={() => expandStatus == 1 ? setExpandStatus(0) : setExpandStatus(1)}>
+      <div className={"container " + ( expandStatus === 1 ? "monitor-plant-card-expanded" : "monitor-plant-card" )} onClick={() => expandStatus === 1 ? setExpandStatus(0) : setExpandStatus(1)}>
         <div className="row">
           <div className="col-3">
             <div className="empty-picture-icon" style={{color:"#72bb53"}}>
@@ -122,7 +122,7 @@ function PlantCard({ plant }) {
   }
   else {
     return (
-      <div className={"container " + ( expandStatus === 1 ? "monitor-plant-card-expanded" : "monitor-plant-card" )} onClick={() => expandStatus == 1 ? setExpandStatus(0) : setExpandStatus(1)}>
+      <div className={"container " + ( expandStatus === 1 ? "monitor-plant-card-expanded" : "monitor-plant-card" )} onClick={() => expandStatus === 1 ? setExpandStatus(0) : setExpandStatus(1)}>
         <div className="row">
           <div className="col-3">
             <div className="empty-picture-icon" style={{color:"#72bb53"}}>
@@ -142,4 +142,3 @@ function PlantCard({ plant }) {
 }
 
   export default Monitor;
-  
