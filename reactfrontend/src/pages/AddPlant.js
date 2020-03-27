@@ -198,7 +198,7 @@ function AddPlant() {
 
               <br />
 
-              <button type="submit" value="Submit" class="btn btn-primary" onClick={handleSubmit}>
+              <button type="submit" value="Submit" className="btn btn-primary" onClick={handleSubmit}>
                 Submit
               </button>
             </div>
