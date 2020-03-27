@@ -96,5 +96,5 @@ function Notifications(props) {
     );
   }
 }
-  
+
 export default Home;

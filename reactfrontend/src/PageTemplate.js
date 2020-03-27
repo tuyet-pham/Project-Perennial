@@ -8,7 +8,7 @@ const PageTemplate = ({component: Component, ...rest}) => {
     return (
         <Route {...rest} component={matchProps => (
             <div className="PageTemplate">
-                <Header {...matchProps}/>
+                <Header {...matchProps} {...rest} />
                 <Component {...matchProps} />
                 <BottomNav />
             </div>
