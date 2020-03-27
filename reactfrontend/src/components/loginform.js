@@ -41,7 +41,7 @@ function LoginForm(props) {
         required
       />
       <br/><br/>
-      <div className="reCapcha">
+      <div className="reCaptcha">
         <ReCAPTCHA
           sitekey="6Ldai-QUAAAAAGvooVJS9gsjMZvwjj2aO4BzjBxg"
           onChange={capChange}
