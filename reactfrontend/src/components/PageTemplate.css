@@ -38,3 +38,7 @@
     padding: 5px 8px 11px 8px; /* Center the icon in the circle */
     margin: 5px 30px 5px 5px; /* Leave space between icon and text */
 }
+
+.PageTemplate {
+    padding-bottom: 60px;
+}
