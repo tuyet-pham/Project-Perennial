@@ -55,8 +55,8 @@ function AddPlant() {
               </h2>
               <div id="species-info" className="row">
                 <div className="col">
-                  <select name="species" onChange={event => setSpecies(event.target.value)}>
-                    <option value="" disabled selected>Select species...</option>
+                  <select name="species" defaultValue="" onChange={event => setSpecies(event.target.value)}>
+                    <option value="" disabled>Select species...</option>
                     <option value="Aloe vera">Aloe Vera</option>
                     <option value="Iris">Iris</option>
                     <option value="Grass">Grass</option>
@@ -86,8 +86,8 @@ function AddPlant() {
                   />
                 </div>
                 <div className="col">
-                  <select name="state" onChange={event => setGeolocationState(event.target.value)}>
-                    <option value="" disabled selected>State</option>
+                  <select name="state" defaultValue="" onChange={event => setGeolocationState(event.target.value)}>
+                    <option value="" disabled>State</option>
                     <option value="AL">AL</option>
                     <option value="AK">AK</option>
                     <option value="AZ">AZ</option>
