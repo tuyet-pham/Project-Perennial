@@ -1,0 +1,45 @@
+.login-icon {
+    color: #72bb53;
+    margin: 5px;
+}
+
+.login-circle {
+    background-color: white;
+    color: #72bb53 !important;
+    border-radius: 50%;
+    padding: 10px 13px 16px 13px; /* Center the icon in the circle */
+    margin: 20% 0px 20px 0px; /* Leave space between icon and text */
+}
+
+.login-spacer-bot {
+    margin: 0px 0px 20px 0px;
+}
+
+.login-input {
+    border-radius: 5px;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    margin-top: 10px;
+    height: 30px;
+    padding-left: 5px;
+}
+
+.login-submit {
+    border-radius: 5px;
+    border-color: #72bb53;
+    padding: 3px 30px 3px 30px;
+    font-weight: 600;
+    background-color: #cbe8ba;
+}
+
+.login-link {
+    margin-top: 10px;
+    color: yellow;
+}
+
+a.login-link {
+    color: #d8d869;
+    font-size: smaller;
+    font-weight: 600;
+}
