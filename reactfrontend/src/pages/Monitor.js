@@ -142,3 +142,4 @@ function PlantCard({ plant }) {
 }
 
   export default Monitor;
+  
