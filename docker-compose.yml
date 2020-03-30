@@ -9,8 +9,6 @@ services:
     ports:
       - 5986:5986
       - 5984:5984
-    environment:
-      - HOST=${HOST}
     expose:
       - 5986
       - 5984
@@ -50,6 +48,8 @@ services:
     build: ./data
     volumes:
       - ./data:/app/data
+    environment:
+      - HOST=${HOST}
     links:
       - db
     command: ./perennialData.sh

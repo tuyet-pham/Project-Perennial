@@ -4,10 +4,6 @@ until curl -f http://db_data:5984; do
     sleep 1
 done
 
-HOST="http://admin:password1@db_data:5984"
-
-curl -X PUT $HOST/_users
-curl -X PUT $HOST/_replicator
 curl -X PUT $HOST/users
 curl -X PUT $HOST/users/01 -d '{"id":"1425", "info":{"username":"Johnny67","email":"johnny76@gmail.com","hashpass":"2%ff840mgjke"}}'
 curl -X PUT $HOST/users/02 -d '{"id":"4233", "info":{"username":"Sarah23","email":"sarah23@gmail.com","hashpass":"6%sk384ldigd"}}'
