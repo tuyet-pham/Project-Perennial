@@ -1,24 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  // Switch,
+  // Route
+} from 'react-router-dom';
+import PageTemplate from './PageTemplate';
+import LoginTemplate from './LoginTemplate'
+import Monitor from './pages/Monitor';
+import AddPlant from './pages/AddPlant';
+import Options from './pages/Options';
+import Home from './pages/Home';
+import Login from './pages/Login'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        {/* <PageTemplate path="/" component={Home} /> */}
+        <PageTemplate path="/home" component={Home} pageName="Project Perennial" />
+        <PageTemplate path="/monitor" component={Monitor} pageName="Monitor" />
+        <PageTemplate path="/add-plant" component={AddPlant} pageName="Add A Plant" />
+        <PageTemplate path="/options" component={Options} pageName="Options" />
+        <LoginTemplate path="/login" component={Login} pageName="Login" />
+      </Router>
     </div>
   );
 }
