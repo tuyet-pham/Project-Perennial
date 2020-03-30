@@ -6,7 +6,7 @@ env
 venv
 .mypy_cache
 __pycache__
-local.ini
+*.ini
 *.sqlite3
 
 # dependencies
