@@ -18,6 +18,7 @@ services:
 
 # ---- Django
   djangobackend:
+    container_name: djangobackend
     build: ./djangobackend
     volumes:
       - ./djangobackend/:/app/django
@@ -53,6 +54,7 @@ services:
       - djangobackend
     command: npm start
 
+# ---- ReactJS
   data:
     build: ./data
     volumes:
@@ -60,6 +62,8 @@ services:
     links:
       - db
     command: ./perennialData.sh
+    environment:
+      - HOST=${HOST}
 
 # ---- Our volumes
 volumes:
