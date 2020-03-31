@@ -3,6 +3,23 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 const validEmailRegex = RegExp(/^(([^<>()[].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+.)+[^<>()[\].,;:\s@"]{2,})$/i);
 
+const validateForm = (errors, challenge) => {
+  let valid = true;
+  if(errors.fullName.length === 0) {
+    valid = false;
+  } else if (errors.email.length === 0) {
+    valid = false;
+  } else if (errors.password_len.length === 0) {
+    valid = false;
+  } else if (errors.password_conf.length === 0) {
+    valid = false;
+  } else if (challenge === false) {
+    valid = false;
+  }
+
+  return valid;
+}
+
 function RegisterForm(props) {
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
@@ -18,18 +35,21 @@ function RegisterForm(props) {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
+    validateForm(errors, challenge)
+    ? console.log("Valid Form")
+    : console.log("Invalid Form");
     console.log({errors})
     console.log({challenge})
     console.log({rePassword});
     console.log({fullName});
-  }
+  };
 
   const capChange = (val) => {
     console.log("Captcha Value: ", val);
     val === null
     ? setChallenge(false)
     : setChallenge(true);
-  }
+  };
 
   const onChange = (event) => {
     event.preventDefault();
