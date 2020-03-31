@@ -1,9 +1,11 @@
 version: "3.2"
 
-# ---- Database
 services:
+
+# ---- Database
   db:
-    image: couchdb:latest
+    container_name: db_data
+    build: ./db
     ports:
       - 5986:5986
       - 5984:5984
@@ -11,8 +13,7 @@ services:
       - 5986
       - 5984
     volumes:
-      - project-perenial_db:/opt/couchdb/data
-      ## new database here
+      - db:/opt/couchdb/data
     restart: always
 
 # ---- Django
@@ -26,7 +27,7 @@ services:
     restart: always
     tty: true
     command: python3 manage.py runserver 0.0.0.0:8000
-    depends_on: 
+    depends_on:
       - db
 
 # ---- ReactJS
@@ -39,11 +40,21 @@ services:
       - 3000:3000
     environment:
       - NODE_ENV=development
-    depends_on:
-      - djangobackend
+    #depends_on:
+    #  - djangobackend
     command: npm start
 
-# ---- Volumes
+  data:
+    build: ./data
+    volumes:
+      - ./data:/app/data
+    environment:
+      - HOST=${HOST}
+    links:
+      - db
+    command: ./perennialData.sh
+
+# ---- Our volumes
 volumes:
-  project-perenial_db:
+  db:
   node-modules:

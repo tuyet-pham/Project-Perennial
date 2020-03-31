@@ -14,6 +14,6 @@ COPY package-lock.json /app/package-lock.json
 RUN npm install
 RUN npm config set unsafe-perm true
 
-RUN npm install react-scripts@3.0.1 -g
+RUN npm install react-scripts -g
 
 CMD ["npm", "start"]
