@@ -13,6 +13,7 @@ import AddPlant from './pages/AddPlant';
 import Options from './pages/Options';
 import Home from './pages/Home';
 import Login from './pages/Login'
+import Register from './pages/Register'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <PageTemplate path="/add-plant" component={AddPlant} pageName="Add A Plant" />
         <PageTemplate path="/options" component={Options} pageName="Options" />
         <LoginTemplate path="/login" component={Login} pageName="Login" />
+        <LoginTemplate path="/sign-up" component={Register} pageName="Sign Up" />
       </Router>
     </div>
   );
