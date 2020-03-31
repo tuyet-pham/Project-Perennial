@@ -16,8 +16,10 @@ function LoginForm(props) {
 
   const capChange = (val) => {
     console.log("Captcha Value: ", val);
-    setChallenge(true);
-  }
+    val === null
+    ? setChallenge(false)
+    : setChallenge(true);
+  };
 
   return (
     <form onSubmit={handleSubmit}>
