@@ -36,6 +36,7 @@ services:
     environment:
       - COUCHDB_USER=${COUCHDB_USER}
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
 
 # ---- ReactJS
   reactfrontend:
@@ -54,7 +55,7 @@ services:
       - djangobackend
     command: npm start
 
-# ---- ReactJS
+# ---- Database data
   data:
     build: ./data
     volumes:
