@@ -4,15 +4,9 @@ until curl -f http://db_data:5984; do
     sleep 1
 done
 
-<<<<<<< HEAD
-
-curl -X PUT $HOST/user
-curl -X PUT $HOST/user/01 -d '{"id":"1425", "info":{"username":"Johnny67","email":"johnny76@gmail.com","hashpass":"2%ff840mgjke"}}'
-=======
 curl -X PUT $HOST/users
 curl -X PUT $HOST/users/01 -d '{"id":"1425", "info":{"username":"Johnny67","email":"johnny76@gmail.com","hashpass":"2%ff840mgjke"}}'
 curl -X PUT $HOST/users/02 -d '{"id":"4233", "info":{"username":"Sarah23","email":"sarah23@gmail.com","hashpass":"6%sk384ldigd"}}'
->>>>>>> ebc7cca78fa0433d93cdca7e257ea70179b9f793
 curl -X PUT $HOST/plant_device
 curl -X PUT $HOST/plant_device/01 -d '{"id":"4751","user_id":"1425","type":"plant","location":{"country":"United States","state":"Texas","city":"Denton","IP":"129.120.67.52"},"species":"Cactus","water_conditions":{"min_moisture_level":"0.60"}}'
 curl -X PUT $HOST/plant_device/02 -d '{"id":"1482","user_id":"1425","type":"plant","location":{"country":"United States","state":"Texas","city":"Denton","IP":"129.120.67.52"},"species":"Potato","water_conditions":{"min_moisture_level":"0.30"}}'

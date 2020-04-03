@@ -43,11 +43,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',     # <--  Required for Authentication.
 
-
     # apps
     'account',
-    'login',
-    'register',
+    'users',
 ]
 
 
@@ -76,7 +74,6 @@ MIDDLEWARE = [
 # Whitelist localhost:3000 because that's where frontend will be served
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
-    'http://localhost:8000',
     'http://djangobackend:8000',
 )
 
@@ -98,14 +95,9 @@ TEMPLATES = [
     },
 ]
 
-# PASSWORD_HASHERS = (
-#     'django.contrib.auth.hashers.MD5PasswordHasher',
-# )
 
 WSGI_APPLICATION = 'wsgi.application'
 
-# Password validation
-# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {

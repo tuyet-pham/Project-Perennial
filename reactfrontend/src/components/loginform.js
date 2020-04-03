@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import axios from 'axios';
 
 function LoginForm(props) {
   const [email, setemail] = useState("");
@@ -8,10 +9,27 @@ function LoginForm(props) {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    console.log('Submitting Form');
-    console.log({challenge})
-    console.log({email});
-    console.log({password})
+    if(challenge === true){
+      
+      if (email != '' || password != '')
+      {
+        console.log('Submitting Form');
+        const auth = { 
+          username: {email},
+          password: {password},
+        };
+        
+        // API CALL HERE
+
+      }
+      else
+      {
+        alert("Please fill in the necessary fields.");
+      }
+    }
+    else {
+      alert("You forgot about the Recaptcha!");
+    }
   }
 
   const capChange = (val) => {
