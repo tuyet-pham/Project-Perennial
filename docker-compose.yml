@@ -59,6 +59,8 @@ services:
     build: ./data
     volumes:
       - ./data:/app/data
+    environment:
+      - HOST=${HOST}
     links:
       - db
     command: ./perennialData.sh
