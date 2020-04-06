@@ -8,19 +8,21 @@ import sys
 sys.path.append('..')
 from dbmanager import *
 
+
 def register(request):
+    adduser('sam44','Bg@mail.com', 'password23!')
     return HttpResponse("register")
 
 
 def login(request):
-    adduser('Beth455','Bgmail.com', 'password23!')
-    return HttpResponse("Login")
-
-
+    
+    return HttpResponse("404")
 
 
 def logout(request):
+
     return HttpResponse("logout")
 
-def current(request):
-    return HttpResponse("getting current")
+
+# def current(request):
+#     return HttpResponse("getting current")

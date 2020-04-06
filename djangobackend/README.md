@@ -21,3 +21,10 @@ $ tree<br>
 
 
 * Important Notice
+Using Django and CouchDB together.
+
+Django
+L___template
+L___Routes
+L___db.sql3
+

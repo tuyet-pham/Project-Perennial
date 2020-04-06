@@ -19,7 +19,6 @@ function LoginForm(props) {
           password: {password},
         };
         
-        // API CALL HERE
 
       }
       else
