@@ -18,3 +18,6 @@ $ tree<br>
 - /                       <--- Root route, Login Page
 - /register
 - /acount
+
+
+* Important Notice
