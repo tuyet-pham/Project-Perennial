@@ -10,13 +10,13 @@ from dbmanager import *
 
 
 def register(request):
-    adduser('sam44','Bg@mail.com', 'password23!')
+    adduser()
     return HttpResponse("register")
 
 
 def login(request):
-    
-    return HttpResponse("404")
+    adduser()
+    return HttpResponse("")
 
 
 def logout(request):

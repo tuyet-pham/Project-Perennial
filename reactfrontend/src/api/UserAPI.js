@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 
-function userLogin(user){
+
+export async function userLogin(user){
     await axios.get( '/users/login', {}, {
         auth : {
             username : user.username,
@@ -11,6 +12,7 @@ function userLogin(user){
     .then(function(response) {
         /** This is where to recieve the token given by Django **/
         console.log(response);
+
         return response.data;
     })
     .catch(function(error) {
@@ -21,7 +23,7 @@ function userLogin(user){
 
 
 // function userLogout(user){
-    
+     
 // }
 
 
@@ -37,7 +39,3 @@ function userLogin(user){
 // }
 
 
-
-function addplant(plant){
-    
-}
