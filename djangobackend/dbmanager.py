@@ -4,10 +4,8 @@
  This is to hopefully consolidate the access to the db
  Could potentially migrate to '/account/views.py'. 
  Since all apps will need it, this might be unlikely.
-
 Documentations for couchdb and python connection
 https://couchdb-python.readthedocs.io/en/latest/client.html#server
-
 '''
 from couchdb import Server
 from couchdb.mapping import Document, TextField, IntegerField, DateTimeField
@@ -65,5 +63,3 @@ def adduser(uname, uemail, upass):
 
 
 # def addReading():
-
-
