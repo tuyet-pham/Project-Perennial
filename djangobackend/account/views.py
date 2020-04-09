@@ -8,6 +8,10 @@ import sys
 sys.path.append('..')
 from dbmanager import *
 
+
+
+'''
+'''
 class Account(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -19,6 +23,10 @@ class Account(APIView):
         }
         return Response(content)
     
+
+
+'''
+'''
 class MonitorPlants(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -30,6 +38,10 @@ class MonitorPlants(APIView):
         }
         return Response(content)
 
+
+
+'''
+'''
 class AddPlant(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -41,6 +53,14 @@ class AddPlant(APIView):
         }
         return Response(content)
 
+    
+def tempaddplant(request):
+    addplant(request.data)
+    return HttpResponse("Hey")
+
+
+'''
+'''
 class Options(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated,)

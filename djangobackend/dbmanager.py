@@ -24,34 +24,39 @@ class User(Document):
     hashpass = TextField()
 
 
+
 db = Server("http://%s:%s@db_data:5984/" % (os.environ['COUCHDB_USER'],os.environ['COUCHDB_PASSWORD']))
 
 users = db['users']
-
 plant_device = db['plant_device']
-
 plant_types = db['plant_types']
-
 plant_device_reading = db['plant_device_reading']
 
 
-def finduser(username, password, email=None):
-    for user in users:
-        print(user)
+
+def finduser(uname):
+    found = True
+    
+    # for user in users.view('_all_docs'):
+    #     if user.id.lower() == uname.lower()
+    #         return found
+    
+    # return found!
+
+
 
 
 def adduser(uname, uemail, upass):
-    # x = 0
-    # map_fun = '''function(doc) {
-    #      if (doc.type == '')
-    #      emit(doc.username, null);
-    #      }'''
-    # for row in users.query(map_fun):
-    #     print(row.key)
+    exists = 'User already exists'
+
+    # if (finduser(uname) == False):
+    #     hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
+    #     user = User(username=uname, email=uemail, hashpass=hashpass)
+    #     user.store(users)
+    #     return user.id
     # else:
-    hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
-    user = User(username=uname, email=uemail, hashpass=hashpass)
-    user.store(users)
+    #     return 
+
 
 
 
@@ -65,8 +70,3 @@ def adduser(uname, uemail, upass):
 # def addReading():
 
 
-
-# def
-
-
-# # def addType():

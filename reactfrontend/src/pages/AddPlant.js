@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PageTemplate from '../PageTemplate';
 import { FaCamera} from 'react-icons/fa';
 
+
 function AddPlant() {
     // Hooks for form values: name, species, geolocation, indoorsoutdoors, wateringConditionTrigger, wateringConditionValue, additionalNotes
     const [name, setName] = useState("");
@@ -26,10 +27,7 @@ function AddPlant() {
         wateringConditionTrigger:{wateringConditionTrigger},
         wateringConditionValue:{wateringConditionValue},
         additionalNotes:{additionalNotes},
-      };
-
-      addPlantIcon(plant);
-      
+      };      
     }
 
     // Forms with hooks reference: https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/
