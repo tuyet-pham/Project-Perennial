@@ -7,6 +7,9 @@ from rest_framework.views import APIView
 import sys
 sys.path.append('..')
 from dbmanager import *
+from rest_framework.decorators import api_view
+from rest_framework.decorators import parser_classes
+from rest_framework.parsers import JSONParser
 
 
 
@@ -53,10 +56,14 @@ class AddPlant(APIView):
         }
         return Response(content)
 
-    
+@api_view(['POST'])
+@parser_classes([JSONParser]) 
 def tempaddplant(request):
-    addplant(request.data)
-    return HttpResponse("Hey")
+    data="Hi"
+    if request.method == 'POST':
+        data=request.data
+        #addplant(data)
+    return Response({'received data': request.data})
 
 
 '''

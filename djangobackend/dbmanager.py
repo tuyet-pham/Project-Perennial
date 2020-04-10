@@ -23,6 +23,16 @@ class User(Document):
     email = TextField()
     hashpass = TextField()
 
+class PlantDevice(Document):
+    name = TextField()
+    species = TextField()
+    geolocationCity = TextField()
+    geolocationState = TextField()
+    indoorsOutdoors = TextField()
+    wateringCoditionTrigger = TextField()
+    wateringConditionValue = TextField()
+    additionalNotes = TextField()
+
 
 
 db = Server("http://%s:%s@db_data:5984/" % (os.environ['COUCHDB_USER'],os.environ['COUCHDB_PASSWORD']))
@@ -57,7 +67,10 @@ def adduser(uname, uemail, upass):
     # else:
     #     return 
 
-
+def addplant(data):
+    print("Gottem")
+    #plant = PlantDevice(name=data['name'],species=data['species'],geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors'],wateringCoditionTrigger=data['wateringCoditionTrigger'],wateringConditionValue=data['wateringConditionValue'],additionalNotes=data['additionalNotes'])
+    #plant.store(plant_device)
 
 
 # def addDevice(user_id, content):
@@ -68,5 +81,3 @@ def adduser(uname, uemail, upass):
 
 
 # def addReading():
-
-

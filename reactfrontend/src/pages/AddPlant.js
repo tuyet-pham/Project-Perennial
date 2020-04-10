@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PageTemplate from '../PageTemplate';
 import { FaCamera} from 'react-icons/fa';
+import { addPlant } from '../api/AccountAPI'
 
 
 function AddPlant() {
@@ -27,7 +28,9 @@ function AddPlant() {
         wateringConditionTrigger:{wateringConditionTrigger},
         wateringConditionValue:{wateringConditionValue},
         additionalNotes:{additionalNotes},
-      };      
+      };   
+      
+      addPlant(plant);
     }
 
     // Forms with hooks reference: https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/
