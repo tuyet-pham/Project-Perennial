@@ -101,6 +101,8 @@
 .options-container {
   padding: 5px;
   margin: 10px auto;
+  margin-top: 10px;
+  margin-bottom: 0px;
   width: 90% !important;
   background-color: #3d3f3b;
   box-shadow: 0 0 0pt 1pt #b1d898; /* rounded corners on outline */

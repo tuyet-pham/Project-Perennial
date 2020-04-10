@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PageTemplate from '../PageTemplate';
 
 function Options() {
   const [notificationMethod, setNotificationMethod] = useState('');
   const [phoneNum, setPhoneNum] = useState('');
   const [emailAddress, setEmailAddress] = useState('');
+  const [notificationBoxes, setNotificationBoxes] = useAsyncState ([]);
 
   const handleSubmit = (event) => {
     console.log("Submitted")
@@ -13,12 +14,13 @@ function Options() {
     console.log(notificationMethod);
     console.log(phoneNum);
     console.log(emailAddress);
+    console.log(notificationBoxes);
   }
 
   return (
     <PageTemplate>
         <div>
-          <OptionButtons handleSubmit={handleSubmit} notificationMethod={notificationMethod} setNotificationMethod={setNotificationMethod} setEmailAddress={setEmailAddress} setPhoneNum={setPhoneNum} /> {/*I know it's ugly, please avert your eyes. */}
+          <OptionButtons handleSubmit={handleSubmit} notificationMethod={notificationMethod} setNotificationMethod={setNotificationMethod} setEmailAddress={setEmailAddress} setPhoneNum={setPhoneNum} setNotificationBoxes={setNotificationBoxes}/> {/*I know it's ugly, please avert your eyes. */}
         </div>
     </PageTemplate>
   );
@@ -41,7 +43,7 @@ function OptionButtons(props) {
   }
   else if (menuString === 'notifications') {
     return (
-      <NotificationOptions handleSubmit={props.handleSubmit} setMenuString={setMenuString} notificationMethod={props.notificationMethod} setNotificationMethod={props.setNotificationMethod} setPhoneNum={props.setPhoneNum} setEmailAddress={props.setEmailAddress} />
+      <NotificationOptions handleSubmit={props.handleSubmit} setMenuString={setMenuString} notificationMethod={props.notificationMethod} setNotificationMethod={props.setNotificationMethod} setPhoneNum={props.setPhoneNum} setEmailAddress={props.setEmailAddress} setNotificationBoxes={props.setNotificationBoxes}/>
     );
   }
 }
@@ -90,6 +92,7 @@ function AccountOptions(props) {
 
 function NotificationOptions(props) {
   // What to notify (checklist) and email/SMS settings
+
   return (
     <div>
       <div className="options-container">
@@ -106,26 +109,20 @@ function NotificationOptions(props) {
             </label>
           </div>
           <NotificationData notificationMethod={props.notificationMethod} setEmailAddress={props.setEmailAddress} setPhoneNum={props.setPhoneNum}/>
-          <button type="submit" value="Submit" className="btn btn-primary" onClick={props.handleSubmit}>
+        </div>
+        <br />
+        <div>
+          <div id="notify_conditions">
+            Notify me when:
+            <div>
+              <NotificationCheckboxes setNotificationBoxes={props.setNotificationBoxes}/>
+            </div>
+          </div>
+        </div>
+        <button type="submit" value="Submit" className="btn btn-primary" onClick={props.handleSubmit}>
             Update preferences
-          </button>
-        </div>
+        </button>
       </div>
-      {/* <div id="change_password_button">
-        <div id="notify_conditions">
-          Notify me when:
-          <div>
-            <label>
-              <input type="radio" name="contactmethod" value="email" /> Email
-            </label>
-          </div>
-          <div>
-            <label>
-              <input type="radio" name="contactmethod" value="sms" /> Text
-            </label>
-          </div>
-        </div>
-      </div> */}
       <div id="back_button" className="button-container">
         <div className="home-buttons" onClick={() => props.setMenuString('toplayer')}>
           Back
@@ -159,6 +156,73 @@ function NotificationData(props) {
       </div>
     );
   }
+}
+
+// Allows for async use of setState, so values
+// are updated in real time.
+// Src: https://sung.codes/blog/2018/12/07/setting-react-hooks-states-in-a-sync-like-manner/
+function useAsyncState(initialValue) {
+  const [value, setValue] = useState(initialValue);
+
+  const setter = x =>
+    new Promise(resolve => {
+      setValue(x);
+      resolve(x);
+    });
+
+    return [value, setter];
+}
+
+
+function NotificationCheckboxes(props) {
+  const [items, setItems] = useAsyncState([
+    {
+      label: "A plant is watered",
+      name: "watered-plant",
+      checked: false
+    },
+    {
+      label: "A reservoir is empty",
+      name: "empty-reservoir",
+      checked: false
+    }
+  ]);
+
+  useEffect(() => {props.setNotificationBoxes(items)});
+
+  const handleChangedCheckbox = index => {
+    toggleCheckbox(index)
+  }
+
+  const toggleCheckbox = index => {
+    setItems(currentItems => 
+      currentItems.map((item, itemIndex) => {
+        if(itemIndex === index) {
+          return {
+            ...item,
+            checked: !item.checked
+          };
+        }
+        return item;
+      }),
+    )
+  };
+
+  return (
+    <ul>
+      {items.map((item, index) => (
+        <li key={index}>
+          <input
+            type="checkbox"
+            name={item.name}
+            onChange={() => handleChangedCheckbox(index)}
+            checked={item.checked}
+          />
+          {item.label}
+        </li>
+      ))}
+    </ul>
+  );
 }
   
   export default Options;
