@@ -11,6 +11,16 @@ import sys
 sys.path.append('..')
 from dbmanager import *
 
+'''
+Authentication is currently not working.
+Routes can added to the class below when authentication is working. 
+Write your corresponding routes at the bottom of the page.
+
+**IMPORTANT**
+(1). Change data to match your incoming requests
+(2). Add the correct response needed to debug.
+'''
+
 
 
 # '''
