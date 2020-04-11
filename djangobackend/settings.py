@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'users',
 ]
 
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -57,6 +58,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     )
 }
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -136,9 +138,8 @@ STATIC_URL = '/static/'
 
 
 DATABASES = { 
-    'default': 
-    { 
+    'default': { 
         'ENGINE': 'django.db.backends.sqlite3', 
-        'NAME': 'couchUsers', 
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'), 
     } 
 }

@@ -33,8 +33,8 @@ class PlantDevice(Document):
     wateringConditionValue = TextField()
     additionalNotes = TextField()
 
-
 db = Server("http://%s:%s@db_data:5984/" % (os.environ['COUCHDB_USER'],os.environ['COUCHDB_PASSWORD']))
+# db.resource.session.disable_ssl_verification()
 
 users = db['users']
 plant_device = db['plant_device']
@@ -55,7 +55,7 @@ def finduser(uname):
     
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
-            return True
+            return user.id
     
     return False
 
@@ -71,14 +71,15 @@ Purpose : Used to login a user.
           (5). Returns 3 if the username doesn't match
 Returns : (1)users id, (2)False
 '''
-def authenticate(uname, upass):
-    doc = users[doc_id]
+def authenticateUser(uname, upass):
+    doc = users[uname]
+    print(doc)
     if (doc == ''):
         return False
     else:
-        hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
-        if doc['username'] == uname:
-            if doc['password'] == hashpass:
+        # hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
+        if (doc['username'] == uname):
+            if (doc['hashpass'] == upass):
                 return True
             else:
                 return 3
