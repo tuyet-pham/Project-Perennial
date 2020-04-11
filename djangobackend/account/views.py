@@ -18,7 +18,7 @@ Write your corresponding routes at the bottom of the page.
 
 **IMPORTANT**
 (1). Change data to match your incoming requests
-(2). Add the correct response needed to debug.
+(2). Add the correct HttpResponse, JsonResponse or Response needed to debug.
 '''
 
 
