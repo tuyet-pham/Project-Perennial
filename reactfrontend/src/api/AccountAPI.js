@@ -10,3 +10,25 @@ export async function addPlant(params){
         console.log(error);
     });
 }
+
+
+export async function monitorplants(params){
+    await axios.post('account/monitorplants/', qs.stringify(params))
+    .then(function(response) {
+        console.log(response);
+    })
+    .catch(function(error) {
+        console.log(error);
+    });
+}
+
+
+export async function options(params){
+    await axios.post('account/options/', qs.stringify(params))
+    .then(function(response) {
+        console.log(response);
+    })
+    .catch(function(error) {
+        console.log(error);
+    });
+}
