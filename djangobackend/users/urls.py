@@ -11,4 +11,3 @@ urlpatterns = [
 ]
 
 
-# localhost:8000/users/login

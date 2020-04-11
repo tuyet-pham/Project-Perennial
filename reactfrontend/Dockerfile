@@ -14,6 +14,7 @@ COPY package-lock.json /app/reactfrontend/package-lock.json
 RUN npm install
 RUN npm config set unsafe-perm true
 RUN npm install axios
+RUN npm install qs
 
 RUN npm install react-scripts -g
 

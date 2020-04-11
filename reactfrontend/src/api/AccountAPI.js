@@ -1,27 +1,12 @@
 import axios from 'axios';
+import qs from "qs";
 
-export async function addPlant(plant){
-    console.log(plant);
-    await axios.post( '/account/addplants', {}, {
-        data : {
-            name : plant.name,
-            species : plant.species,
-            geolocationCity : plant.geolocationCity,
-            geolocationState : plant.geolocationState,
-            indoorsOutdoors : plant.indoorsOutdoors,
-            wateringConditionTrigger : plant.wateringConditionTrigger,
-            wateringConditionValue : plant.wateringConditionValue,
-            additionalNotes : plant.additionalNotes,
-        }
-    })
+export async function addPlant(params){
+    await axios.post('account/addplants/', qs.stringify(params))
     .then(function(response) {
-        /** This is where to recieve the token given by Django **/
         console.log(response);
-
-        return response.data;
     })
     .catch(function(error) {
         console.log(error);
-        return null;
     });
 }

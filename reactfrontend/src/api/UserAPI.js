@@ -1,23 +1,13 @@
 import axios from 'axios';
+import qs from "qs";
 
-
-
-export async function userLogin(user){
-    await axios.get( '/users/login', {}, {
-        auth : {
-            username : user.username,
-            password : user.password,
-        }
-    })
+export async function userLogin(params){
+    await axios.post('users/login/', qs.stringify(params))
     .then(function(response) {
-        /** This is where to recieve the token given by Django **/
         console.log(response);
-
-        return response.data;
     })
     .catch(function(error) {
         console.log('Error on Authentication');
-        return null;
     });
 }
 

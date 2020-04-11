@@ -1,15 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import JsonResponse
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
+
 import sys
 sys.path.append('..')
 from dbmanager import *
-from rest_framework.decorators import api_view
-from rest_framework.decorators import parser_classes
-from rest_framework.parsers import JSONParser
 
 
 
@@ -56,15 +56,28 @@ class AddPlant(APIView):
         }
         return Response(content)
 
-@api_view(['POST'])
-@parser_classes([JSONParser]) 
-def tempaddplant(request):
-    data="Hi"
-    if request.method == 'POST':
-        data=request.data
-        #addplant(data)
-    return Response({'received data': request.data})
 
+@csrf_exempt
+def addplants(request):
+    data = {}
+
+    try:
+        data = { 
+            name : request.POST.get('name'),
+            species : request.POST.get('species'),
+            geolocationCity : request.POST.get('geolocationCity'),
+            geolocationState : request.POST.get('geolocationState'),
+            indoorsOutdoors : request.POST.get('indoorsOutdoors'),
+            wateringConditionTrigger : request.POST.get('wateringConditionTrigger'),
+            wateringConditionValue : request.POST.get('wateringConditionValue'),
+            additionalNotes : request.POST.get('additionalNotes'),
+        }
+        # addplant(data)
+    except Exception as e:
+        print(e)
+
+    
+    return HttpResponse('200')
 
 '''
 '''

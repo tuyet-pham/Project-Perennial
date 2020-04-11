@@ -19,18 +19,18 @@ function AddPlant() {
     const handleSubmit = (event) => {
       event.preventDefault()
       
-      const plant = { 
-        name: {name},
-        species: {species},
-        geolocationCity:{geolocationCity},
-        geolocationState:{geolocationState},
-        indoorsOutdoors:{indoorsOutdoors},
-        wateringConditionTrigger:{wateringConditionTrigger},
-        wateringConditionValue:{wateringConditionValue},
-        additionalNotes:{additionalNotes},
-      };   
+      const params = { 
+        name : `${name}`,
+        species : `${species}`,
+        geolocationCity :`${geolocationCity}`,
+        geolocationState :`${geolocationState}`,
+        indoorsOutdoors :`${indoorsOutdoors}`,
+        wateringConditionTrigger :`${wateringConditionTrigger}`,
+        wateringConditionValue :`${wateringConditionValue}`,
+        additionalNotes :`${additionalNotes}`
+      }
       
-      addPlant(plant);
+      addPlant(params);
     }
 
     // Forms with hooks reference: https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/
