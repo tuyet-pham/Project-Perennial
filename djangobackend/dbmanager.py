@@ -32,9 +32,8 @@ To store pick the database that you want to store the document in - aka one of t
 and use the key word <yourdocument>.store(<db_name>)
 
 @EXAMPLE
-user = User(username='John', email='John@gmail.com', hashpass='sr$5jgRGr774')
-user.store(users)
-
+newUser = User(username='John', email='John@gmail.com', hashpass='sr$5jgRGr774')
+newUser.store(users)
 '''
 class User(Document):
     username = TextField()
