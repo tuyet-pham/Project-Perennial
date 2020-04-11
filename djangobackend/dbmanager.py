@@ -2,13 +2,11 @@
  Use CouchDB to create a CouchDB client
  This is an independent manager for the database
  This is to hopefully consolidate the access to the db
- Could potentially migrate to '/account/views.py'. 
- Since all apps will need it, this might be unlikely.
 
-Documentations for couchdb and python connection
-https://couchdb-python.readthedocs.io/en/latest/client.html#server
-
+ Documentations for couchdb and python connection
+ https://couchdb-python.readthedocs.io/en/latest/client.html#server
 '''
+
 from couchdb import Server
 from couchdb.mapping import Document, TextField, IntegerField, DateTimeField
 from couchdb import http, json, util
@@ -18,6 +16,26 @@ import hashlib
 
 from rest_framework.authtoken.models import Token
 
+
+db = Server("http://%s:%s@db_data:5984/" % (os.environ['COUCHDB_USER'],os.environ['COUCHDB_PASSWORD']))
+
+users = db['users']
+plant_device = db['plant_device']
+plant_types = db['plant_types']
+plant_device_reading = db['plant_device_reading']
+
+
+'''
+Database documents can be stored using Document class inheritance.
+Create the document class and their attributes.
+To store pick the database that you want to store the document in - aka one of the ones above -
+and use the key word <yourdocument>.store(<db_name>)
+
+@EXAMPLE
+user = User(username='John', email='John@gmail.com', hashpass='sr$5jgRGr774')
+user.store(users)
+
+'''
 class User(Document):
     username = TextField()
     email = TextField()
@@ -32,14 +50,6 @@ class PlantDevice(Document):
     wateringCoditionTrigger = TextField()
     wateringConditionValue = TextField()
     additionalNotes = TextField()
-
-db = Server("http://%s:%s@db_data:5984/" % (os.environ['COUCHDB_USER'],os.environ['COUCHDB_PASSWORD']))
-# db.resource.session.disable_ssl_verification()
-
-users = db['users']
-plant_device = db['plant_device']
-plant_types = db['plant_types']
-plant_device_reading = db['plant_device_reading']
 
 
 '''
@@ -106,6 +116,9 @@ def adduser(uname, uemail, upass):
     else:
         return existErr
 
+     
+
+     
 def addplant(data):
     print("Gottem")
     #plant = PlantDevice(name=data['name'],species=data['species'],geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors'],wateringCoditionTrigger=data['wateringCoditionTrigger'],wateringConditionValue=data['wateringConditionValue'],additionalNotes=data['additionalNotes'])
