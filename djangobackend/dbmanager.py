@@ -118,14 +118,9 @@ def adduser(uname, uemail, upass):
      
 
      
-def addplant(data):
-    print("Gottem")
-    #plant = PlantDevice(name=data['name'],species=data['species'],geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors'],wateringCoditionTrigger=data['wateringCoditionTrigger'],wateringConditionValue=data['wateringConditionValue'],additionalNotes=data['additionalNotes'])
-    #plant.store(plant_device)
-
-
-# def addDevice(user_id, content):
-#     plant_device['05'] = content
+def addPlant(data):
+    plant = PlantDevice(name=data['name'],species=data['species'],geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors'],wateringCoditionTrigger=data['wateringConditionTrigger'],wateringConditionValue=data['wateringConditionValue'],additionalNotes=data['additionalNotes'])
+    plant.store(plant_device)
 
 
 

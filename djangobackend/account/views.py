@@ -10,6 +10,11 @@ from django.views.decorators.csrf import csrf_exempt
 import sys
 sys.path.append('..')
 from dbmanager import *
+from rest_framework.status import (
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+    HTTP_200_OK
+)
 
 '''
 Authentication is currently not working.
@@ -89,22 +94,22 @@ def addplants(request):
 
     try:
         data = { 
-            name : request.POST.get('name'),
-            species : request.POST.get('species'),
-            geolocationCity : request.POST.get('geolocationCity'),
-            geolocationState : request.POST.get('geolocationState'),
-            indoorsOutdoors : request.POST.get('indoorsOutdoors'),
-            wateringConditionTrigger : request.POST.get('wateringConditionTrigger'),
-            wateringConditionValue : request.POST.get('wateringConditionValue'),
-            additionalNotes : request.POST.get('additionalNotes'),
+            'name' : request.POST.get('name'),
+            'species' : request.POST.get('species'),
+            'geolocationCity' : request.POST.get('geolocationCity'),
+            'geolocationState' : request.POST.get('geolocationState'),
+            'indoorsOutdoors' : request.POST.get('indoorsOutdoors'),
+            'wateringConditionTrigger' : request.POST.get('wateringConditionTrigger'),
+            'wateringConditionValue' : request.POST.get('wateringConditionValue'),
+            'additionalNotes' : request.POST.get('additionalNotes'),
         }
         # passing data to addplant function in dbmanager.py in djangobackend
-        # addplant(data)
+        addPlant(data)
     except Exception as e:
-        print(e)
+        print("Error: Failed Request on %s", e)
 
     
-    return HttpResponse('200')
+    return JsonResponse(data, status=HTTP_200_OK)
 
 
 
@@ -114,21 +119,22 @@ def options(request):
 
     try:
         data = { 
-            name : request.POST.get('name'),
-            species : request.POST.get('species'),
-            geolocationCity : request.POST.get('geolocationCity'),
-            geolocationState : request.POST.get('geolocationState'),
-            indoorsOutdoors : request.POST.get('indoorsOutdoors'),
-            wateringConditionTrigger : request.POST.get('wateringConditionTrigger'),
-            wateringConditionValue : request.POST.get('wateringConditionValue'),
-            additionalNotes : request.POST.get('additionalNotes'),
+            'name' : request.POST.get('name'),
+            'species' : request.POST.get('species'),
+            'geolocationCity' : request.POST.get('geolocationCity'),
+            'geolocationState' : request.POST.get('geolocationState'),
+            'indoorsOutdoors' : request.POST.get('indoorsOutdoors'),
+            'wateringConditionTrigger' : request.POST.get('wateringConditionTrigger'),
+            'wateringConditionValue' : request.POST.get('wateringConditionValue'),
+            'additionalNotes' : request.POST.get('additionalNotes'),
         }
-    except Exception as e:
-        print(e)
-
         # passing data to options function in dbmanager.py in djangobackend
-        # options(data)
-    return HttpResponse('200')
+        # options(data) - make in dbmanager.py
+    except Exception as e:
+        print("Error: Failed Request on %s", e)
+
+    
+    return JsonResponse(data)
 
 
 
@@ -139,18 +145,19 @@ def monitorplants(request):
 
     try:
         data = { 
-            name : request.POST.get('name'),
-            species : request.POST.get('species'),
-            geolocationCity : request.POST.get('geolocationCity'),
-            geolocationState : request.POST.get('geolocationState'),
-            indoorsOutdoors : request.POST.get('indoorsOutdoors'),
-            wateringConditionTrigger : request.POST.get('wateringConditionTrigger'),
-            wateringConditionValue : request.POST.get('wateringConditionValue'),
-            additionalNotes : request.POST.get('additionalNotes'),
+            'name' : request.POST.get('name'),
+            'species' : request.POST.get('species'),
+            'geolocationCity' : request.POST.get('geolocationCity'),
+            'geolocationState' : request.POST.get('geolocationState'),
+            'indoorsOutdoors' : request.POST.get('indoorsOutdoors'),
+            'wateringConditionTrigger' : request.POST.get('wateringConditionTrigger'),
+            'wateringConditionValue' : request.POST.get('wateringConditionValue'),
+            'additionalNotes' : request.POST.get('additionalNotes'),
         }
-    except Exception as e:
-        print(e)
-
         # passing data to monitorplants function in dbmanager.py in djangobackend
-        # monitorplants(data)
-    return HttpResponse('200')
+        # monitorplants(data) - make in dbmanager.py
+    except Exception as e:
+        print("Error: Failed Request on %s", e)
+
+    
+    return JsonResponse(data)

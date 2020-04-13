@@ -39,7 +39,7 @@ export default App;
 //   const text = document.querySelector('#char-input').value
 
 //   axios
-//     .get(`/login?text=${text}`).then(({data}) => {
+//     .get(`users/login?text=${text}`).then(({data}) => {
 //       document.querySelector('#char-count').textContent = `${data.count} characters!`
 //     })
 //     .catch(err => console.log(err))
