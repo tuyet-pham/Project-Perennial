@@ -22,7 +22,7 @@ function Options() {
   const validateInput = () => {
     // Define regular expression patterns.
     var phoneNumRegex = new RegExp("([0-9]{11}|[0-9]{10})");
-    var emailRegex = new RegExp(".+@.+\..+");
+    var emailRegex = new RegExp("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[\.][a-zA-Z]{2,}");
     let inputValid = ''
     
     // Check for valid input.
