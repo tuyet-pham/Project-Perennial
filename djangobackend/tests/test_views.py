@@ -5,6 +5,22 @@ from users.views import register, login, logout
 from users.models import User
 import json
 
+"""
+This function tests the functionality of the views.py files in the account and users
+folders. The tests currently only consist of verifying that the functions in the 
+respective views.py files return the correct status codes.
+
+It is expected we receive status codes 403 for the current Account views tests
+as the classes in the account views.py file that manage these functions have 
+authentication and permission classes that restrict access only to certain users.
+Our tests do not have these permissions yet. Later tests will so we can test all
+functionality of these functions.
+
+For the views.py file under the users folder, it is appropriate for us to be 
+receiving status codes of 200 in return because there are no restrictions on 
+access for these functions. 
+"""
+
 class TestAccountViews(TestCase):
 
     def setUp(self):
