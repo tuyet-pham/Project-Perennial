@@ -33,32 +33,35 @@ def register(request):
 # @permission_classes((AllowAny,))
 # @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def login(request):
+    
     username = ''
     password = ''
-    token = ''
-
     try:
         username = request.POST.get('username')
         password = request.POST.get('password')
+        
     except Exception as e:
         print(e)
- 
-    user = authenticate(username=username, password=password)
+     
+    # user = authenticate(username=username, password=password)
+    # newEntry = User.objects.create_user(username, password)
+    # newEntry.save()
 
-    if(authenticateUser(username, password) == True):
-        if not user:
-            newEntry = User.objects.get_or_create(username=username, password=password)
-            newEntry.save()
+    # if(authenticateUser(username, password) == True):
+    #     if not user:
+    #         newEntry = models.User.objects.create(username=username, password=password)
+    #         newEntry.save()
 
-            user = authenticate(username=username, password=password)
-            login(request, user)
+    #         user = authenticate(username=username, password=password)
+    #         login(request, user)
 
-            token = Token.objects.get_or_create(user=user)
-            return Response({'token': token}, status=HTTP_200_OK)
-        else:
-            return Response({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
-    else:
-        return Response('ffvf')    
+    #         token = Token.objects.get_or_create(user=user)
+    #         return Response({'token': token}, status=HTTP_200_OK)
+    #     else:
+    #         return Response({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
+    # else:
+
+    return HttpResponse(newEntry)    
         
 
 

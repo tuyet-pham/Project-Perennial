@@ -29,8 +29,7 @@ services:
     stdin_open: true
     restart: always
     tty: true
-    command: python3 manage.py runserver 0.0.0.0:8000
-    entrypoint: /entrypoint.sh
+    command: ./entrypoint.sh
     links:
       - db
     environment:
