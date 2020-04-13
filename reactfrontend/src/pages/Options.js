@@ -10,11 +10,40 @@ function Options() {
   const handleSubmit = (event) => {
     console.log("Submitted")
     event.preventDefault();
+    if (validateInput()) {
+      console.log(notificationMethod);
+      console.log(phoneNum);
+      console.log(emailAddress);
+      console.log(notificationBoxes);
+    }
+  }
 
-    console.log(notificationMethod);
-    console.log(phoneNum);
-    console.log(emailAddress);
-    console.log(notificationBoxes);
+  const validateInput = () => {
+    // Define regular expression patterns.
+    var phoneNumRegex = new RegExp("([0-9]{11}|[0-9]{10})");
+    var emailRegex = new RegExp(".+@.+\..+");
+    let inputValid = ''
+    
+    // Check for valid input.
+    if (notificationMethod === '') {
+      inputValid = "Please select a notification method."
+    }
+    else {
+      if (notificationMethod === 'sms' && phoneNumRegex.test(phoneNum) === false) {
+        inputValid = "Please input a valid phone number."
+      }
+      if (notificationMethod === 'email' && emailRegex.test(emailAddress) === false) {
+        inputValid = "Please input a valid email address."
+      }
+    }
+
+    if(inputValid !== '') {
+      alert(inputValid)
+      return(false)
+    }
+
+    alert('Notification preferences updated.')
+    return(true)
   }
 
   return (
@@ -138,14 +167,14 @@ function NotificationData(props) {
   if (notificationMethod === 'email') {
     return(
       <div>
-        <input type='text' placeholder="Valid email address" onChange={event => props.setEmailAddress(event.target.value)} />
+        <input type='text' placeholder="Valid email address" required onChange={event => props.setEmailAddress(event.target.value)} />
       </div>
     );
   }
   else if (notificationMethod === 'sms') {
     return(
       <div>
-        <input type='text' placeholder="Valid phone number" onChange={event => props.setPhoneNum(event.target.value)} />
+        <input type='text' placeholder="Valid phone number" pattern="([0-9]{11}|[0-9]{10})" required onChange={event => props.setPhoneNum(event.target.value)} />
       </div>
     );
   }
@@ -209,7 +238,7 @@ function NotificationCheckboxes(props) {
   };
 
   return (
-    <ul>
+    <ul className="checkboxes">
       {items.map((item, index) => (
         <li key={index}>
           <input
