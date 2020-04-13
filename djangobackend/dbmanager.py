@@ -42,6 +42,7 @@ class User(Document):
 
 class PlantDevice(Document):
     name = TextField()
+    username = Textfield()
     species = TextField()
     geolocationCity = TextField()
     geolocationState = TextField()
@@ -50,6 +51,21 @@ class PlantDevice(Document):
     wateringConditionValue = TextField()
     additionalNotes = TextField()
 
+class PlantDeviceReading(Document):
+    username = Textfield()
+    devicetype = TextField()
+    device_id = TextField()
+    timeReading = TextField()
+    datetime = TextField()
+    values = {
+        moistureLevel = TextField()
+        waterLevel = TextField()
+        pumpStatus = TextField()
+    }
+
+class PlantTypes(Document):
+    plant = Textfield()
+    minMoisture = TextField()
 
 '''
 @finduser()

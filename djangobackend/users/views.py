@@ -5,7 +5,6 @@ from rest_framework.response import Response
 
 import django
 from django.db import models
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
@@ -25,8 +24,6 @@ from dbmanager import *
 
 
 @csrf_exempt
-@api_view(['POST'])
-@permission_classes((AllowAny,))
 def register(request):
     serialized = UserSerializer(data=request.data)
     if serialized.is_valid():
@@ -39,32 +36,30 @@ def register(request):
 
 
 @csrf_exempt
-# @api_view(["POST"])
-# @permission_classes((AllowAny,))
-# @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def login(request):
     
-    username = ''
-    password = ''
-    try:
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        
-    except Exception as e:
-        print(e)
-     
-    user = authenticate(username=username, password=password)
+    authUser = {}
 
-    if(authenticateUser(username, password) == True):
+    try:
+        authUser = {
+            'username' : request.POST.get('username'),
+            'password' : request.POST.get('password'),
+        }
+    except Exception as e:
+        print("Error : Failed Request on %s", e)
+     
+    user = authenticate(username=authUser['username'], password=authUser['password'])
+
+    if(authenticateUser(user) == True):
         if not user:
-            newEntry = User.objects.create_user(username=username, password=password)
+            newEntry = User.create(username=authUser['username'], password=authUser['password'])
             newEntry.save()
 
-            user = authenticate(username=username, password=password)
-            login(request, user)
+            user = authenticate(username=authUser['username'], password=authUser['password'])
+            login(user)
 
             token = Token.objects.get_or_create(user=user)
-            return Response({'token': token}, status=HTTP_200_OK)
+            return Response({'token': token, 'username': authUser['username']}, status=HTTP_200_OK)
         else:
             return Response({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
     else:
