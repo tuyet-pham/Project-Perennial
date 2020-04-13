@@ -8,7 +8,7 @@
 '''
 
 from couchdb import Server
-from couchdb.mapping import Document, TextField, IntegerField, DateTimeField
+from couchdb.mapping import Document, TextField, IntegerField, DateTimeField, DictField, Mapping
 from couchdb import http, json, util
 from uuid import uuid4
 import os, sys
@@ -42,29 +42,31 @@ class User(Document):
 
 class PlantDevice(Document):
     name = TextField()
-    username = Textfield()
+    username = TextField()
     species = TextField()
-    geolocationCity = TextField()
-    geolocationState = TextField()
-    indoorsOutdoors = TextField()
-    wateringCoditionTrigger = TextField()
+    location = DictField(Mapping.build(
+        geolocationCity = TextField(),
+        geolocationState = TextField(),
+        indoorsOutdoors = TextField(),
+    ))
+    wateringConditionTrigger = TextField()
     wateringConditionValue = TextField()
     additionalNotes = TextField()
 
 class PlantDeviceReading(Document):
-    username = Textfield()
+    username = TextField()
     devicetype = TextField()
     device_id = TextField()
     timeReading = TextField()
     datetime = TextField()
-    values = {
-        moistureLevel = TextField()
-        waterLevel = TextField()
-        pumpStatus = TextField()
-    }
+    values = DictField(Mapping.build(
+        moistureLevel = TextField(),
+        waterLevel = TextField(),
+        pumpStatus = TextField(),
+    ))
 
 class PlantTypes(Document):
-    plant = Textfield()
+    plant = TextField()
     minMoisture = TextField()
 
 '''
@@ -133,9 +135,24 @@ def adduser(uname, uemail, upass):
 
      
 
-     
+'''
+@addPlant()
+Param   : data
+Purpose : Used to add a new plant device.
+          (1). Checks to see if the user exists in couchdb.
+          (2). If user exists, it checks to see if that plant device exists already
+          (3). If plant doesn't exist, adds the plant to the database under that username
+          (4). If plant exists, it returns a check to account/views that notifies the user that the plant cannot be added
+Returns : (1). Check to account/views if the plant device can be added or not
+'''
 def addPlant(data):
-    plant = PlantDevice(name=data['name'],species=data['species'],geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors'],wateringCoditionTrigger=data['wateringConditionTrigger'],wateringConditionValue=data['wateringConditionValue'],additionalNotes=data['additionalNotes'])
+    plant = PlantDevice(
+        name=data['name'],
+        species=data['species'],
+        location=dict(geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors']),
+        wateringConditionTrigger=data['wateringConditionTrigger'],
+        wateringConditionValue=data['wateringConditionValue'],
+        additionalNotes=data['additionalNotes'])
     plant.store(plant_device)
 
 
