@@ -10,12 +10,12 @@ from dbmanager import *
 
 
 def register(request):
-    adduser()
+    adduser('uname', 'uemail', 'upass')
     return HttpResponse("register")
 
 
 def login(request):
-    adduser()
+    adduser('uname', 'uemail', 'upass')
     return HttpResponse("")
 
 
