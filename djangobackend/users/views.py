@@ -3,10 +3,10 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from rest_framework.response import Response
 
-import django
 from django.db import models
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import AnonymousUser, User, UserManager
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import AllowAny
@@ -50,9 +50,9 @@ def login(request):
      
     user = authenticate(username=authUser['username'], password=authUser['password'])
 
-    if(authenticateUser(user) == True):
+    if(authenticateUser(authUser['username'], authUser['password']) == True):
         if not user:
-            newEntry = User.create(username=authUser['username'], password=authUser['password'])
+            newEntry = User.objects.create_user(username=authUser['username'], password=authUser['password'])
             newEntry.save()
 
             user = authenticate(username=authUser['username'], password=authUser['password'])

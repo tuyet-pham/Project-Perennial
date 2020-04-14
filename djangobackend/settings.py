@@ -80,14 +80,13 @@ CORS_ORIGIN_WHITELIST = (
 
 ROOT_URLCONF = 'urls'
 
-
-
 DATABASES = {
     'default': { 
         'ENGINE': 'django.db.backends.sqlite3', 
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'), 
     }
 }
+
 
 TEMPLATES = [
     {
