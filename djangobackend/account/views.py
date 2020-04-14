@@ -18,8 +18,8 @@ class Account(APIView):
 
     def get(self, request, format=None):
         content = {
-            'username': unicode(request.user),  # `django.contrib.auth.User` instance.
-            'auth': unicode(request.auth),  # None
+            'username': str(request.user),  # `django.contrib.auth.User` instance.
+            'auth': str(request.auth),  # None
         }
         return Response(content)
     
@@ -33,8 +33,8 @@ class MonitorPlants(APIView):
 
     def get(self, request, format=None):
         content = {
-            'username': unicode(request.user),  # `django.contrib.auth.User` instance.
-            'auth': unicode(request.auth),  # None
+            'username': str(request.user),  # `django.contrib.auth.User` instance.
+            'auth': str(request.auth),  # None
         }
         return Response(content)
 
@@ -48,8 +48,8 @@ class AddPlant(APIView):
     
     def post(self, request, format=None):
         content = {
-            'username': unicode(request.user),  # `django.contrib.auth.User` instance.
-            'auth': unicode(request.auth),  # None
+            'username': str(request.user),  # `django.contrib.auth.User` instance.
+            'auth': str(request.auth),  # None
         }
         return Response(content)
 
@@ -67,8 +67,8 @@ class Options(APIView):
 
     def post(self, request, format=None):
         content = {
-            'username': unicode(request.user),  # `django.contrib.auth.User` instance.
-            'auth': unicode(request.auth),  # None
+            'username': str(request.user),  # `django.contrib.auth.User` instance.
+            'auth': str(request.auth),  # None
         }
         return Response(content)
 
