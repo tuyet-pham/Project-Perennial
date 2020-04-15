@@ -1,0 +1,60 @@
+version: "3.2"
+
+services:
+
+# ---- Database
+  db:
+    container_name: db_data
+    build: ./db
+    ports:
+      - 5986:5986
+      - 5984:5984
+    expose:
+      - 5986
+      - 5984
+    volumes:
+      - db:/opt/couchdb/data
+    restart: always
+
+# ---- Django
+  djangobackend:
+    build: ./djangobackend
+    volumes:
+      - ./djangobackend/:/app/django
+    ports:
+      - 8000:8000
+    stdin_open: true
+    restart: always
+    tty: true
+    command: python3 manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+
+# ---- ReactJS
+  reactfrontend:
+    build: ./reactfrontend
+    volumes:
+      - ./reactfrontend:/app
+      - node-modules:/app/node_modules
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=development
+    #depends_on:
+    #  - djangobackend
+    command: npm start
+
+  data:
+    build: ./data
+    volumes:
+      - ./data:/app/data
+    environment:
+      - HOST=${HOST}
+    links:
+      - db
+    command: ./perennialData.sh
+
+# ---- Our volumes
+volumes:
+  db:
+  node-modules:

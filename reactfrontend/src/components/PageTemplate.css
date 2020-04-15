@@ -1,0 +1,44 @@
+
+/* Used for active link in bottom nav. */
+.selected {
+    background-color: #b1d898 !important;
+    color: #72bb53 !important;
+    height: 100%;
+    width: 100%;
+}
+
+/* Used for inactive links in bottom nav. */
+.unselected {
+    background-color: #72bb53;
+    color: white;
+    height: 100%;
+    width: 100%;
+    font-size: xx-large;
+}
+
+/* Header */
+.Header {
+    background-color: black;
+    color: white;
+    text-align: left;
+    min-height: 60px;
+    padding: 5px;
+    font-size: xx-large;
+}
+
+.header-icon {
+    color: #72bb53;
+    margin: 5px;
+}
+
+.header-circle {
+    background-color: white;
+    color: #72bb53 !important;
+    border-radius: 50%;
+    padding: 5px 8px 11px 8px; /* Center the icon in the circle */
+    margin: 5px 30px 5px 5px; /* Leave space between icon and text */
+}
+
+.PageTemplate {
+    padding-bottom: 60px;
+}

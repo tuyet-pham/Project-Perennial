@@ -1,0 +1,94 @@
+/* Builtin classes that might come in handy */
+
+.App {
+  text-align: center;
+  background-color: #7d8379;
+  height: 100%;
+  color: white;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+/* Buttons on home page */
+
+.button-container {
+  display: flex; /* This lets buttons scale to screen */
+}
+
+.home-buttons {
+  color: white;
+  font-size: xx-large;
+  min-height: 60px;
+  width: 90% !important;
+  margin: 10px auto;
+  padding: 5px;
+  background-color: #3d3f3b;
+  box-shadow: 0 0 0pt 1pt #b1d898; /* rounded corners on outline */
+  border-radius: 5px;
+  text-align: left;
+}
+
+.circle-icon {
+  background-color: white;
+  color: #72bb53 !important;
+  box-sizing: border-box;
+  border-radius: 50%;
+  padding: 5px 8px 8px 8px; /* Center the icon in the circle */
+  margin: 5px 30px 5px 5px; /* Leave space between icon and text */
+}
+
+/* Form on Add a Plant page */
+
+.form-container {
+  color: white;
+  background-color: #3d3f3b;
+  box-shadow: 0 0 0pt 1pt #b1d898; /* rounded corners on outline */
+  border-radius: 5px;
+  margin: 10px auto;
+  padding: 5px;
+  width: 100%;
+  text-align: left;
+}
+
+.empty-picture-icon {
+  color: gray;
+  background-color: white;
+  border-radius: 50%;
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 5px 15px 12px 15px;
+  font-size: xx-large;
+  cursor: pointer;
+}
+
+
+/* Entries on Monitor page */
+
+.monitor-plant-card {
+  color: white;
+  font-size: large;
+  min-height: 60px;
+  width: 90% !important;
+  margin: 10px auto;
+  padding: 5px;
+  background-color: #3d3f3b;
+  box-shadow: 0 0 0pt 1pt #b1d898; /* rounded corners on outline */
+  border-radius: 5px;
+  text-align: left;
+}
+
+.monitor-plant-card-expanded {
+  color: white;
+  font-size: large;
+  min-height: 60px;
+  width: 90% !important;
+  margin: 10px auto;
+  padding: 5px;
+  background-color: #3d3f3b;
+  box-shadow: 0 0 0pt 1pt #b1d898; /* rounded corners on outline */
+  border-radius: 5px;
+  text-align: left;
+}
