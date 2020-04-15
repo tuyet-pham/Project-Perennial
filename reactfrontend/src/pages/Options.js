@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PageTemplate from '../PageTemplate';
 import OptionButtons from '../components/OptionButtons';
+import { options } from '../api/AccountAPI';
 
 function Options() {
   const [notificationMethod, setNotificationMethod] = useState('');
@@ -9,20 +10,35 @@ function Options() {
   const [notificationBoxes, setNotificationBoxes] = useState ([]);
 
   const handleSubmit = (event) => {
-    console.log("Submitted")
     event.preventDefault();
+    const username = "Johnny67"
+
     if (validateInput()) {
       console.log(notificationMethod);
       console.log(phoneNum);
       console.log(emailAddress);
       console.log(notificationBoxes);
+
+      const params = {
+        username : `${username}`,
+        emailAddress : `${emailAddress}`,
+        phoneNum : `${phoneNum}`,
+        notificationMethod : `${notificationMethod}`
+      }
+      
+      options(params)
+        .then(api_response => {
+          console.log(api_response);
+        });
+        
+      alert('Notification preferences updated.')
     }
   }
 
   const validateInput = () => {
     // Define regular expression patterns.
     var phoneNumRegex = new RegExp("([0-9]{11}|[0-9]{10})");
-    var emailRegex = new RegExp("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[\.][a-zA-Z]{2,}");
+    var emailRegex = new RegExp("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[\\.][a-zA-Z]{2,}");
     let inputValid = ''
     
     // Check for valid input.
@@ -43,7 +59,6 @@ function Options() {
       return(false)
     }
 
-    alert('Notification preferences updated.')
     return(true)
   }
 
