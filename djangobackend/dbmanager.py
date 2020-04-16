@@ -90,11 +90,10 @@ def findUsername(uname):
 Param   : username, password
 Purpose : Used to login a user.
           (1). Checks to see if the user exists in couchdb.
-          (2). Returns False if user id isn't found
-          (3). Returns True if user is found
-          (4). Returns 2 if incorrect password
-          (5). Returns 3 if the username doesn't match
-Returns : (1)users id, (2)False
+Returns : (1). Returns False if user id isn't found
+          (2). Returns True if user is found
+          (3). Returns 2 if incorrect password
+          (4). Returns 3 if the username doesn't match
 '''
 def authenticateUser(uname, upass):
     
