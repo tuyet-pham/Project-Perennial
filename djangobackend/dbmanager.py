@@ -14,8 +14,6 @@ from uuid import uuid4
 import os, sys
 import hashlib
 
-from rest_framework.authtoken.models import Token
-
 
 db = Server("http://%s:%s@db_data:5984/" % (os.environ['COUCHDB_USER'],os.environ['COUCHDB_PASSWORD']))
 
@@ -99,8 +97,10 @@ Purpose : Used to login a user.
 Returns : (1)users id, (2)False
 '''
 def authenticateUser(uname, upass):
+    
     doc = users[uname]
-    print(doc)
+    print(doc['username'])
+
     if (doc == ''):
         return False
     else:

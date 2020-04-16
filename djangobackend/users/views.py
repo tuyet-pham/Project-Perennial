@@ -1,17 +1,19 @@
 from __future__ import unicode_literals
-from django.http import HttpResponse
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
-
-from django.db import models
-from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
-from django.contrib.auth.models import AnonymousUser, User, UserManager
-from rest_framework.decorators import api_view, permission_classes, renderer_classes
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.permissions import AllowAny
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 
+
+from django.db import models
+from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes, renderer_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
@@ -20,57 +22,72 @@ from rest_framework.status import (
 
 import sys
 sys.path.append('..')
-from dbmanager import *
-
+import dbmanager
 
 @csrf_exempt
 def register(request):
-    serialized = UserSerializer(data=request.data)
-    if serialized.is_valid():
-        User.objects.create_user(
-            serialized.save()
-        )
-        return Response(serialized.data, status=status.HTTP_201_CREATED)
-    else:
-        return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
-
+    return JsonResponse("ok")
 
 @csrf_exempt
-def login(request):
+def loginu(request):
     
-    authUser = {}
+    username = ''
+    password = ''
 
     try:
-        authUser = {
-            'username' : request.POST.get('username'),
-            'password' : request.POST.get('password'),
-        }
+        username = request.POST.get('username')
+        password = request.POST.get('password')
     except Exception as e:
         print("Error : Failed Request on %s", e)
      
-    user = authenticate(username=authUser['username'], password=authUser['password'])
+    # authenticate the user in django
+    user = authenticate(request, username=username, password=password)
 
-    if(authenticateUser(authUser['username'], authUser['password']) == True):
-        if not user:
-            newEntry = User.objects.create_user(username=authUser['username'], password=authUser['password'])
+    # authenticate the user in couchdb
+    status = dbmanager.authenticateUser(username, password)
+
+
+    # if both true
+    if status == True:
+        if user is not None:
+            login(request, user)
+            token, _ = Token.objects.get_or_create(user=user)
+            return JsonResponse(
+                {
+                    "user": username,
+                    "token": token.key
+                },
+                status=HTTP_200_OK)
+                
+
+        if user is None:
+            newEntry = User.objects.get_or_create(username=username, password=password)
             newEntry.save()
 
-            user = authenticate(username=authUser['username'], password=authUser['password'])
-            login(user)
-
-            token = Token.objects.get_or_create(user=user)
-            return Response({'token': token, 'username': authUser['username']}, status=HTTP_200_OK)
-        else:
-            return Response({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
+            user = authenticate(request, username=username, password=password)
+            login(request, user=user)
+            token, _ = Token.objects.get_or_create(user=user)
+            return JsonResponse(
+            {
+                "user": username,
+                "token": token.key
+            },
+            status=HTTP_200_OK)
     else:
-        return Response({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)   
+        return JsonResponse({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
+
+
         
 
 
-def logout(request):
+def logoutu(request):
     logout(request)
-    return HttpResponse("logout")
-
+    return JsonResponse(
+        {
+            "user": username,
+            "message": "logged out"
+        },
+        status=HTTP_200_OK)
 
 # def current(request):
 #     return HttpResponse("getting current")
