@@ -5,7 +5,11 @@ from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 
 
 from django.db import models
-from django.views.decorators.csrf import csrf_exempt
+
+# Might need this later to provide Cross Site Request Forgery protection
+# As of right now it is ignored
+
+from django.views.decorators.csrf import csrf_exempt        
 from django.core import serializers
 
 from django.contrib.auth import authenticate, login, logout

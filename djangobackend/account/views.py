@@ -1,20 +1,35 @@
+from __future__ import unicode_literals
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
+from django.db import models
+
+# csrf - Might need this later to provide Cross Site Request Forgery protection
+# As of right now it is ignored
+from django.views.decorators.csrf import csrf_exempt        
+from django.core import serializers
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes, renderer_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 
-import sys
-sys.path.append('..')
-from dbmanager import *
+
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
     HTTP_200_OK
 )
+
+import sys
+sys.path.append('..')
+import dbmanager
 
 '''
 Authentication is currently not working.

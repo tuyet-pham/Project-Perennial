@@ -68,7 +68,7 @@ class PlantTypes(Document):
     minMoisture = TextField()
 
 '''
-@finduser()
+@findusername()
 Param   : username
 Purpose : Used to find a user.
           (1). Checks to see if the user exists in couchdb.
@@ -76,7 +76,7 @@ Purpose : Used to find a user.
           (3). If the user doesn't exist returns False flag
 Returns : (1)users id, (2)False
 '''
-def finduser(uname):
+def findusername(uname):
     
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
@@ -125,7 +125,7 @@ Returns : (1)users id, (2)False
 def adduser(uname, uemail, upass):
     existErr = False
 
-    if (finduser(uname) == False):
+    if (findusername(uname) == False):
         hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
         user = User(username=uname, email=uemail, hashpass=hashpass)
         user.store(users)
