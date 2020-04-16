@@ -50,7 +50,6 @@ def loginu(request):
     # authenticate the user in couchdb
     status = dbmanager.authenticateUser(username, password)
 
-
     # if both true
     if status == True:
         if user is not None:

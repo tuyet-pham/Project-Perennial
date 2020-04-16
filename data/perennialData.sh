@@ -8,9 +8,9 @@ curl -X PUT $HOST/users
 curl -X PUT $HOST/users/Johnny67 -d '{"username":"Johnny67","email":"johnny76@gmail.com","hashpass":"mypass"}'
 curl -X PUT $HOST/users/Sarah23 -d '{"username":"Sarah23","email":"sarah23@gmail.com","hashpass":"6%sk384ldigd"}'
 curl -X PUT $HOST/plant_device
-curl -X PUT $HOST/plant_device/01 -d '{"type":"plant","location":{"country":"United States","state":"Texas","city":"Denton","IP":"129.120.67.52"},"species":"Cactus","water_conditions":{"min_moisture_level":"0.60"}}'
-curl -X PUT $HOST/plant_device/02 -d '{"type":"plant","location":{"country":"United States","state":"Texas","city":"Denton","IP":"129.120.67.52"},"species":"Potato","water_conditions":{"min_moisture_level":"0.30"}}'
-curl -X PUT $HOST/plant_device/03 -d '{"type":"plant","location":{"country":"United States","state":"Oklahoma","city":"Tulsa","IP":"129.120.56.37"},"species":"Flower","water_conditions":{"min_moisture_level":"0.80"}}'
+curl -X PUT $HOST/plant_device/01 -d '{"name":"pedro","type":"plant","location":{"country":"United States","state":"Texas","city":"Denton","IP":"129.120.67.52"},"species":"Cactus","water_conditions":{"min_moisture_level":"0.60"}}'
+curl -X PUT $HOST/plant_device/02 -d '{"name":"pedro","type":"plant","location":{"country":"United States","state":"Texas","city":"Denton","IP":"129.120.67.52"},"species":"Potato","water_conditions":{"min_moisture_level":"0.30"}}'
+curl -X PUT $HOST/plant_device/03 -d '{"name":"pedro","type":"plant","location":{"country":"United States","state":"Oklahoma","city":"Tulsa","IP":"129.120.56.37"},"species":"Flower","water_conditions":{"min_moisture_level":"0.80"}}'
 curl -X PUT $HOST/plant_device_reading
 curl -X PUT $HOST/plant_device_reading/01 -d '{"type":"plant","device_id":"1943","time_reading":"datetime","values":{"moisture_level":"0.90","water_level":"0.30","pump_status":"true"}}'
 curl -X PUT $HOST/plant_device_reading/02 -d '{"type":"plant","device_id":"5243","time_reading":"datetime","values":{"moisture_level":"0.60","water_level":"1.00","pump_status":"false"}}'

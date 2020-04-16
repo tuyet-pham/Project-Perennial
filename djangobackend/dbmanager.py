@@ -133,7 +133,23 @@ def adduser(uname, uemail, upass):
     else:
         return existErr
 
-     
+'''
+@findPlantName()
+Param   : pName
+Purpose : Used to check if an existing plant exists in the database for that user.
+          (1). Checks to see if the name exists in couchdb.
+          (2). If name exists, returns true, to not push to database
+          (3). If plant doesn't exist, returns false, to push to database
+Returns : (1). Returns True to not push to database
+          (2). Returns False to push to database
+'''
+def findPlantName(pName):
+    for plant in plant_device.view('_all_docs'):
+        doc = plant_device[plant.id]
+        if(doc['name'].lower() == pName.lower()):
+            return True
+    
+    return False
 
 '''
 @addPlant()
@@ -146,14 +162,20 @@ Purpose : Used to add a new plant device.
 Returns : (1). Check to account/views if the plant device can be added or not
 '''
 def addPlant(data):
-    plant = PlantDevice(
-        name=data['name'],
-        species=data['species'],
-        location=dict(geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors']),
-        wateringConditionTrigger=data['wateringConditionTrigger'],
-        wateringConditionValue=data['wateringConditionValue'],
-        additionalNotes=data['additionalNotes'])
-    plant.store(plant_device)
+    pName = data['name']
+    if(findPlantName(pName) == False):
+        print(data['name'])
+        plant = PlantDevice(
+            name=data['name'],
+            species=data['species'],
+            location=dict(geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors']),
+            wateringConditionTrigger=data['wateringConditionTrigger'],
+            wateringConditionValue=data['wateringConditionValue'],
+            additionalNotes=data['additionalNotes'])
+        plant.store(plant_device)
+        return True
+    else:
+        return False
 
 
 

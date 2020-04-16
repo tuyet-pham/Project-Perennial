@@ -19,8 +19,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
-
-
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
@@ -106,7 +104,7 @@ Write your corresponding routes at the bottom of the page.
 @csrf_exempt
 def addplants(request):
     data = {}
-
+    check = True
     try:
         data = { 
             'name' : request.POST.get('name'),
@@ -119,13 +117,15 @@ def addplants(request):
             'additionalNotes' : request.POST.get('additionalNotes'),
         }
         # passing data to addplant function in dbmanager.py in djangobackend
-        addPlant(data)
     except Exception as e:
         print("Error: Failed Request on %s", e)
-
-    
-    return JsonResponse(data, status=HTTP_200_OK)
-
+        
+    if (addPlant(data) == False):
+        check = False
+    if (check == False):
+        return JsonResponse(data, status=HTTP_404_NOT_FOUND)
+    else:
+        return JsonResponse(data, status=HTTP_200_OK)
 
 
 @csrf_exempt
