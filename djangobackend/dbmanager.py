@@ -76,7 +76,7 @@ Purpose : Used to find a user.
           (3). If the user doesn't exist returns False flag
 Returns : (1)users id, (2)False
 '''
-def findusername(uname):
+def findUsername(uname):
     
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
@@ -125,7 +125,7 @@ Returns : (1)users id, (2)False
 def adduser(uname, uemail, upass):
     existErr = False
 
-    if (findusername(uname) == False):
+    if (findUsername(uname) == False):
         hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
         user = User(username=uname, email=uemail, hashpass=hashpass)
         user.store(users)
