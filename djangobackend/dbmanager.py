@@ -112,6 +112,7 @@ def authenticateUser(uname, upass):
         else:
             return 2
 
+
 '''
 @adduser()
 Param   : username, email, password
@@ -131,6 +132,7 @@ def adduser(uname, uemail, upass):
         return user.id
     else:
         return existErr
+
 
 '''
 @findPlantName()
@@ -175,7 +177,6 @@ def addPlant(data):
     else:
         print("Plant name exists")
         return False
-
 
 
 # def addReading():
