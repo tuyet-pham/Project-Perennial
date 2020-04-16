@@ -117,7 +117,8 @@ def options(request):
             'username' : request.POST.get('username'),
             'emailAddress' : request.POST.get('emailAddress'),
             'phoneNum' : request.POST.get('phoneNum'),
-            'notificationMethod' : request.POST.get('notificationMethod')
+            'notificationMethod' : request.POST.get('notificationMethod'),
+            'notificationTriggers' : request.POST.getlist('notificationTriggers')
         }
         updateoptions(data)
     except Exception as e:

@@ -14,25 +14,37 @@ function Options() {
     const username = "Johnny67"
 
     if (validateInput()) {
-      console.log(notificationMethod);
-      console.log(phoneNum);
-      console.log(emailAddress);
-      console.log(notificationBoxes);
+      const notificationTriggers = getNotificationTriggers();
 
       const params = {
         username : `${username}`,
         emailAddress : `${emailAddress}`,
         phoneNum : `${phoneNum}`,
-        notificationMethod : `${notificationMethod}`
+        notificationMethod : `${notificationMethod}`,
+        notificationTriggers: `${notificationTriggers}`
       }
       
       options(params)
-        .then(api_response => {
-          console.log(api_response);
-        });
+        // .then(api_response => {
+        //   console.log(api_response);
+        // });
         
       alert('Notification preferences updated.')
     }
+  }
+
+  const getNotificationTriggers = () => {
+    const notificationTriggers = []
+
+    if (notificationBoxes[0].checked === true) {
+      notificationTriggers.push('wateredPlant')
+    }
+
+    if (notificationBoxes[1].checked === true) {
+      notificationTriggers.push('emptyreservoir')
+    }
+
+    return notificationTriggers;
   }
 
   const validateInput = () => {

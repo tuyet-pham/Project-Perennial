@@ -150,13 +150,17 @@ def updateoptions(data):
     # user = getuser(username)
     # print(user)
 
-    user=users.get(username)
+    user = users.get(username)
     user['notificationMethod'] = data['notificationMethod']
     if data['notificationMethod'] == 'sms':
         user['phoneNum'] = data['phoneNum']
         
     if data['notificationMethod'] == 'email':
         user['email'] = data['emailAddress']
+        user['phoneNum'] = None
+
+
+    user['notificationTriggers'] = data['notificationTriggers']
 
     print(user)
 
