@@ -161,9 +161,7 @@ Purpose : Used to add a new plant device.
 Returns : (1). Check to account/views if the plant device can be added or not
 '''
 def addPlant(data):
-    pName = data['name']
     if(findPlantName(pName) == False):
-        print(data['name'])
         plant = PlantDevice(
             name=data['name'],
             species=data['species'],
@@ -172,8 +170,10 @@ def addPlant(data):
             wateringConditionValue=data['wateringConditionValue'],
             additionalNotes=data['additionalNotes'])
         plant.store(plant_device)
+        print("Plant stored successfully")
         return True
     else:
+        print("Plant name exists")
         return False
 
 
