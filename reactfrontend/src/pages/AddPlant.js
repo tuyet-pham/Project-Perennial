@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PageTemplate from '../PageTemplate';
 import { FaCamera} from 'react-icons/fa';
+import { addPlant } from '../api/AccountAPI'
 
 
 function AddPlant() {
@@ -18,16 +19,18 @@ function AddPlant() {
     const handleSubmit = (event) => {
       event.preventDefault()
       
-      const plant = { 
-        name: {name},
-        species: {species},
-        geolocationCity:{geolocationCity},
-        geolocationState:{geolocationState},
-        indoorsOutdoors:{indoorsOutdoors},
-        wateringConditionTrigger:{wateringConditionTrigger},
-        wateringConditionValue:{wateringConditionValue},
-        additionalNotes:{additionalNotes},
-      };      
+      const params = { 
+        name : `${name}`,
+        species : `${species}`,
+        geolocationCity :`${geolocationCity}`,
+        geolocationState :`${geolocationState}`,
+        indoorsOutdoors :`${indoorsOutdoors}`,
+        wateringConditionTrigger :`${wateringConditionTrigger}`,
+        wateringConditionValue :`${wateringConditionValue}`,
+        additionalNotes :`${additionalNotes}`
+      }
+      
+      addPlant(params);
     }
 
     // Forms with hooks reference: https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/

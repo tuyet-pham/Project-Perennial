@@ -5,8 +5,8 @@ until curl -f http://db_data:5984; do
 done
 
 curl -X PUT $HOST/users
-curl -X PUT $HOST/users/Johnny67 -d '{"info":{"username":"Johnny67","email":"johnny76@gmail.com","hashpass":"2%ff840mgjke"}}'
-curl -X PUT $HOST/users/Sarah23 -d '{"info":{"username":"Sarah23","email":"sarah23@gmail.com","hashpass":"6%sk384ldigd"}}'
+curl -X PUT $HOST/users/Johnny67 -d '{"username":"Johnny67","email":"johnny76@gmail.com","hashpass":"mypass"}'
+curl -X PUT $HOST/users/Sarah23 -d '{"username":"Sarah23","email":"sarah23@gmail.com","hashpass":"6%sk384ldigd"}'
 curl -X PUT $HOST/plant_device
 curl -X PUT $HOST/plant_device/01 -d '{"type":"plant","location":{"country":"United States","state":"Texas","city":"Denton","IP":"129.120.67.52"},"species":"Cactus","water_conditions":{"min_moisture_level":"0.60"}}'
 curl -X PUT $HOST/plant_device/02 -d '{"type":"plant","location":{"country":"United States","state":"Texas","city":"Denton","IP":"129.120.67.52"},"species":"Potato","water_conditions":{"min_moisture_level":"0.30"}}'

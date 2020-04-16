@@ -1,28 +1,94 @@
 from __future__ import unicode_literals
-from django.http import HttpResponse
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework.response import Response
-from . import serializers
-# from models import User
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
+
+
+from django.db import models
+from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes, renderer_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.status import (
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+    HTTP_200_OK
+)
+
 import sys
 sys.path.append('..')
-from dbmanager import *
+import dbmanager
 
-
+@csrf_exempt
 def register(request):
-    adduser('uname', 'uemail', 'upass')
-    return HttpResponse("register")
+    return JsonResponse("ok")
+
+@csrf_exempt
+def loginu(request):
+    
+    username = ''
+    password = ''
+
+    try:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+    except Exception as e:
+        print("Error : Failed Request on %s", e)
+     
+    # authenticate the user in django
+    user = authenticate(request, username=username, password=password)
+
+    # authenticate the user in couchdb
+    status = dbmanager.authenticateUser(username, password)
 
 
-def login(request):
-    adduser('uname', 'uemail', 'upass')
-    return HttpResponse("")
+    # if both true
+    if status == True:
+        if user is not None:
+            login(request, user)
+            token, _ = Token.objects.get_or_create(user=user)
+            return JsonResponse(
+                {
+                    "user": username,
+                    "token": token.key
+                },
+                status=HTTP_200_OK)
+                
+
+        if user is None:
+            newEntry = User.objects.get_or_create(username=username, password=password)
+            newEntry.save()
+
+            user = authenticate(request, username=username, password=password)
+            login(request, user=user)
+            token, _ = Token.objects.get_or_create(user=user)
+            return JsonResponse(
+            {
+                "user": username,
+                "token": token.key
+            },
+            status=HTTP_200_OK)
+    else:
+        return JsonResponse({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
 
 
-def logout(request):
+        
 
-    return HttpResponse("logout")
 
+def logoutu(request):
+    logout(request)
+    return JsonResponse(
+        {
+            "user": username,
+            "message": "logged out"
+        },
+        status=HTTP_200_OK)
 
 # def current(request):
 #     return HttpResponse("getting current")
+

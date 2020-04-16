@@ -11,22 +11,13 @@ function LoginForm(props) {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     if(challenge === true){
-      if (email !== '' || password !== '')
-      {
-        console.log('Submitting Form');
-        
-        const auth = { 
-          username: {email},
-          password: {password},
-        };
 
-       userLogin(auth);
-
+      console.log('Submitting Form...');
+      const params = {
+        username : `${email}`,
+        password : `${password}`,
       }
-      else
-      {
-        alert("Please fill in the necessary fields.");
-      }
+      userLogin(params);
     }
     else {
       alert("You forgot about the Recaptcha!");

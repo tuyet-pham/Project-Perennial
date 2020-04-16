@@ -16,13 +16,12 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
-
+SECRET_KEY = 'v_gq(21bn7-b*xxp!)&*98qe6jg7*uu6_hcxqdx^@7rv4y-1g3'
+#  os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1", "djangobackend"]
-
 
 # Application definition
 INSTALLED_APPS = [
@@ -46,6 +45,7 @@ INSTALLED_APPS = [
     'tests',
 ]
 
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -55,6 +55,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     )
 }
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -76,6 +77,14 @@ CORS_ORIGIN_WHITELIST = (
 )
 
 ROOT_URLCONF = 'urls'
+
+DATABASES = {
+    'default': { 
+        'ENGINE': 'django.db.backends.sqlite3', 
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'), 
+    }
+}
+
 
 TEMPLATES = [
     {
@@ -131,12 +140,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
-
-DATABASES = { 
-    'default': 
-    { 
-        'ENGINE': 'django.db.backends.sqlite3', 
-        'NAME': 'couchUsers', 
-    } 
-}

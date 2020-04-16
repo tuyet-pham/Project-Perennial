@@ -5,9 +5,12 @@ $ tree<br>
 .<br>
 ├── manage.py<br>
 ├── settings.py<br>
-├── login/<br>
 ├── account/<br>
-├── register/<br>
+├──────| views.py <br>
+├──────| urls.py <br>
+├── users/<br>
+├──────| views.py <br>
+├──────| urls.py<br>
 ├── urls.py<br>
 └── wsgi.py<br>
 
@@ -16,15 +19,6 @@ $ tree<br>
 #### Routes Available
 
 - /                       <--- Root route, Login Page
-- /register
+- /users
 - /acount
-
-
-* Important Notice
-Using Django and CouchDB together.
-
-Django
-L___template
-L___Routes
-L___db.sql3
 

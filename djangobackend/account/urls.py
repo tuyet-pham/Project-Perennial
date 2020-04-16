@@ -18,8 +18,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.Account.as_view(), name='account'),
-    url(r'^monitorplants/', views.MonitorPlants.as_view(), name='monitorplants'),
-    url(r'^addplants/', views.tempaddplant, name='addplants'),
-    url(r'^options/', views.Options.as_view(), name='options'),
+    # url(r'^$', views.Account.as_view(), name='account'),
+    url(r'monitorplants/$', views.monitorplants, name='monitorplants'),
+    url(r'addplants/$', views.addplants, name='addplants'),
+    url(r'options/$', views.options, name='options'),
 ]
