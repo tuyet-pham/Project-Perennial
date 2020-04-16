@@ -1,8 +1,8 @@
 from django.test import SimpleTestCase
 from django.test import TestCase
 from urls import urlpatterns
-from account.views import *
-from users.views import *
+from account.views import monitorplants, addplants, options
+from users.views import register, loginu, logoutu
 from django.urls import reverse, resolve, path
 
 
@@ -25,28 +25,22 @@ EG: self.assertEqual(resolve(url).func, register)
 
 class test_account_urls(SimpleTestCase):
 
-    def test_account_url_is_resolved(self):
-        url = reverse('account')
-        print(resolve(url))
-        self.assertEqual(resolve(url).func.__name__, Account.as_view().__name__)
-        print()
-
     def test_monitor_plants_url_is_resolved(self):
         url = reverse('monitorplants')
         print(resolve(url))
-        self.assertEqual(resolve(url).func.__name__, MonitorPlants.as_view().__name__)
+        self.assertEqual(resolve(url).func, monitorplants)
         print()
 
     def test_add_plants_url_is_resolved(self):
         url = reverse('addplants')
         print(resolve(url))
-        self.assertEqual(resolve(url).func, tempaddplant)
+        self.assertEqual(resolve(url).func, addplants)
         print()
 
     def test_options_url_is_resolved(self):
         url = reverse('options')
         print(resolve(url))
-        self.assertEqual(resolve(url).func.__name__, Options.as_view().__name__)
+        self.assertEqual(resolve(url).func, options)
         print()
 
 class test_users_urls(SimpleTestCase):
@@ -58,15 +52,15 @@ class test_users_urls(SimpleTestCase):
         print()
         
     def test_login_url_is_resolved(self):
-        url = reverse('login')
+        url = reverse('loginu')
         print(resolve(url))
-        self.assertEqual(resolve(url).func, login)
+        self.assertEqual(resolve(url).func, loginu)
         print()
 
     def test_logout_url_is_resolved(self):
-        url = reverse('logout')
+        url = reverse('logoutu')
         print(resolve(url))
-        self.assertEqual(resolve(url).func, logout)
+        self.assertEqual(resolve(url).func, logoutu)
         print()
 
 
