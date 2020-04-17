@@ -97,21 +97,26 @@ Purpose : Used to login a user.
 Returns : (1)users id, (2)False
 '''
 def authenticateUser(uname, upass):
-    
-    doc = users[uname]
-    print(doc['username'])
-
-    if (doc == ''):
-        return False
-    else:
-        # hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
+    for user in users.view('_all_docs'):
+        doc = users[user.id]
+        print(doc['username'])
         if (doc['username'] == uname):
-            if (doc['hashpass'] == upass):
-                return True
-            else:
-                return 3
+            return True
+    print(uname)
+    # doc = users[uname]
+    # print(doc['username'])
+
+    # if (doc == ''):
+    #     return False
+    # else:
+        # hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
+    if (doc['username'] == uname):
+        if (doc['hashpass'] == upass):
+            return True
         else:
-            return 2
+            return 3
+    else:
+        return 2
 
 '''
 @adduser()

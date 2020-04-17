@@ -27,7 +27,7 @@ from rest_framework.status import (
 
 import sys
 sys.path.append('..')
-import dbmanager
+from dbmanager import addPlant
 
 '''
 Authentication is currently not working.
