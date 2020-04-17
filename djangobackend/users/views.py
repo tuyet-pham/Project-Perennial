@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
@@ -26,7 +26,7 @@ from rest_framework.status import (
 
 import sys
 sys.path.append('..')
-import dbmanager
+from dbmanager import authenticateUser
 
 @csrf_exempt
 def register(request):
@@ -48,7 +48,7 @@ def loginu(request):
     user = authenticate(request, username=username, password=password)
 
     # authenticate the user in couchdb
-    status = dbmanager.authenticateUser(username, password)
+    status = authenticateUser(username, password)
 
     # if both true
     if status == True:
@@ -64,12 +64,9 @@ def loginu(request):
                 
 
         if user is None:
-            newEntry = User.objects.get_or_create(username=username, password=password)
-            newEntry.save()
-
-            user = authenticate(request, username=username, password=password)
-            login(request, user=user)
-            token, _ = Token.objects.get_or_create(user=user)
+            created = User.objects.create_user(username=username, password=password)
+            login(request, user=created)
+            token, _ = Token.objects.get_or_create(user=created)
             return JsonResponse(
             {
                 "user": username,

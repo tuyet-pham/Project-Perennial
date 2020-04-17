@@ -10,6 +10,8 @@ from django.core import serializers
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AnonymousUser
+
 
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
@@ -27,7 +29,7 @@ from rest_framework.status import (
 
 import sys
 sys.path.append('..')
-import dbmanager
+from dbmanager import addPlant
 
 '''
 Authentication is currently not working.
@@ -106,7 +108,7 @@ def addplants(request):
     data = {}
     check = True
     try:
-        data = { 
+        data = {
             'name' : request.POST.get('name'),
             'species' : request.POST.get('species'),
             'geolocationCity' : request.POST.get('geolocationCity'),

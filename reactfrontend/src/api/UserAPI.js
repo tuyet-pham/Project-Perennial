@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from "qs";
 
 export async function userLogin(params){
-    await axios.get('users/login/', qs.stringify(params))
+    await axios.post('users/login/', qs.stringify(params))
     .then(function(response) {
         console.log(response);
     })
