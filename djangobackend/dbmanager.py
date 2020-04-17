@@ -68,7 +68,7 @@ class PlantTypes(Document):
     minMoisture = TextField()
 
 '''
-@finduser()
+@findusername()
 Param   : username
 Purpose : Used to find a user.
           (1). Checks to see if the user exists in couchdb.
@@ -76,7 +76,7 @@ Purpose : Used to find a user.
           (3). If the user doesn't exist returns False flag
 Returns : (1)users id, (2)False
 '''
-def finduser(uname):
+def findUsername(uname):
     
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
@@ -90,11 +90,10 @@ def finduser(uname):
 Param   : username, password
 Purpose : Used to login a user.
           (1). Checks to see if the user exists in couchdb.
-          (2). Returns False if user id isn't found
-          (3). Returns True if user is found
-          (4). Returns 2 if incorrect password
-          (5). Returns 3 if the username doesn't match
-Returns : (1)users id, (2)False
+Returns : (1). Returns False if user id isn't found
+          (2). Returns True if user is found
+          (3). Returns 2 if incorrect password
+          (4). Returns 3 if the username doesn't match
 '''
 def authenticateUser(uname, upass):
     
@@ -113,6 +112,7 @@ def authenticateUser(uname, upass):
         else:
             return 2
 
+
 '''
 @adduser()
 Param   : username, email, password
@@ -125,7 +125,7 @@ Returns : (1)users id, (2)False
 def adduser(uname, uemail, upass):
     existErr = False
 
-    if (finduser(uname) == False):
+    if (findUsername(uname) == False):
         hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
         user = User(username=uname, email=uemail, hashpass=hashpass)
         user.store(users)
@@ -133,7 +133,24 @@ def adduser(uname, uemail, upass):
     else:
         return existErr
 
-     
+
+'''
+@findPlantName()
+Param   : pName
+Purpose : Used to check if an existing plant exists in the database for that user.
+          (1). Checks to see if the name exists in couchdb.
+          (2). If name exists, returns true, to not push to database
+          (3). If plant doesn't exist, returns false, to push to database
+Returns : (1). Returns True to not push to database
+          (2). Returns False to push to database
+'''
+def findPlantName(pName):
+    for plant in plant_device.view('_all_docs'):
+        doc = plant_device[plant.id]
+        if(doc['name'].lower() == pName.lower()):
+            return True
+    
+    return False
 
 '''
 @addPlant()
@@ -146,15 +163,20 @@ Purpose : Used to add a new plant device.
 Returns : (1). Check to account/views if the plant device can be added or not
 '''
 def addPlant(data):
-    plant = PlantDevice(
-        name=data['name'],
-        species=data['species'],
-        location=dict(geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors']),
-        wateringConditionTrigger=data['wateringConditionTrigger'],
-        wateringConditionValue=data['wateringConditionValue'],
-        additionalNotes=data['additionalNotes'])
-    plant.store(plant_device)
-
+    if(findPlantName(pName) == False):
+        plant = PlantDevice(
+            name=data['name'],
+            species=data['species'],
+            location=dict(geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors']),
+            wateringConditionTrigger=data['wateringConditionTrigger'],
+            wateringConditionValue=data['wateringConditionValue'],
+            additionalNotes=data['additionalNotes'])
+        plant.store(plant_device)
+        print("Plant stored successfully")
+        return True
+    else:
+        print("Plant name exists")
+        return False
 
 
 # def addReading():

@@ -1,20 +1,35 @@
+from __future__ import unicode_literals
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
+from django.db import models
+
+# csrf - Might need this later to provide Cross Site Request Forgery protection
+# As of right now it is ignored
+from django.views.decorators.csrf import csrf_exempt        
+from django.core import serializers
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.models import AnonymousUser
+
+
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes, renderer_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.views.decorators.csrf import csrf_exempt
-
-import sys
-sys.path.append('..')
-from dbmanager import *
+from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
     HTTP_200_OK
 )
+
+import sys
+sys.path.append('..')
+from dbmanager import addPlant
 
 '''
 Authentication is currently not working.
@@ -63,9 +78,9 @@ Write your corresponding routes at the bottom of the page.
 @csrf_exempt
 def addplants(request):
     data = {}
-
+    check = True
     try:
-        data = { 
+        data = {
             'name' : request.POST.get('name'),
             'species' : request.POST.get('species'),
             'geolocationCity' : request.POST.get('geolocationCity'),
@@ -76,13 +91,15 @@ def addplants(request):
             'additionalNotes' : request.POST.get('additionalNotes'),
         }
         # passing data to addplant function in dbmanager.py in djangobackend
-        addPlant(data)
     except Exception as e:
         print("Error: Failed Request on %s", e)
-
-    
-    return JsonResponse(data, status=HTTP_200_OK)
-
+        
+    if (addPlant(data) == False):
+        check = False
+    if (check == False):
+        return JsonResponse(data, status=HTTP_404_NOT_FOUND)
+    else:
+        return JsonResponse(data, status=HTTP_200_OK)
 
 
 @csrf_exempt
