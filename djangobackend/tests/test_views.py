@@ -42,17 +42,11 @@ class TestAccountViews(TestCase):
     def test_MonitorPlants_GET_access(self):
         request = self.factory.get(self.monitor_plants_url)
         request.session = {}
-        request.user = User.objects.create_user('test','test.com''test')
+        request.user = User.objects.create_user('test','test.com','test')
         response = monitorplants(request)
         self.assertEqual(response.status_code, 200)
         print(response.status_code)
         print()
-
-    #def test_tempAddPlant_no_access(self):
-        #response = client.get(reverse('addplants'))
-        #self.assertEquals(response.status_code, 403)
-        #print(response.status_code)
-        #print()
 
     def test_Options_POST_no_access(self):
         request = self.factory.post(self.options_url)
@@ -61,10 +55,6 @@ class TestAccountViews(TestCase):
         self.assertEquals(response.status_code, 200) #shouldn't be 200
         print(response.status_code)
         print()
-
-    
-
-    #def test_Options_POST(self):
         
 
 
@@ -80,27 +70,26 @@ class TestUserViews(TestCase):
     def test_register_ok_status(self):
         request = self.factory.get(self.register_url)
         request.session = {}
-        request.user = User.objects.create_user('test','test.com''test')
-        """ response = register(request) <--- problem
+        request.user = User.objects.create_user('test','test.com','test')
+        response = register(request)
         self.assertEquals(response.status_code, 200)
         print(response.status_code)
-        print() """
+        print()
 
     def test_login_ok_status(self):
-        request = self.factory.get(self.login_url)
+        request = self.factory.post(self.login_url)
         request.session = {}
-        request.user = User.objects.create_user('test','test.com''test')
-        """ request.user.password = 'testpw'
-        response = loginu(request) <--- problem
+        request.user = User.objects.create_user('test','test.com','test')
+        response = loginu(request)
         self.assertEquals(response.status_code, 200)
         print(response.status_code)
-        print() """
+        print()
 
     def test_logout_ok_status(self):
-        request = self.factory.get(self.logout_url)
+        request = self.factory.post(self.logout_url)
         request.session = {}
-        request.user = User.objects.create_user('test','test.com''test')
-        """ response = logoutu(request) <--- problem
+        request.user = User.objects.create_user('test','test.com','test')
+        response = logoutu(request)
         self.assertEquals(response.status_code, 200)
         print(response.status_code)
-        print() """
+        print()
