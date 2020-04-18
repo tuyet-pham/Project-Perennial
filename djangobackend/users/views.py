@@ -30,7 +30,7 @@ from dbmanager import authenticateUser
 
 @csrf_exempt
 def register(request):
-    return JsonResponse("ok")
+    return JsonResponse("ok", safe =False)
 
 @csrf_exempt
 def loginu(request):
