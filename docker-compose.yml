@@ -52,7 +52,18 @@ services:
       - HOST=${HOST}
     links:
       - db
+    depends_on:
+     - db
     command: ./perennialData.sh
+
+  mqttclient:
+    build: ./mqtt_client
+    volumes:
+     - ./mqtt_client:/code
+    depends_on:
+     - db
+    environment:
+      - MQTT_BROKER=${MQTT_BROKER}
 
 # ---- Our volumes
 volumes:
