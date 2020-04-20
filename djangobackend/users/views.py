@@ -13,7 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
@@ -26,14 +26,65 @@ from rest_framework.status import (
 
 import sys
 sys.path.append('..')
-import dbmanager
+from dbmanager import authenticateUser, findUsername, findEmail
 
 @csrf_exempt
-def register(request):
-    return JsonResponse("ok")
+def registerUser(request):
+     
+    username = ''
+    password = ''
+    email = ''
 
+    try:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+
+    except Exception as e:
+        print("Error : Failed Request on %s", e)
+
+    # # authenticate the user in couchdb
+
+    # # if both true
+    # if status == True:
+    #     if user is not None:
+    #         login(request, user)
+    #         token, _ = Token.objects.get_or_create(user=user)
+    #         return JsonResponse(
+    #             {
+    #                 "username": username,
+    #                 "token": token.key
+    #             },
+    #             status=HTTP_200_OK)
+                
+
+    #     if user is None:
+    #         created = User.objects.create_user(username=username, password=password)
+    #         login(request, user=created)
+    #         token, _ = Token.objects.get_or_create(user=created)
+    #         return JsonResponse(
+    #         {
+    #             "username": username,
+    #             "token": token.key
+    #         },
+    #         status=HTTP_200_OK)
+    # else:
+    return JsonResponse({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
+
+
+
+
+'''
+loginUser()
+Param   : username
+Purpose : Used to find a user.
+          (1). Checks to see if the user exists in couchdb.
+          (2). If the user exists then return a True flag
+          (3). If the user doesn't exist returns False flag
+Returns : (1)users id, (2)False
+'''
 @csrf_exempt
-def loginu(request):
+def loginUser(request):
     
     username = ''
     password = ''
@@ -48,7 +99,7 @@ def loginu(request):
     user = authenticate(request, username=username, password=password)
 
     # authenticate the user in couchdb
-    status = dbmanager.authenticateUser(username, password)
+    status = authenticateUser(username, password)
 
     # if both true
     if status == True:
@@ -57,22 +108,19 @@ def loginu(request):
             token, _ = Token.objects.get_or_create(user=user)
             return JsonResponse(
                 {
-                    "user": username,
+                    "username": username,
                     "token": token.key
                 },
                 status=HTTP_200_OK)
                 
 
         if user is None:
-            newEntry = User.objects.get_or_create(username=username, password=password)
-            newEntry.save()
-
-            user = authenticate(request, username=username, password=password)
-            login(request, user=user)
-            token, _ = Token.objects.get_or_create(user=user)
+            created = User.objects.create_user(username=username, password=password)
+            login(request, user=created)
+            token, _ = Token.objects.get_or_create(user=created)
             return JsonResponse(
             {
-                "user": username,
+                "username": username,
                 "token": token.key
             },
             status=HTTP_200_OK)
@@ -82,15 +130,21 @@ def loginu(request):
 
         
 
+@api_view(['POST'])
+def logoutUser(request):
+    try:
+       request.user.auth_token.delete()
+    except (AttributeError, ObjectDoesNotExist):
+        pass
 
-def logoutu(request):
     logout(request)
-    return JsonResponse(
-        {
-            "user": username,
-            "message": "logged out"
-        },
-        status=HTTP_200_OK)
+
+    return Response({"success": _("Successfully logged out.")},
+                    status=status.HTTP_200_OK)
+
+
+
+
 
 # def current(request):
 #     return HttpResponse("getting current")

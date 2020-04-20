@@ -10,6 +10,8 @@ from django.core import serializers
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AnonymousUser
+
 
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
@@ -38,9 +40,6 @@ Write your corresponding routes at the bottom of the page.
 (1). Change data to match your incoming requests
 (2). Add the correct HttpResponse, JsonResponse or Response needed.
 '''
-
-
-
 # '''
 # '''
 # class Account(APIView):
@@ -53,7 +52,7 @@ Write your corresponding routes at the bottom of the page.
 #             'auth': unicode(request.auth),  # None
 #         }
 #         return Response(content)
-    
+
 
 
 # '''
@@ -88,7 +87,6 @@ Write your corresponding routes at the bottom of the page.
 # '''
 # '''
 # class Options(APIView):
-#     authentication_classes = (SessionAuthentication, BasicAuthentication)
 #     permission_classes = (IsAuthenticated,)
 
 #     def post(self, request, format=None):

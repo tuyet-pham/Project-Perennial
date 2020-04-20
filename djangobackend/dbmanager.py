@@ -85,16 +85,24 @@ def findUsername(uname):
     return False
 
 
+
+def findEmail(email):
+    for user in users.view('_all_docs'):
+        doc = users[user.id]
+        if(doc['email'].lower() == email.lower()):
+            return True
+    
+    return False
+
 '''
 @authenticate()
 Param   : username, password
 Purpose : Used to login a user.
           (1). Checks to see if the user exists in couchdb.
-          (2). Returns False if user id isn't found
-          (3). Returns True if user is found
-          (4). Returns 2 if incorrect password
-          (5). Returns 3 if the username doesn't match
-Returns : (1)users id, (2)False
+Returns : (1). Returns False if user id isn't found
+          (2). Returns True if user is found
+          (3). Returns 2 if incorrect password
+          (4). Returns 3 if the username doesn't match
 '''
 def authenticateUser(uname, upass):
     for user in users.view('_all_docs'):
@@ -118,6 +126,7 @@ def authenticateUser(uname, upass):
     else:
         return 2
 
+
 '''
 @adduser()
 Param   : username, email, password
@@ -128,15 +137,20 @@ Purpose : Used to register a user.
 Returns : (1)users id, (2)False
 '''
 def adduser(uname, uemail, upass):
-    existErr = False
+    usernameExists = 2
+    emailExists = 3
 
     if (findUsername(uname) == False):
-        hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
-        user = User(username=uname, email=uemail, hashpass=hashpass)
-        user.store(users)
-        return user.id
+        if(findEmail(uemail) == False):
+            hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
+            user = User(id=uname, username=uname, email=uemail, hashpass=hashpass)
+            user.store(users)
+            return user.id
+        else:
+            return emailExists
     else:
-        return existErr
+        return usernameExists
+
 
 '''
 @findPlantName()
@@ -181,10 +195,11 @@ def addPlant(data):
             wateringConditionValue=data['wateringConditionValue'],
             additionalNotes=data['additionalNotes'])
         plant.store(plant_device)
+        print("Plant stored successfully")
         return True
     else:
+        print("Plant name exists")
         return False
-
 
 
 # def addReading():
