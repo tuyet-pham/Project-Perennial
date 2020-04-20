@@ -37,6 +37,8 @@ class User(Document):
     username = TextField()
     email = TextField()
     hashpass = TextField()
+    phoneNum = TextField()
+    notificationMethod = TextField()
 
 class PlantDevice(Document):
     name = TextField()
@@ -126,7 +128,7 @@ def authenticateUser(uname, upass):
 
 
 '''
-@adduser()
+@adduser().notification
 Param   : username, email, password
 Purpose : Used to register a user.
           (1). Checks to see if the user exists in couchdb.
@@ -148,6 +150,59 @@ def adduser(uname, uemail, upass):
             return emailExists
     else:
         return usernameExists
+
+'''
+@getuser()
+Param   : username
+Purpose : Used to find a user.
+          (1). Checks to see if the user exists in couchdb.
+          (2). If the user exists then return a True flag
+          (3). If the user doesn't exist returns False flag
+Returns : (1)user object, (2)False
+'''
+def getuser(uname):
+    
+    for user in users.view('_all_docs'):
+        if user.id.lower() == uname.lower():
+            return user
+    
+    return False
+
+'''
+@updateoptions()
+Param   : username, email, phonenum, method
+Purpose : Used to update a user's notification options.
+          (1). Finds revision number of user in DB.
+          (2). If method is email, update the user object with new email.
+          (3). If method is phone, update the user object with new phone number.
+          (4). Post updated user object to user DB.
+Returns : (1)updated revision number, (2)False
+'''     
+# def updateoptions(uname, uemail, uphone, umethod):
+def updateoptions(data):
+    # user = getuser(username)
+    # print(user)
+
+    user = users.get(data['username'])
+    user['notificationMethod'] = data['notificationMethod']
+    if data['notificationMethod'] == 'sms':
+        user['phoneNum'] = data['phoneNum']
+        
+    if data['notificationMethod'] == 'email':
+        user['email'] = data['emailAddress']
+        user['phoneNum'] = None
+
+    user['notificationTriggers'] = data['notificationTriggers']
+
+    users.save(user)
+
+    return 1
+
+     
+def addplant(data):
+    print("Gottem")
+    #plant = PlantDevice(name=data['name'],species=data['species'],geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors'],wateringCoditionTrigger=data['wateringCoditionTrigger'],wateringConditionValue=data['wateringConditionValue'],additionalNotes=data['additionalNotes'])
+    #plant.store(plant_device)
 
 
 '''
