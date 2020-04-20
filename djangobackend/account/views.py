@@ -29,7 +29,7 @@ from rest_framework.status import (
 
 import sys
 sys.path.append('..')
-from dbmanager import addPlant
+from dbmanager import addPlant, updateoptions
 
 '''
 Authentication is currently not working.

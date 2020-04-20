@@ -177,11 +177,10 @@ Returns : (1)updated revision number, (2)False
 '''     
 # def updateoptions(uname, uemail, uphone, umethod):
 def updateoptions(data):
-    username = data['username']
     # user = getuser(username)
     # print(user)
 
-    user = users.get(username)
+    user = users.get(data['username'])
     user['notificationMethod'] = data['notificationMethod']
     if data['notificationMethod'] == 'sms':
         user['phoneNum'] = data['phoneNum']
@@ -190,10 +189,7 @@ def updateoptions(data):
         user['email'] = data['emailAddress']
         user['phoneNum'] = None
 
-
     user['notificationTriggers'] = data['notificationTriggers']
-
-    print(user)
 
     users.save(user)
 

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import { userLogin } from '../api/UserAPI'
+ 
 
 function LoginForm(props) {
   const [email, setemail] = useState("");
@@ -8,10 +10,18 @@ function LoginForm(props) {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    console.log('Submitting Form');
-    console.log({challenge})
-    console.log({email});
-    console.log({password})
+    if(challenge === true){
+
+      console.log('Submitting Form...');
+      const params = {
+        username : `${email}`,
+        password : `${password}`,
+      }
+      userLogin(params);
+    }
+    else {
+      alert("You forgot about the Recaptcha!");
+    }
   }
 
   const capChange = (val) => {

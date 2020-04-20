@@ -11,10 +11,11 @@ function Options() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const username = "Johnny67"
 
     if (validateInput()) {
       const notificationTriggers = getNotificationTriggers();
+      const username = localStorage.getItem('username');
+      // console.log(username)
 
       const params = {
         username : `${username}`,
