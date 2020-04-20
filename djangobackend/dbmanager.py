@@ -58,7 +58,7 @@ class PlantDeviceReading(Document):
     devicetype = TextField()
     device_id = TextField()
     timeReading = TextField()
-    datetime = TextField()
+    datetime = IntegerField()
     values = DictField(Mapping.build(
         moistureLevel = TextField(),
         waterLevel = TextField(),
@@ -82,7 +82,7 @@ def findUsername(uname):
     
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
-            return user.id
+            return True
     
     return False
 
@@ -95,6 +95,8 @@ def findEmail(email):
             return True
     
     return False
+
+
 
 '''
 @authenticate()
@@ -114,14 +116,15 @@ def authenticateUser(uname, upass):
     if (doc == ''):
         return False
     else:
-        # hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
+        hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
         if (doc['username'] == uname):
-            if (doc['hashpass'] == upass):
+            print(hashpass)
+            if (doc['hashpass'] == hashpass):
                 return True
             else:
-                return 3
+                return '3'
         else:
-            return 2
+            return '2'
 
 
 '''
@@ -134,13 +137,13 @@ Purpose : Used to register a user.
 Returns : (1)users id, (2)False
 '''
 def adduser(uname, uemail, upass):
-    usernameExists = 2
-    emailExists = 3
+    usernameExists = '2'
+    emailExists = '3'
 
     if (findUsername(uname) == False):
-        if(findEmail(email) == False):
+        if(findEmail(uemail) == False):
             hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
-            user = User(id=uname, username=uname, email=email, hashpass=hashpass)
+            user = User(id=uname, username=uname, email=uemail, hashpass=hashpass)
             user.store(users)
             return user.id
         else:
@@ -219,6 +222,8 @@ def findPlantName(pName):
             return True
     
     return False
+
+
 
 '''
 @addPlant()

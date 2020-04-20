@@ -3,6 +3,7 @@ import PageTemplate from '../PageTemplate';
 import OptionButtons from '../components/OptionButtons';
 import { options } from '../api/AccountAPI';
 
+
 function Options() {
   const [notificationMethod, setNotificationMethod] = useState('');
   const [phoneNum, setPhoneNum] = useState('');
@@ -52,6 +53,7 @@ function Options() {
     // Define regular expression patterns.
     var phoneNumRegex = new RegExp("([0-9]{11}|[0-9]{10})");
     var emailRegex = new RegExp("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[\\.][a-zA-Z]{2,}");
+
     let inputValid = ''
     
     // Check for valid input.
