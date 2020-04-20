@@ -50,41 +50,48 @@ export async function userRegister(params){
     await axios.post('users/register/', qs.stringify(params))
     .then(function(response) {
         console.log(response);
-        alert("Sucessful signup!")
+        alert("Successful signup!")
+        return '/login';
     })
     .catch(function(error) {
-        console.log('Error on Authentication');
-        if(error.data.email == true){
-            alert("Email already in use.")
+        if (error.response.data.type === '2'){
+           alert("Username already exists.");
+           return false;
         }
-        if(error.data.email == true){
-            alert("Email already in use.")
+        else if (error.response.data.type === '3'){
+           alert("Email already exists.");
+           return false;
         }
-  });
+    });
 }
-
 
 
 
 //Setting a token object on Logging in correctly
 function setToken(token){
     localStorage.setItem('token', token);
+
 }
+
 
 //Setting a username object on Logging in correctly
 function setUsername(thisUser){
     localStorage.setItem('username', thisUser);
+
 }
 
 
+//Getting a username object on Logging in correctly
 function getUsername(){
     return localStorage.getItem('username');
 }
 
 
+//Getting a Token object on Logging in correctly
 function getToken(){
     return localStorage.getItem('token');
 }
+
 
 function clearUser(){
     localStorage.clear();
