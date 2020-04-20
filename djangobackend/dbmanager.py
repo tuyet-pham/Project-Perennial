@@ -8,13 +8,11 @@
 '''
 
 from couchdb import Server
-from couchdb.mapping import Document, TextField, IntegerField, DateTimeField
+from couchdb.mapping import Document, TextField, IntegerField, DateTimeField, DictField, Mapping
 from couchdb import http, json, util
 from uuid import uuid4
 import os, sys
 import hashlib
-
-from rest_framework.authtoken.models import Token
 
 
 db = Server("http://%s:%s@db_data:5984/" % (os.environ['COUCHDB_USER'],os.environ['COUCHDB_PASSWORD']))
@@ -44,17 +42,35 @@ class User(Document):
 
 class PlantDevice(Document):
     name = TextField()
+    username = TextField()
     species = TextField()
-    geolocationCity = TextField()
-    geolocationState = TextField()
-    indoorsOutdoors = TextField()
-    wateringCoditionTrigger = TextField()
+    location = DictField(Mapping.build(
+        geolocationCity = TextField(),
+        geolocationState = TextField(),
+        indoorsOutdoors = TextField(),
+    ))
+    wateringConditionTrigger = TextField()
     wateringConditionValue = TextField()
     additionalNotes = TextField()
 
+class PlantDeviceReading(Document):
+    username = TextField()
+    devicetype = TextField()
+    device_id = TextField()
+    timeReading = TextField()
+    datetime = TextField()
+    values = DictField(Mapping.build(
+        moistureLevel = TextField(),
+        waterLevel = TextField(),
+        pumpStatus = TextField(),
+    ))
+
+class PlantTypes(Document):
+    plant = TextField()
+    minMoisture = TextField()
 
 '''
-@finduser()
+@findusername()
 Param   : username
 Purpose : Used to find a user.
           (1). Checks to see if the user exists in couchdb.
@@ -62,7 +78,7 @@ Purpose : Used to find a user.
           (3). If the user doesn't exist returns False flag
 Returns : (1)users id, (2)False
 '''
-def finduser(uname):
+def findUsername(uname):
     
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
@@ -76,15 +92,16 @@ def finduser(uname):
 Param   : username, password
 Purpose : Used to login a user.
           (1). Checks to see if the user exists in couchdb.
-          (2). Returns False if user id isn't found
-          (3). Returns True if user is found
-          (4). Returns 2 if incorrect password
-          (5). Returns 3 if the username doesn't match
-Returns : (1)users id, (2)False
+Returns : (1). Returns False if user id isn't found
+          (2). Returns True if user is found
+          (3). Returns 2 if incorrect password
+          (4). Returns 3 if the username doesn't match
 '''
 def authenticateUser(uname, upass):
+    
     doc = users[uname]
-    print(doc)
+    print(doc['username'])
+
     if (doc == ''):
         return False
     else:
@@ -96,6 +113,7 @@ def authenticateUser(uname, upass):
                 return 3
         else:
             return 2
+
 
 '''
 @adduser().notification
@@ -109,7 +127,7 @@ Returns : (1)users id, (2)False
 def adduser(uname, uemail, upass):
     existErr = False
 
-    if (finduser(uname) == False):
+    if (findUsername(uname) == False):
         hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
         user = User(username=uname, email=uemail, hashpass=hashpass)
         user.store(users)
@@ -175,9 +193,49 @@ def addplant(data):
     #plant.store(plant_device)
 
 
-# def addDevice(user_id, content):
-#     plant_device['05'] = content
+'''
+@findPlantName()
+Param   : pName
+Purpose : Used to check if an existing plant exists in the database for that user.
+          (1). Checks to see if the name exists in couchdb.
+          (2). If name exists, returns true, to not push to database
+          (3). If plant doesn't exist, returns false, to push to database
+Returns : (1). Returns True to not push to database
+          (2). Returns False to push to database
+'''
+def findPlantName(pName):
+    for plant in plant_device.view('_all_docs'):
+        doc = plant_device[plant.id]
+        if(doc['name'].lower() == pName.lower()):
+            return True
+    
+    return False
 
+'''
+@addPlant()
+Param   : data
+Purpose : Used to add a new plant device.
+          (1). Checks to see if the user exists in couchdb.
+          (2). If user exists, it checks to see if that plant device exists already
+          (3). If plant doesn't exist, adds the plant to the database under that username
+          (4). If plant exists, it returns a check to account/views that notifies the user that the plant cannot be added
+Returns : (1). Check to account/views if the plant device can be added or not
+'''
+def addPlant(data):
+    if(findPlantName(pName) == False):
+        plant = PlantDevice(
+            name=data['name'],
+            species=data['species'],
+            location=dict(geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors']),
+            wateringConditionTrigger=data['wateringConditionTrigger'],
+            wateringConditionValue=data['wateringConditionValue'],
+            additionalNotes=data['additionalNotes'])
+        plant.store(plant_device)
+        print("Plant stored successfully")
+        return True
+    else:
+        print("Plant name exists")
+        return False
 
 
 # def addReading():
