@@ -87,6 +87,15 @@ def findUsername(uname):
     return False
 
 
+
+def findEmail(email):
+    for user in users.view('_all_docs'):
+        doc = users[user.id]
+        if(doc['email'].lower() == email.lower()):
+            return True
+    
+    return False
+
 '''
 @authenticate()
 Param   : username, password
@@ -125,15 +134,19 @@ Purpose : Used to register a user.
 Returns : (1)users id, (2)False
 '''
 def adduser(uname, uemail, upass):
-    existErr = False
+    usernameExists = 2
+    emailExists = 3
 
     if (findUsername(uname) == False):
-        hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
-        user = User(username=uname, email=uemail, hashpass=hashpass)
-        user.store(users)
-        return user.id
+        if(findEmail(email) == False):
+            hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
+            user = User(id=uname, username=uname, email=email, hashpass=hashpass)
+            user.store(users)
+            return user.id
+        else:
+            return emailExists
     else:
-        return existErr
+        return usernameExists
 
 '''
 @getuser()
