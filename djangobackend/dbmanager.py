@@ -148,11 +148,13 @@ Purpose : Used to check if an existing plant exists in the database for that use
 Returns : (1). Returns True to not push to database
           (2). Returns False to push to database
 '''
-def findPlantName(pName):
+def findPlantName(pName, pUser):
     for plant in plant_device.view('_all_docs'):
         doc = plant_device[plant.id]
-        if(doc['name'].lower() == pName.lower()):
-            return True
+        print(doc['username'])
+        if(doc['username'].lower() == pUser.lower()):
+            if(doc['name'].lower() == pName.lower()):
+                return True
     
     return False
 
@@ -168,9 +170,10 @@ Returns : (1). Check to account/views if the plant device can be added or not
 '''
 def addPlant(data):
     pName = data['name']
-    if(findPlantName(pName) == False):
-        print(data['name'])
+    pUser = data['username']
+    if(findPlantName(pName, pUser) == False):
         plant = PlantDevice(
+            username=data['username'],
             name=data['name'],
             species=data['species'],
             location=dict(geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors']),
