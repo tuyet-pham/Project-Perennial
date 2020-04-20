@@ -40,6 +40,30 @@ Write your corresponding routes at the bottom of the page.
 (1). Change data to match your incoming requests
 (2). Add the correct HttpResponse, JsonResponse or Response needed.
 '''
+# '''
+# '''
+# class Account(APIView):
+#     authentication_classes = (SessionAuthentication, BasicAuthentication)
+#     permission_classes = (IsAuthenticated,)
+
+#     def get(self, request, format=None):
+#         content = {
+#             'username': unicode(request.user),  # `django.contrib.auth.User` instance.
+#             'auth': unicode(request.auth),  # None
+#         }
+#         return Response(content)
+
+
+
+# '''
+# '''
+# class MonitorPlants(APIView):
+#     authentication_classes = (SessionAuthentication, BasicAuthentication)
+#     permission_classes = (IsAuthenticated,)
+
+#     def get(self, request, format=None):
+#         content = {
+#             'username': unicode(request.user),  # `django.contrib.auth.User` instance.
 #             'auth': unicode(request.auth),  # None
 #         }
 #         return Response(content)
