@@ -36,6 +36,7 @@ def registerUser(request):
     username = ''
     password = ''
     email = ''
+    route = "/login"
 
     try:
         username = request.POST.get('username')
@@ -56,7 +57,12 @@ def registerUser(request):
         user = authenticate(request, username=username, password=password)
         if user is None:
             created = User.objects.create_user(username=username, password=password)
-        return JsonResponse({"type": status}, status=HTTP_200_OK)
+        return JsonResponse(
+            {
+                "type": status,
+                "route": route,
+            }, 
+            status=HTTP_200_OK)
 
 
 '''
@@ -73,6 +79,7 @@ def loginUser(request):
     
     username = ''
     password = ''
+    route = "/home"
 
     try:
         username = request.POST.get('username')
@@ -94,11 +101,11 @@ def loginUser(request):
             return JsonResponse(
                 {
                     "username": username,
-                    "token": token.key
+                    "token": token.key,
+                    "route" : route,
                 },
                 status=HTTP_200_OK)
                 
-
         if user is None:
             created = User.objects.create_user(username=username, password=password)
             login(request, user=created)
@@ -106,7 +113,8 @@ def loginUser(request):
             return JsonResponse(
             {
                 "username": username,
-                "Authentication ": "Token " + token.key
+                "token": token.key,
+                "route" : route,
             },
             status=HTTP_200_OK)
     else:
@@ -117,15 +125,20 @@ def loginUser(request):
 
 @api_view(['POST'])
 def logoutUser(request):
+    route = "/login"
+
     try:
        request.user.auth_token.delete()
     except (AttributeError, ObjectDoesNotExist):
         pass
 
     logout(request)
-
-    return Response({"success": _("Successfully logged out.")},
-                    status=status.HTTP_200_OK)
+    return JsonResponse(
+            {
+                "username": username,
+                "route" : route,
+            },
+            status=HTTP_200_OK)
 
 
 

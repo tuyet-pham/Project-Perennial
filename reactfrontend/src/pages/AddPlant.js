@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PageTemplate from '../PageTemplate';
 import { FaCamera} from 'react-icons/fa';
 import { addPlant } from '../api/AccountAPI'
+import { getUsername } from '../api/UserAPI'
 
 
 function AddPlant() {
@@ -21,6 +22,7 @@ function AddPlant() {
       
       const params = { 
         name : `${name}`,
+        username: getUsername(),
         species : `${species}`,
         geolocationCity :`${geolocationCity}`,
         geolocationState :`${geolocationState}`,

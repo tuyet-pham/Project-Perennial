@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { userRegister } from '../api/UserAPI'
+import { useHistory } from "react-router-dom";
 
 const validEmailRegex = RegExp(/^(([^<>()[].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+.)+[^<>()[\].,;:\s@"]{2,})$/i);
 
@@ -34,21 +35,34 @@ function RegisterForm(props) {
       password_len: '',
       password_conf: '',
   });
+  const history = useHistory();
+
 
   
   const handleSubmit = (evt) => {
+
     evt.preventDefault();
     validateForm(errors, challenge)
     ? console.log("Valid Form")
     : console.log(errors);
-
-    console.log('Submitting Form...');
-    const params = {
-        username : `${username}`,
-        email : `${email}`,
-        password : `${password}`,
+    if(challenge === true){
+      console.log('Submitting Form...');
+      const params = {
+          username : `${username}`,
+          email : `${email}`,
+          password : `${password}`,
+      }
+      
+      
+      const route = userRegister(params);
+      if (route !== false) {
+          history.push("/login");
+      }
+      
     }
-    userRegister(params);
+    else {
+      alert("You forgot about the Recaptcha!");
+    }
   };
 
   const capChange = (val) => {
