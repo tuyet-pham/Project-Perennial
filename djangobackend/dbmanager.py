@@ -37,6 +37,8 @@ class User(Document):
     username = TextField()
     email = TextField()
     hashpass = TextField()
+    phoneNum = TextField()
+    notificationMethod = TextField()
 
 class PlantDevice(Document):
     name = TextField()
@@ -56,7 +58,7 @@ class PlantDeviceReading(Document):
     devicetype = TextField()
     device_id = TextField()
     timeReading = TextField()
-    datetime = TextField()
+    datetime = IntegerField()
     values = DictField(Mapping.build(
         moistureLevel = TextField(),
         waterLevel = TextField(),
@@ -80,7 +82,7 @@ def findUsername(uname):
     
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
-            return user.id
+            return True
     
     return False
 
@@ -94,6 +96,8 @@ def findEmail(email):
     
     return False
 
+
+
 '''
 @authenticate()
 Param   : username, password
@@ -105,30 +109,25 @@ Returns : (1). Returns False if user id isn't found
           (4). Returns 3 if the username doesn't match
 '''
 def authenticateUser(uname, upass):
-    for user in users.view('_all_docs'):
-        doc = users[user.id]
-        print(doc['username'])
-        if (doc['username'] == uname):
-            return True
-    print(uname)
-    # doc = users[uname]
-    # print(doc['username'])
+    doc = users[uname]
+    print(doc['username'])
 
-    # if (doc == ''):
-    #     return False
-    # else:
-        # hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
-    if (doc['username'] == uname):
-        if (doc['hashpass'] == upass):
-            return True
-        else:
-            return 3
+    if (doc == ''):
+        return False
     else:
-        return 2
+        hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
+        if (doc['username'] == uname):
+            print(hashpass)
+            if (doc['hashpass'] == hashpass):
+                return True
+            else:
+                return '3'
+        else:
+            return '2'
 
 
 '''
-@adduser()
+@adduser().notification
 Param   : username, email, password
 Purpose : Used to register a user.
           (1). Checks to see if the user exists in couchdb.
@@ -137,8 +136,8 @@ Purpose : Used to register a user.
 Returns : (1)users id, (2)False
 '''
 def adduser(uname, uemail, upass):
-    usernameExists = 2
-    emailExists = 3
+    usernameExists = '2'
+    emailExists = '3'
 
     if (findUsername(uname) == False):
         if(findEmail(uemail) == False):
@@ -150,6 +149,59 @@ def adduser(uname, uemail, upass):
             return emailExists
     else:
         return usernameExists
+
+'''
+@getuser()
+Param   : username
+Purpose : Used to find a user.
+          (1). Checks to see if the user exists in couchdb.
+          (2). If the user exists then return a True flag
+          (3). If the user doesn't exist returns False flag
+Returns : (1)user object, (2)False
+'''
+def getuser(uname):
+    
+    for user in users.view('_all_docs'):
+        if user.id.lower() == uname.lower():
+            return user
+    
+    return False
+
+'''
+@updateoptions()
+Param   : username, email, phonenum, method
+Purpose : Used to update a user's notification options.
+          (1). Finds revision number of user in DB.
+          (2). If method is email, update the user object with new email.
+          (3). If method is phone, update the user object with new phone number.
+          (4). Post updated user object to user DB.
+Returns : (1)updated revision number, (2)False
+'''     
+# def updateoptions(uname, uemail, uphone, umethod):
+def updateoptions(data):
+    # user = getuser(username)
+    # print(user)
+
+    user = users.get(data['username'])
+    user['notificationMethod'] = data['notificationMethod']
+    if data['notificationMethod'] == 'sms':
+        user['phoneNum'] = data['phoneNum']
+        
+    if data['notificationMethod'] == 'email':
+        user['email'] = data['emailAddress']
+        user['phoneNum'] = None
+
+    user['notificationTriggers'] = data['notificationTriggers']
+
+    users.save(user)
+
+    return 1
+
+     
+def addplant(data):
+    print("Gottem")
+    #plant = PlantDevice(name=data['name'],species=data['species'],geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors'],wateringCoditionTrigger=data['wateringCoditionTrigger'],wateringConditionValue=data['wateringConditionValue'],additionalNotes=data['additionalNotes'])
+    #plant.store(plant_device)
 
 
 '''
@@ -171,6 +223,8 @@ def findPlantName(pName, pUser):
                 return True
     
     return False
+
+
 
 '''
 @addPlant()

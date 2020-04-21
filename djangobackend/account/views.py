@@ -29,7 +29,7 @@ from rest_framework.status import (
 
 import sys
 sys.path.append('..')
-from dbmanager import addPlant
+from dbmanager import addPlant, updateoptions
 
 '''
 Authentication is currently not working.
@@ -133,17 +133,13 @@ def options(request):
 
     try:
         data = { 
-            'name' : request.POST.get('name'),
-            'species' : request.POST.get('species'),
-            'geolocationCity' : request.POST.get('geolocationCity'),
-            'geolocationState' : request.POST.get('geolocationState'),
-            'indoorsOutdoors' : request.POST.get('indoorsOutdoors'),
-            'wateringConditionTrigger' : request.POST.get('wateringConditionTrigger'),
-            'wateringConditionValue' : request.POST.get('wateringConditionValue'),
-            'additionalNotes' : request.POST.get('additionalNotes'),
+            'username' : request.POST.get('username'),
+            'emailAddress' : request.POST.get('emailAddress'),
+            'phoneNum' : request.POST.get('phoneNum'),
+            'notificationMethod' : request.POST.get('notificationMethod'),
+            'notificationTriggers' : request.POST.getlist('notificationTriggers')
         }
-        # passing data to options function in dbmanager.py in djangobackend
-        # options(data) - make in dbmanager.py
+        updateoptions(data)
     except Exception as e:
         print("Error: Failed Request on %s", e)
 

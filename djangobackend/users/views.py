@@ -26,7 +26,9 @@ from rest_framework.status import (
 
 import sys
 sys.path.append('..')
-from dbmanager import authenticateUser, findUsername, findEmail
+from dbmanager import authenticateUser
+from dbmanager import adduser
+
 
 @csrf_exempt
 def registerUser(request):
@@ -43,35 +45,18 @@ def registerUser(request):
     except Exception as e:
         print("Error : Failed Request on %s", e)
 
-    # # authenticate the user in couchdb
+    status = adduser(uname=username, uemail=email, upass=password)
 
-    # # if both true
-    # if status == True:
-    #     if user is not None:
-    #         login(request, user)
-    #         token, _ = Token.objects.get_or_create(user=user)
-    #         return JsonResponse(
-    #             {
-    #                 "username": username,
-    #                 "token": token.key
-    #             },
-    #             status=HTTP_200_OK)
-                
-
-    #     if user is None:
-    #         created = User.objects.create_user(username=username, password=password)
-    #         login(request, user=created)
-    #         token, _ = Token.objects.get_or_create(user=created)
-    #         return JsonResponse(
-    #         {
-    #             "username": username,
-    #             "token": token.key
-    #         },
-    #         status=HTTP_200_OK)
-    # else:
-    return JsonResponse({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
-
-
+    # if both true
+    if status == '3':
+        return JsonResponse({"type": status}, status=HTTP_404_NOT_FOUND)
+    elif status == '2':
+        return JsonResponse({"type": status}, status=HTTP_404_NOT_FOUND)
+    else:
+        user = authenticate(request, username=username, password=password)
+        if user is None:
+            created = User.objects.create_user(username=username, password=password)
+        return JsonResponse({"type": status}, status=HTTP_200_OK)
 
 
 '''
@@ -121,7 +106,7 @@ def loginUser(request):
             return JsonResponse(
             {
                 "username": username,
-                "token": token.key
+                "Authentication ": "Token " + token.key
             },
             status=HTTP_200_OK)
     else:
