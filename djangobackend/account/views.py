@@ -105,6 +105,7 @@ def addplants(request):
     check = True
     try:
         data = {
+            'username' : 'Johnny67',
             'name' : request.POST.get('name'),
             'species' : request.POST.get('species'),
             'geolocationCity' : request.POST.get('geolocationCity'),

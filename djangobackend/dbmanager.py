@@ -109,7 +109,6 @@ Returns : (1). Returns False if user id isn't found
           (4). Returns 3 if the username doesn't match
 '''
 def authenticateUser(uname, upass):
-    
     doc = users[uname]
     print(doc['username'])
 
@@ -215,11 +214,13 @@ Purpose : Used to check if an existing plant exists in the database for that use
 Returns : (1). Returns True to not push to database
           (2). Returns False to push to database
 '''
-def findPlantName(pName):
+def findPlantName(pName, pUser):
     for plant in plant_device.view('_all_docs'):
         doc = plant_device[plant.id]
-        if(doc['name'].lower() == pName.lower()):
-            return True
+        print(doc['username'])
+        if(doc['username'].lower() == pUser.lower()):
+            if(doc['name'].lower() == pName.lower()):
+                return True
     
     return False
 
@@ -236,8 +237,11 @@ Purpose : Used to add a new plant device.
 Returns : (1). Check to account/views if the plant device can be added or not
 '''
 def addPlant(data):
-    if(findPlantName(pName) == False):
+    pName = data['name']
+    pUser = data['username']
+    if(findPlantName(pName, pUser) == False):
         plant = PlantDevice(
+            username=data['username'],
             name=data['name'],
             species=data['species'],
             location=dict(geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors']),
