@@ -1,17 +1,47 @@
 import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import { userLogin } from '../api/UserAPI'
+import { getToken } from '../api/UserAPI'
+
+import { useHistory } from "react-router-dom";
+
 
 function LoginForm(props) {
-  const [email, setemail] = useState("");
+  const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
   const [challenge, setChallenge] = useState(false)
+  const history = useHistory();
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    console.log('Submitting Form');
-    console.log({challenge})
-    console.log({email});
-    console.log({password})
+
+    if(challenge === true){
+
+      console.log('Submitting Form...');
+      
+      const params = {
+        username : `${username}`,
+        password : `${password}`,
+      }
+      
+      
+      const route = userLogin(params);
+      if (route === false) {
+         alert("Invalid Credentials. Try again.")
+      }
+      else{
+        if (getToken() === ''){
+          alert('Stop hacking');
+        }
+        else{
+          history.push("/home");
+        }
+      }
+    }
+    else{
+      alert("You forgot about the Recaptcha!");
+    }
+
   }
 
   const capChange = (val) => {
@@ -26,11 +56,11 @@ function LoginForm(props) {
       <input
         className="login-input"
         type="text"
-        name="email"
-        placeholder="email"
-        value={email}
+        name="username"
+        placeholder="username"
+        value={username}
         onChange={e =>
-        setemail(e.target.value)}
+        setusername(e.target.value)}
         required
       />
       <br/>

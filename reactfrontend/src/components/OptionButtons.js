@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import NotificationCheckboxes from './NotificationCheckboxes';
 import NotificationData from './NotificationData';
+import { userLogout } from '../api/UserAPI';
+import { useHistory } from "react-router-dom";
 
 
 function OptionButtons(props) {
@@ -43,11 +45,21 @@ function TopLayerOptions(props) {
 }
   
 function AccountOptions(props) {
+    const history = useHistory();
+    const handleLogout = (evt) => {
+        evt.preventDefault();
+        //alert user first?
+          
+        const route = userLogout();
+        history.push("/login");
+    }
+
+
 // Logout or change password
     return (
         <div>
         <div id="logout_button" className="button-container">
-            <div className="home-buttons" onClick={() => alert('Logged out')}>
+            <div className="home-buttons" onClick={handleLogout}>
             Logout
             </div>
         </div>
