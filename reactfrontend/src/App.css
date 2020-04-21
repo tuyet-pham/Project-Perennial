@@ -29,6 +29,7 @@
   box-shadow: 0 0 0pt 1pt #b1d898; /* rounded corners on outline */
   border-radius: 5px;
   text-align: left;
+  cursor: pointer;
 }
 
 .circle-icon {
@@ -78,6 +79,7 @@
   box-shadow: 0 0 0pt 1pt #b1d898; /* rounded corners on outline */
   border-radius: 5px;
   text-align: left;
+  cursor: pointer;
 }
 
 .monitor-plant-card-expanded {
@@ -91,4 +93,23 @@
   box-shadow: 0 0 0pt 1pt #b1d898; /* rounded corners on outline */
   border-radius: 5px;
   text-align: left;
+  cursor: pointer;
+}
+
+/* Sections on Options page */
+
+.options-container {
+  padding: 5px;
+  margin: 10px auto;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  width: 90% !important;
+  background-color: #3d3f3b;
+  box-shadow: 0 0 0pt 1pt #b1d898; /* rounded corners on outline */
+  border-radius: 5px;
+  text-align: left;
+}
+
+.checkboxes {
+  list-style-type: none;
 }

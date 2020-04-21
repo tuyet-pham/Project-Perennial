@@ -18,32 +18,43 @@ services:
 
 # ---- Django
   djangobackend:
+    container_name: djangobackend
     build: ./djangobackend
     volumes:
       - ./djangobackend/:/app/django
     ports:
       - 8000:8000
+    expose:
+      - 8000
     stdin_open: true
     restart: always
     tty: true
-    command: python3 manage.py runserver 0.0.0.0:8000
-    depends_on:
+    command: ./entrypoint.sh
+    links:
       - db
+    environment:
+      - COUCHDB_USER=${COUCHDB_USER}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
 
 # ---- ReactJS
   reactfrontend:
     build: ./reactfrontend
     volumes:
-      - ./reactfrontend:/app
-      - node-modules:/app/node_modules
+      - ./reactfrontend:/app/reactfrontend
+      - node-modules:/app/reactfrontend/node_modules
     ports:
       - 3000:3000
     environment:
       - NODE_ENV=development
-    #depends_on:
-    #  - djangobackend
+    links: 
+      - db
+      - djangobackend
+    depends_on:
+      - djangobackend
     command: npm start
 
+# ---- Database data
   data:
     build: ./data
     volumes:
@@ -52,7 +63,20 @@ services:
       - HOST=${HOST}
     links:
       - db
+    depends_on:
+     - db
     command: ./perennialData.sh
+    environment:
+      - HOST=${HOST}
+
+  mqttclient:
+    build: ./mqtt_client
+    volumes:
+     - ./mqtt_client:/code
+    depends_on:
+     - db
+    environment:
+      - MQTT_BROKER=${MQTT_BROKER}
 
 # ---- Our volumes
 volumes:
