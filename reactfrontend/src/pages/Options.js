@@ -16,7 +16,6 @@ function Options() {
     if (validateInput()) {
       const notificationTriggers = getNotificationTriggers();
       const username = localStorage.getItem('username');
-      // console.log(username)
 
       const params = {
         username : `${username}`,
@@ -27,9 +26,6 @@ function Options() {
       }
       
       options(params)
-        // .then(api_response => {
-        //   console.log(api_response);
-        // });
         
       alert('Notification preferences updated.')
     }

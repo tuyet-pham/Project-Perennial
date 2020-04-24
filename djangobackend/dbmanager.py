@@ -177,10 +177,7 @@ Purpose : Used to update a user's notification options.
           (4). Post updated user object to user DB.
 Returns : (1)updated revision number, (2)False
 '''     
-# def updateoptions(uname, uemail, uphone, umethod):
 def updateoptions(data):
-    # user = getuser(username)
-    # print(user)
 
     user = users.get(data['username'])
     user['notificationMethod'] = data['notificationMethod']
@@ -197,7 +194,25 @@ def updateoptions(data):
 
     return 1
 
+'''
+@changepassword()
+Param   : username, password
+Purpose : Used to update a user's notification options.
+          (1). Finds revision number of user in DB.
+          (2). If method is email, update the user object with new email.
+          (3). If method is phone, update the user object with new phone number.
+          (4). Post updated user object to user DB.
+Returns : (1)updated revision number, (2)False
+''' 
+def changepassword(data):
+    username = data['username']
+    password = data['password']
+    hashpass = hashlib.sha256(password.encode('utf-8')).hexdigest()
+    
+    return 1
      
+
+
 def addplant(data):
     print("Gottem")
     #plant = PlantDevice(name=data['name'],species=data['species'],geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors'],wateringCoditionTrigger=data['wateringCoditionTrigger'],wateringConditionValue=data['wateringConditionValue'],additionalNotes=data['additionalNotes'])

@@ -3,11 +3,27 @@ import NotificationCheckboxes from './NotificationCheckboxes';
 import NotificationData from './NotificationData';
 import { userLogout } from '../api/UserAPI';
 import { useHistory } from "react-router-dom";
+import { changepassword } from '../api/AccountAPI';
+
 
 
 function OptionButtons(props) {
     // Top layer options or drilled down options
     const [menuString, setMenuString] = useState('toplayer');
+    const [newPassword, setNewPassword] = useState('')
+    const [validated, setValidated] = useState(false)
+    const params = []
+
+    const handlePasswordChange = () => {
+        if (validated === false) {
+            alert("Invalid input.")
+        }
+        else {
+            changepassword(params)
+            alert("Password updated.")
+        }
+        
+    }
 
     if (menuString === 'toplayer') {
         return (
@@ -22,6 +38,11 @@ function OptionButtons(props) {
     else if (menuString === 'notifications') {
         return (
         <NotificationOptions handleSubmit={props.handleSubmit} setMenuString={setMenuString} notificationMethod={props.notificationMethod} setNotificationMethod={props.setNotificationMethod} setPhoneNum={props.setPhoneNum} setEmailAddress={props.setEmailAddress} setNotificationBoxes={props.setNotificationBoxes}/>
+        );
+    }
+    else if (menuString === 'changepassword') {
+        return (
+            <ChangePassword validated={validated} setValidated={setValidated} newPassword={newPassword} setNewPassword={setNewPassword} handlePasswordChange={handlePasswordChange} />
         );
     }
 }
@@ -55,7 +76,7 @@ function AccountOptions(props) {
     }
 
 
-// Logout or change password
+    // Logout or change password
     return (
         <div>
         <div id="logout_button" className="button-container">
@@ -64,7 +85,7 @@ function AccountOptions(props) {
             </div>
         </div>
         <div id="change_password_button" className="button-container">
-            <div className="home-buttons" onClick={() => alert('Change password')}>
+            <div className="home-buttons" onClick={() => props.setMenuString('changepassword')}>
             Change password
             </div>
         </div>
@@ -117,6 +138,76 @@ function NotificationOptions(props) {
         </div>
         </div>
     );
+}
+
+function ChangePassword(props) {
+    const [confirmPassword, setConfirmPassword] = useState('')
+
+    const handleChange = (evt) => {
+        evt.preventDefault();
+
+        const {name, value} = evt.target
+
+        switch(name) {
+            case 'newPassword':
+                if(value.length < 8) {
+                    console.log('Password is too short.')
+                    props.setValidated(false)
+                }
+                props.setNewPassword(value)
+                break;
+            case 'confirmPassword':
+                if(value !== props.newPassword) {
+                    console.log('Passwords do not match.')
+                    props.setValidated(false)
+                }
+                else {
+                    if(props.newPassword.length > 8) {
+                        props.setValidated(true)
+                    }
+                }
+                setConfirmPassword(value)
+                break;
+        }
+    }
+
+    return(
+        <div>
+            <div className="options-container">
+                <div>
+                    <input 
+                        className="login-input"
+                        type="password" 
+                        name="newPassword"
+                        placeholder="New password"
+                        value={props.newPassword}
+                        onChange={handleChange}
+                        required
+                    />
+                    <br />
+                    <input 
+                        className="login-input"
+                        type="password" 
+                        name="confirmPassword"
+                        placeholder="Confirm password"
+                        value={confirmPassword}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <br />
+                <button className="btn btn-primary" onClick={() => props.handlePasswordChange()}>
+                    Change Password
+                </button>
+            </div>
+            <div id="back_button" className="button-container">
+                <div className="home-buttons" onClick={() => props.setMenuString('toplayer')}>
+                    Back
+                </div>
+            </div>
+        </div>
+    );
+
 }
 
 export default OptionButtons;

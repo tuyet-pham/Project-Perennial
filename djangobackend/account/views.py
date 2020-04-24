@@ -29,7 +29,7 @@ from rest_framework.status import (
 
 import sys
 sys.path.append('..')
-from dbmanager import addPlant, updateoptions
+from dbmanager import addPlant, updateoptions, changepassword
 
 '''
 Authentication is currently not working.
@@ -146,6 +146,21 @@ def options(request):
     
     return JsonResponse(data)
 
+
+@csrf_exempt
+def updatepassword(request):
+    data = {}
+
+    try:
+        data = {
+            'username' : request.POST.get('username'),
+            'pass' : request.POST.get('pass')
+        }
+        changepassword(data)
+    except Exception as e:
+        print("Error: Failed Request on %s", e)
+
+    return JsonResponse(data)
 
 
 
