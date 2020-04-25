@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { userLogin } from '../api/UserAPI'
-import { getToken } from '../api/UserAPI'
-
 import { useHistory } from "react-router-dom";
 
 
@@ -30,8 +28,8 @@ function LoginForm(props) {
          alert("Invalid Credentials. Try again.")
       }
       else{
-        if (getToken() === ''){
-          alert('Stop hacking');
+        if (localStorage.getItem('token') === ''){
+          alert('Stop hacking..');
         }
         else{
           history.push("/home");

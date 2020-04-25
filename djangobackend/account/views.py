@@ -16,10 +16,7 @@ from django.contrib.auth.models import AnonymousUser
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from rest_framework.permissions import AllowAny
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
@@ -40,66 +37,11 @@ Write your corresponding routes at the bottom of the page.
 (1). Change data to match your incoming requests
 (2). Add the correct HttpResponse, JsonResponse or Response needed.
 '''
-# '''
-# '''
-# class Account(APIView):
-#     authentication_classes = (SessionAuthentication, BasicAuthentication)
-#     permission_classes = (IsAuthenticated,)
-
-#     def get(self, request, format=None):
-#         content = {
-#             'username': unicode(request.user),  # `django.contrib.auth.User` instance.
-#             'auth': unicode(request.auth),  # None
-#         }
-#         return Response(content)
-
-
-
-# '''
-# '''
-# class MonitorPlants(APIView):
-#     authentication_classes = (SessionAuthentication, BasicAuthentication)
-#     permission_classes = (IsAuthenticated,)
-
-#     def get(self, request, format=None):
-#         content = {
-#             'username': unicode(request.user),  # `django.contrib.auth.User` instance.
-#             'auth': unicode(request.auth),  # None
-#         }
-#         return Response(content)
-
-
-
-# '''
-# '''
-# class AddPlant(APIView):
-#     authentication_classes = (SessionAuthentication, BasicAuthentication)
-#     permission_classes = (IsAuthenticated,)
-    
-#     def post(self, request, format=None):
-#         content = {
-#             'username': unicode(request.user),  # `django.contrib.auth.User` instance.
-#             'auth': unicode(request.auth),  # None
-#         }
-#         return Response(content)
-
-
-# '''
-# '''
-# class Options(APIView):
-#     permission_classes = (IsAuthenticated,)
-
-#     def post(self, request, format=None):
-#         content = {
-#             'username': unicode(request.user),  # `django.contrib.auth.User` instance.
-#             'auth': unicode(request.auth),  # None
-#         }
-#         return Response(content)
-
-
 
 
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def addplants(request):
     data = {}
     check = True
@@ -128,6 +70,8 @@ def addplants(request):
 
 
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def options(request):
     data = {}
 
@@ -150,6 +94,8 @@ def options(request):
 
 
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def monitorplants(request):
     data = {}
 

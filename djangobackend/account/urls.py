@@ -19,7 +19,7 @@ from . import views
 
 urlpatterns = [
     # url(r'^$', views.Account.as_view(), name='account'),
-    url(r'monitorplants/$', views.monitorplants, name='monitorplants'),
-    url(r'addplants/$', views.addplants, name='addplants'),
-    url(r'options/$', views.options, name='options'),
+    url(r'^monitorplants', views.monitorplants, name='monitorplants'),
+    url(r'^addplants', views.addplants, name='addplants'),
+    url(r'^options', views.options, name='options'),
 ]
