@@ -24,7 +24,7 @@ function App() {
         <PageTemplate path="/monitor" component={Monitor} pageName="Monitor" />
         <PageTemplate path="/add-plant" component={AddPlant} pageName="Add A Plant" />
         <PageTemplate path="/options" component={Options} pageName="Options" />
-        <LoginTemplate path="/login" component={Login} pageName="Login" />
+        <LoginTemplate exac path="/" component={Login} pageName="Login" />
         <LoginTemplate path="/sign-up" component={Register} pageName="Sign Up" />
       </Router>
     </div>

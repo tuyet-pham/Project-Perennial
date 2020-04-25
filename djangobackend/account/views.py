@@ -6,18 +6,13 @@ from django.db import models
 # csrf - Might need this later to provide Cross Site Request Forgery protection
 # As of right now it is ignored
 from django.views.decorators.csrf import csrf_exempt        
-from django.core import serializers
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth.models import AnonymousUser
-
 
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
-from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
@@ -64,7 +59,7 @@ def addplants(request):
     if (addPlant(data) == False):
         check = False
     if (check == False):
-        return JsonResponse(data, status=HTTP_404_NOT_FOUND)
+        return JsonResponse(data, status=HTTP_400_NOT_FOUND)
     else:
         return JsonResponse(data, status=HTTP_200_OK)
 
@@ -86,13 +81,15 @@ def options(request):
         updateoptions(data)
     except Exception as e:
         print("Error: Failed Request on %s", e)
-
     
     return JsonResponse(data)
 
 
 
 
+"""
+Requires token for API call.
+"""
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
