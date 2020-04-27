@@ -4,13 +4,13 @@
 .env
 env
 venv
+.venv
 .mypy_cache
 __pycache__
 __init__.py
 migrations
 *.ini
 *.sqlite3
-couchUsers
 
 # dependencies
 /node_modules

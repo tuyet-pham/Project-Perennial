@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
+import { userRegister } from '../api/UserAPI'
+import { useHistory } from "react-router-dom";
 
 const validEmailRegex = RegExp(/^(([^<>()[].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+.)+[^<>()[\].,;:\s@"]{2,})$/i);
 
 const validateForm = (errors, challenge) => {
   let valid = true;
-  if(errors.fullName.length === 0) {
+  if(errors.username.length === 0) {
     valid = false;
   } else if (errors.email.length === 0) {
     valid = false;
@@ -20,28 +22,47 @@ const validateForm = (errors, challenge) => {
   return valid;
 }
 
+
 function RegisterForm(props) {
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
   const [ rePassword, setRepassword ] = useState("");
   const [ challenge, setChallenge ] = useState(false);
-  const [ fullName, setFullName ] = useState("");
+  const [ username, setUsername ] = useState("");
   const [ errors, setErrors ] = useState({
-      fullName: '',
+      username: '',
       email: '',
       password_len: '',
       password_conf: '',
   });
+  const history = useHistory();
 
+
+  
   const handleSubmit = (evt) => {
+
     evt.preventDefault();
     validateForm(errors, challenge)
     ? console.log("Valid Form")
-    : console.log("Invalid Form");
-    console.log({errors})
-    console.log({challenge})
-    console.log({rePassword});
-    console.log({fullName});
+    : console.log(errors);
+    if(challenge === true){
+      console.log('Submitting Form...');
+      const params = {
+          username : `${username}`,
+          email : `${email}`,
+          password : `${password}`,
+      }
+      
+      
+      const route = userRegister(params);
+      if (route !== false) {
+          history.push("/login");
+      }
+      
+    }
+    else {
+      alert("You forgot about the Recaptcha!");
+    }
   };
 
   const capChange = (val) => {
@@ -58,12 +79,12 @@ function RegisterForm(props) {
     let curerrors = errors;
 
     switch(name) {
-      case 'fullName':
-        curerrors.fullName =
+      case 'username':
+        curerrors.username =
           value.length < 5
-          ? 'Full Name must be 5 characters long!'
+          ? 'Username must be 5 characters long!'
           : '';
-        setFullName(value);
+        setUsername(value);
         break;
       case 'email':
         curerrors.email =
@@ -98,9 +119,9 @@ function RegisterForm(props) {
       <input
         className="login-input"
         type="text"
-        name="fullName"
-        placeholder="full name"
-        value={fullName}
+        name="username"
+        placeholder="username"
+        value={username}
         onChange={onChange}
         required
       />

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'account',
     'users',
     'tests',
+    'notifications',
 ]
 
 # ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
@@ -140,3 +141,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_SESSION_LOGIN = False 

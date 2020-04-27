@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PageTemplate from '../PageTemplate';
 import { FaCamera} from 'react-icons/fa';
 import { addPlant } from '../api/AccountAPI'
+import { useHistory } from "react-router-dom";
 
 
 function AddPlant() {
@@ -14,6 +15,7 @@ function AddPlant() {
     const [wateringConditionTrigger, setWateringConditionTrigger] = useState("moisture");
     const [wateringConditionValue, setWateringConditionValue] = useState(0);
     const [additionalNotes, setAdditionalNotes] = useState("");
+    const history = useHistory();
 
     // Handle submission 
     const handleSubmit = (event) => {
@@ -21,6 +23,7 @@ function AddPlant() {
       
       const params = { 
         name : `${name}`,
+        username: `${localStorage.getItem('username')}`,
         species : `${species}`,
         geolocationCity :`${geolocationCity}`,
         geolocationState :`${geolocationState}`,
@@ -30,7 +33,14 @@ function AddPlant() {
         additionalNotes :`${additionalNotes}`
       }
       
-      addPlant(params);
+      if (localStorage.getItem('token') === null) {
+        alert("Your session has timed out");
+        history.push("/login");
+        localStorage.clear();
+      }
+      else{
+        addPlant(params);
+      }
     }
 
     // Forms with hooks reference: https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/

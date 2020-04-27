@@ -37,6 +37,8 @@ class User(Document):
     username = TextField()
     email = TextField()
     hashpass = TextField()
+    phoneNum = TextField()
+    notificationMethod = TextField()
 
 class PlantDevice(Document):
     name = TextField()
@@ -56,7 +58,7 @@ class PlantDeviceReading(Document):
     devicetype = TextField()
     device_id = TextField()
     timeReading = TextField()
-    datetime = TextField()
+    datetime = IntegerField()
     values = DictField(Mapping.build(
         moistureLevel = TextField(),
         waterLevel = TextField(),
@@ -76,13 +78,30 @@ Purpose : Used to find a user.
           (3). If the user doesn't exist returns False flag
 Returns : (1)users id, (2)False
 '''
-def findUsername(uname):
-    
+def findUsername(uname):  
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
-            return user.id
-    
+            return True
     return False
+
+
+
+'''
+@findusername()
+Param   : email
+Purpose : Used to find email.
+          (1). Checks to see if the email in couchdb.
+          (2). If the email exists then return a True flag
+          (3). If the email doesn't exist returns False flag
+Returns : (1)True, (2)False
+'''
+def findEmail(email):
+    for user in users.view('_all_docs'):
+        doc = users[user.id]
+        if(doc['email'].lower() == email.lower()):
+            return True
+    return False
+
 
 
 '''
@@ -96,25 +115,25 @@ Returns : (1). Returns False if user id isn't found
           (4). Returns 3 if the username doesn't match
 '''
 def authenticateUser(uname, upass):
-    
     doc = users[uname]
     print(doc['username'])
 
     if (doc == ''):
         return False
     else:
-        # hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
+        hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
         if (doc['username'] == uname):
-            if (doc['hashpass'] == upass):
+            print(hashpass)
+            if (doc['hashpass'] == hashpass):
                 return True
             else:
-                return 3
+                return '3'
         else:
-            return 2
+            return '2'
 
 
 '''
-@adduser()
+@adduser().notification
 Param   : username, email, password
 Purpose : Used to register a user.
           (1). Checks to see if the user exists in couchdb.
@@ -123,15 +142,68 @@ Purpose : Used to register a user.
 Returns : (1)users id, (2)False
 '''
 def adduser(uname, uemail, upass):
-    existErr = False
+    usernameExists = '2'
+    emailExists = '3'
 
     if (findUsername(uname) == False):
-        hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
-        user = User(username=uname, email=uemail, hashpass=hashpass)
-        user.store(users)
-        return user.id
+        if(findEmail(uemail) == False):
+            hashpass = hashlib.sha256(upass.encode('utf-8')).hexdigest()
+            user = User(id=uname, username=uname, email=uemail, hashpass=hashpass)
+            user.store(users)
+            return user.id
+        else:
+            return emailExists
     else:
-        return existErr
+        return usernameExists
+
+'''
+@getuser()
+Param   : username
+Purpose : Used to find a user.
+          (1). Checks to see if the user exists in couchdb.
+          (2). If the user exists then return a True flag
+          (3). If the user doesn't exist returns False flag
+Returns : (1)user object, (2)False
+'''
+def getuser(uname):
+    
+    for user in users.view('_all_docs'):
+        if user.id.lower() == uname.lower():
+            return user
+    return False
+
+
+
+
+'''
+@updateoptions()
+Param   : username, email, phonenum, method
+Purpose : Used to update a user's notification options.
+          (1). Finds revision number of user in DB.
+          (2). If method is email, update the user object with new email.
+          (3). If method is phone, update the user object with new phone number.
+          (4). Post updated user object to user DB.
+Returns : (1)updated revision number, (2)False
+'''     
+def updateoptions(data):
+
+    user = users.get(data['username'])
+    if user == '':
+        return False
+
+    user['notificationMethod'] = data['notificationMethod']
+    if data['notificationMethod'] == 'sms':
+        user['phoneNum'] = data['phoneNum']
+        
+    if data['notificationMethod'] == 'email':
+        user['email'] = data['emailAddress']
+        user['phoneNum'] = None
+
+    user['notificationTriggers'] = data['notificationTriggers']
+    users.save(user)
+
+    return True
+
 
 
 '''
@@ -144,13 +216,17 @@ Purpose : Used to check if an existing plant exists in the database for that use
 Returns : (1). Returns True to not push to database
           (2). Returns False to push to database
 '''
-def findPlantName(pName):
+def findPlantName(pName, pUser):
     for plant in plant_device.view('_all_docs'):
         doc = plant_device[plant.id]
-        if(doc['name'].lower() == pName.lower()):
-            return True
+        print(doc['username'])
+        if(doc['username'].lower() == pUser.lower()):
+            if(doc['name'].lower() == pName.lower()):
+                return True
     
     return False
+
+
 
 '''
 @addPlant()
@@ -163,8 +239,11 @@ Purpose : Used to add a new plant device.
 Returns : (1). Check to account/views if the plant device can be added or not
 '''
 def addPlant(data):
-    if(findPlantName(pName) == False):
+    pName = data['name']
+    pUser = data['username']
+    if(findPlantName(pName, pUser) == False):
         plant = PlantDevice(
+            username=data['username'],
             name=data['name'],
             species=data['species'],
             location=dict(geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors']),
@@ -179,4 +258,25 @@ def addPlant(data):
         return False
 
 
-# def addReading():
+
+
+'''
+@addPlant()
+Param   : data
+Purpose : change password
+Returns : True
+'''
+def changepassword(data):
+    user = users.get(data['username'])
+    if user == '':
+        return False
+    
+    hashpass = hashlib.sha256(data['newpassword'].encode('utf-8')).hexdigest()
+    print(hashpass)
+    if user['hashpass'] != hashpass:
+        user['hashpass'] = hashpass
+    
+    users.save(user)
+
+    return True
+
