@@ -16,7 +16,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
-    HTTP_200_OK
+    HTTP_200_OK,
+    HTTP_202_ACCEPTED
 )
 
 import sys
@@ -50,7 +51,7 @@ def addplants(request):
     if (addPlant(data) == False):
         check = False
     if (check == False):
-        return JsonResponse(data, status=HTTP_400_BAD_REQUEST)
+        return JsonResponse(data, status=HTTP_202_ACCEPTED)
     else:
         return JsonResponse(data, status=HTTP_200_OK)
 

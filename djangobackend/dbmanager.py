@@ -222,7 +222,7 @@ def findPlantName(pName, pUser):
         print(doc['username'])
         if(doc['username'].lower() == pUser.lower()):
             if(doc['name'].lower() == pName.lower()):
-                return True
+                return plant.id
     
     return False
 
@@ -241,7 +241,8 @@ Returns : (1). Check to account/views if the plant device can be added or not
 def addPlant(data):
     pName = data['name']
     pUser = data['username']
-    if(findPlantName(pName, pUser) == False):
+    answer = findPlantName(pName, pUser)
+    if(answer == False):
         plant = PlantDevice(
             username=data['username'],
             name=data['name'],
@@ -254,7 +255,15 @@ def addPlant(data):
         print("Plant stored successfully")
         return True
     else:
-        print("Plant name exists")
+        doc = plant_device[answer]
+        doc['species'] = data['species']
+        doc['location'] = dict(geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors'])
+        doc['wateringConditionTrigger'] = data['wateringConditionTrigger']
+        doc['wateringConditionValue'] = data['wateringConditionValue']
+        doc['additionalNotes'] = data['additionalNotes']
+        plant_device.save(doc)
+
+        print("Plant updated successfully")
         return False
 
 

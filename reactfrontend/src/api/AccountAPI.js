@@ -11,10 +11,19 @@ export async function addPlant(params){
     })
     .then(function(response) {
         console.log(response);
+        if(response.status === 200)
+        {
+            alert("Plant Added Successfully!");
+        }
+        else if(response.status === 202)
+        {
+            alert("Plant Updated Successfully!");
+        }
         return true;
     })
     .catch(function(error) {
         console.log(error);
+        alert("Something went WRONG!");
         return false;
     });
 }
