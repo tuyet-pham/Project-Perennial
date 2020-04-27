@@ -7,7 +7,4 @@ urlpatterns = [
     url(r'^register/', views.registerUser , name='registerUser'),
     url(r'^login/', views.loginUser , name='loginUser'),
     url(r'^logout', views.logoutUser, name='logoutUser'),
-    # url(r'^current/$', views.UserView.as_view(), name='user-current'),
 ]
-
-

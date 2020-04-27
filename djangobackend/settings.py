@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'account',
     'users',
     'tests',
+    'notifications',
 ]
 
 # ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
