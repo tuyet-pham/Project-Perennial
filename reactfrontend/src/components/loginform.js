@@ -8,7 +8,6 @@ function LoginForm(props) {
   const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
   const [challenge, setChallenge] = useState(false)
-  const [loading, setLoading] = useState(false);
   const history = useHistory();
 
   const handleSubmit = (evt) => {

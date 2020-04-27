@@ -54,10 +54,12 @@ function RegisterForm(props) {
       }
       
       
-      const route = userRegister(params);
-      if (route !== false) {
-          history.push("/login");
-      }
+      
+      userRegister(params);
+        
+      setTimeout(() => {
+        history.push("/login");
+      }, 1000);
       
     }
     else {
