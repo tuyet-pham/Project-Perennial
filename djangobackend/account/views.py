@@ -148,19 +148,36 @@ def options(request):
 
 
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def updatepassword(request):
     data = {}
+    status = ''
 
     try:
         data = {
             'username' : request.POST.get('username'),
-            'pass' : request.POST.get('pass')
+            'newPassword' : request.POST.get('newPassword')
         }
-        changepassword(data)
     except Exception as e:
-        print("Error: Failed Request on %s", e)
+        print("[views.py] Error: Failed Request on %s", e)
 
-    return JsonResponse(data)
+    print("[views.py] About to change password...")
+    status = changepassword(data)
+    if status:
+        user = User.objects.get(username=data['username'])
+        user.set_password(data['newpassword'])
+        user.save()
+
+        message = {
+            'username' : request.POST.get('username'),
+            'status' : "Successfully changed password"
+        }
+
+        return JsonResponse(message,status=HTTP_200_OK)
+    
+    else:
+        return JsonResponse(status=HTTP_400_BAD_REQUEST)
 
 
 

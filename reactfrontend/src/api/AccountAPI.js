@@ -35,7 +35,6 @@ export async function options(params){
 
 
 export async function changepassword(params){
-    console.log("Change password")
     await axios.post('account/updatepassword/', qs.stringify(params))
     .then(function(response){
         console.log(response);

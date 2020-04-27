@@ -196,20 +196,32 @@ def updateoptions(data):
 
 '''
 @changepassword()
-Param   : username, password
+Param   : data[username, password]
 Purpose : Used to update a user's notification options.
           (1). Finds revision number of user in DB.
-          (2). If method is email, update the user object with new email.
-          (3). If method is phone, update the user object with new phone number.
-          (4). Post updated user object to user DB.
-Returns : (1)updated revision number, (2)False
+          (2). If password is different, update password.
+          (3). Post updated user object to user DB.
+Returns : (1)True, (2)False
 ''' 
 def changepassword(data):
     username = data['username']
     password = data['password']
+    print("[dbmanager.py] changepassword()")
+
+    user = users.get(username)
+    if user == '' or user == None:
+        return False
+
     hashpass = hashlib.sha256(password.encode('utf-8')).hexdigest()
-    
-    return 1
+    print("%s %s", username, hashpass)
+
+    # From Tii's code: don't allow repeat passwords (is this necessary?)
+    if user['hashpass'] != hashpass:
+        user['hashpass'] = hashpass
+    ###
+
+    users.save(user)
+    return True
      
 
 

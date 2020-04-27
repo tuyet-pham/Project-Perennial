@@ -12,11 +12,16 @@ function OptionButtons(props) {
     const [menuString, setMenuString] = useState('toplayer');
     const [newPassword, setNewPassword] = useState('')
     const [validated, setValidated] = useState(false)
-    const params = []
+
+    const username = localStorage.getItem('username')
+    const params = {
+        username : `${username}`,
+        newPassword : `${newPassword}`
+    }
 
     const handlePasswordChange = () => {
         if (validated === false) {
-            alert("Invalid input.")
+            alert("Invalid input. Make sure your passwords match and are at least 8 characters long.")
         }
         else {
             changepassword(params)
@@ -42,7 +47,7 @@ function OptionButtons(props) {
     }
     else if (menuString === 'changepassword') {
         return (
-            <ChangePassword validated={validated} setValidated={setValidated} newPassword={newPassword} setNewPassword={setNewPassword} handlePasswordChange={handlePasswordChange} />
+            <ChangePassword validated={validated} setValidated={setValidated} newPassword={newPassword} setNewPassword={setNewPassword} handlePasswordChange={handlePasswordChange} setMenuString={setMenuString}/>
         );
     }
 }
@@ -151,14 +156,12 @@ function ChangePassword(props) {
         switch(name) {
             case 'newPassword':
                 if(value.length < 8) {
-                    console.log('Password is too short.')
                     props.setValidated(false)
                 }
                 props.setNewPassword(value)
                 break;
             case 'confirmPassword':
                 if(value !== props.newPassword) {
-                    console.log('Passwords do not match.')
                     props.setValidated(false)
                 }
                 else {

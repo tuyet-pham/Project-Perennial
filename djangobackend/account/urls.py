@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'monitorplants/$', views.monitorplants, name='monitorplants'),
     url(r'addplants/$', views.addplants, name='addplants'),
     url(r'options/$', views.options, name='options'),
+    url(r'updatepassword/$', views.updatepassword, name='updatepassword'),
 ]
