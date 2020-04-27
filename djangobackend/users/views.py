@@ -139,10 +139,3 @@ def logoutUser(request):
             },
             status=HTTP_200_OK)
 
-
-
-
-
-# def current(request):
-#     return HttpResponse("getting current")
-

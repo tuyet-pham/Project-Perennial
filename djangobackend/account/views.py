@@ -21,17 +21,8 @@ from rest_framework.status import (
 
 import sys
 sys.path.append('..')
-from dbmanager import addPlant, updateoptions
+from dbmanager import addPlant, updateoptions, changepassword
 
-'''
-Authentication is currently not working.
-Routes can added to the class below when authentication is working. 
-Write your corresponding routes at the bottom of the page.
-
-**IMPORTANT**
-(1). Change data to match your incoming requests
-(2). Add the correct HttpResponse, JsonResponse or Response needed.
-'''
 
 
 @csrf_exempt
@@ -59,9 +50,12 @@ def addplants(request):
     if (addPlant(data) == False):
         check = False
     if (check == False):
-        return JsonResponse(data, status=HTTP_400_NOT_FOUND)
+        return JsonResponse(data, status=HTTP_400_BAD_REQUEST)
     else:
         return JsonResponse(data, status=HTTP_200_OK)
+
+
+
 
 
 @csrf_exempt
@@ -69,7 +63,7 @@ def addplants(request):
 @permission_classes([IsAuthenticated])
 def options(request):
     data = {}
-
+    status = ''
     try:
         data = { 
             'username' : request.POST.get('username'),
@@ -78,18 +72,54 @@ def options(request):
             'notificationMethod' : request.POST.get('notificationMethod'),
             'notificationTriggers' : request.POST.getlist('notificationTriggers')
         }
-        updateoptions(data)
     except Exception as e:
         print("Error: Failed Request on %s", e)
     
-    return JsonResponse(data)
+    status = updateoptions(data)
+    if status == True:
+        return JsonResponse(data, status=HTTP_200_OK)
+    else:
+        return HttpResponse(status=HTTP_400_BAD_REQUEST)
 
 
 
 
-"""
-Requires token for API call.
-"""
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def changecredentials(request):
+    data = {}
+    status = ''
+    
+    try:
+        data = { 
+            'username' : request.POST.get('username'),
+            'newpassword' : request.POST.get('newpassword'),
+        }
+    except Exception as e:
+        print("Error: Failed Request on %s", e)
+    
+    status = changepassword(data)
+    if status == True:
+        u = User.objects.get(username=data['username'])
+        u.set_password(data['newpassword'])
+        u.save()
+
+        message = {
+            'username' : request.POST.get('username'),
+            'status' : "Successfully changed password"
+        }
+
+        return JsonResponse(message,status=HTTP_200_OK)
+    else:
+        return HttpResponse(status=HTTP_400_BAD_REQUEST)
+    
+
+
+
+
+
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -114,3 +144,4 @@ def monitorplants(request):
 
     
     return JsonResponse(data)
+    
