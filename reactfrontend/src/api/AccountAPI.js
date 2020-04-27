@@ -12,15 +12,17 @@ export async function addPlant(params){
 }
 
 
-// export async function monitorplants(params){
-//     await axios.post('account/monitorplants/', qs.stringify(params))
-//     .then(function(response) {
-//         console.log(response);
-//     })
-//     .catch(function(error) {
-//         console.log(error);
-//     });
-// }
+export async function monitorplants(params){
+    await axios.post('account/monitorplants/', qs.stringify(params))
+    .then(function(response) {
+        console.log(response.data);
+        return response.data;
+    })
+    .catch(function(error) {
+        console.log(error);
+        return false;
+    });
+}
 
 
 export async function options(params){

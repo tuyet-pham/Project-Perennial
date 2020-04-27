@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
-import PageTemplate from '../PageTemplate';
+import React, { useState, useEffect } from 'react';
+import qs from "qs";
+import axios from 'axios';
 import { FaSeedling } from 'react-icons/fa';
+import PageTemplate from '../PageTemplate';
+import { getUsername } from '../api/UserAPI'
+import { monitorplants } from '../api/AccountAPI'
 
 function Monitor() {
   // Dummy data - remove when API is integrated.
@@ -11,9 +15,43 @@ function Monitor() {
     {key:2, name:"Audrey 2.0", moisture:"69%", temperature:"95", humidity:"90", updated:"Mon Mar 23 2020 10:46:47", reservoirEmpty:0}
   ];
 
+  const [plantList, setPlantList] = useState(null);
+
+  useEffect(() => {
+    async function fetchPlants() {
+
+      let params = {
+        username: getUsername()
+      }
+      console.log(params)
+      let tmpPlantList = []
+      await axios.post('account/monitorplants/', qs.stringify(params))
+      .then(function(response) {
+          console.log(response.data);
+          tmpPlantList = response.data.plants;
+      })
+      .catch(function(error) {
+          console.log(error);
+      });
+
+      if (tmpPlantList) {
+        console.log(tmpPlantList);
+        setPlantList(tmpPlantList);
+      } else {
+        console.log("No plants found for this user!")
+        setPlantList([]);
+      }
+
+
+    }
+    // Get readings for each idx
+
+    fetchPlants();
+  }, []);
+
   return (
     <PageTemplate>
-      <PlantCardList list={demo_plants_list}/>
+      <PlantCardList list={plantList}/>
     </PageTemplate>
   );
 }
@@ -44,7 +82,7 @@ function PlantCardList({ list }) {
   if (!list) {
     return (
       <h2>
-        No plants have been registered yet.
+        Loading plant list...
       </h2>
     )
   }
@@ -96,19 +134,27 @@ function PlantCard({ plant }) {
         </div>
         <div className="col">
           <div className="row">
-            <b>Moisture: &nbsp;</b> 
-            {plant.moisture}
+            <b>Moisture: &nbsp;</b>
+            {plant.moisture}%
           </div>
           <div className="row">
-            <b>Temperature: &nbsp;</b> 
+            <b>Temperature: &nbsp;</b>
             {plant.temperature}
           </div>
           <div className="row">
-            <b>Humidity: &nbsp;</b> 
+            <b>Humidity: &nbsp;</b>
             {plant.humidity}
           </div>
           <div className="row">
-            <i> 
+            <b>Last Watered: &nbsp;</b>
+            {plant.last_watered}
+          </div>
+          <div className="row">
+            <b>Status: &nbsp;</b>
+            {plant.online}
+          </div>
+          <div className="row">
+            <i>
               Last updated {plant.updated}
             </i>
           </div>
