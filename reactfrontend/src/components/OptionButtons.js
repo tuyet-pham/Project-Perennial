@@ -16,7 +16,7 @@ function OptionButtons(props) {
     const username = localStorage.getItem('username')
     const params = {
         username : `${username}`,
-        newPassword : `${newPassword}`
+        password : `${newPassword}`
     }
 
     const handlePasswordChange = () => {
@@ -75,8 +75,7 @@ function AccountOptions(props) {
     const handleLogout = (evt) => {
         evt.preventDefault();
         //alert user first?
-          
-        const route = userLogout();
+        userLogout();
         history.push("/login");
     }
 

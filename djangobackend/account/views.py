@@ -6,100 +6,29 @@ from django.db import models
 # csrf - Might need this later to provide Cross Site Request Forgery protection
 # As of right now it is ignored
 from django.views.decorators.csrf import csrf_exempt        
-from django.core import serializers
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth.models import AnonymousUser
-
 
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
-from rest_framework.permissions import AllowAny
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
-    HTTP_200_OK
+    HTTP_200_OK,
+    HTTP_202_ACCEPTED
 )
 
 import sys
 sys.path.append('..')
 from dbmanager import addPlant, updateoptions, changepassword
 
-'''
-Authentication is currently not working.
-Routes can added to the class below when authentication is working. 
-Write your corresponding routes at the bottom of the page.
-
-**IMPORTANT**
-(1). Change data to match your incoming requests
-(2). Add the correct HttpResponse, JsonResponse or Response needed.
-'''
-# '''
-# '''
-# class Account(APIView):
-#     authentication_classes = (SessionAuthentication, BasicAuthentication)
-#     permission_classes = (IsAuthenticated,)
-
-#     def get(self, request, format=None):
-#         content = {
-#             'username': unicode(request.user),  # `django.contrib.auth.User` instance.
-#             'auth': unicode(request.auth),  # None
-#         }
-#         return Response(content)
-
-
-
-# '''
-# '''
-# class MonitorPlants(APIView):
-#     authentication_classes = (SessionAuthentication, BasicAuthentication)
-#     permission_classes = (IsAuthenticated,)
-
-#     def get(self, request, format=None):
-#         content = {
-#             'username': unicode(request.user),  # `django.contrib.auth.User` instance.
-#             'auth': unicode(request.auth),  # None
-#         }
-#         return Response(content)
-
-
-
-# '''
-# '''
-# class AddPlant(APIView):
-#     authentication_classes = (SessionAuthentication, BasicAuthentication)
-#     permission_classes = (IsAuthenticated,)
-    
-#     def post(self, request, format=None):
-#         content = {
-#             'username': unicode(request.user),  # `django.contrib.auth.User` instance.
-#             'auth': unicode(request.auth),  # None
-#         }
-#         return Response(content)
-
-
-# '''
-# '''
-# class Options(APIView):
-#     permission_classes = (IsAuthenticated,)
-
-#     def post(self, request, format=None):
-#         content = {
-#             'username': unicode(request.user),  # `django.contrib.auth.User` instance.
-#             'auth': unicode(request.auth),  # None
-#         }
-#         return Response(content)
-
-
 
 
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def addplants(request):
     data = {}
     check = True
@@ -122,15 +51,20 @@ def addplants(request):
     if (addPlant(data) == False):
         check = False
     if (check == False):
-        return JsonResponse(data, status=HTTP_404_NOT_FOUND)
+        return JsonResponse(data, status=HTTP_202_ACCEPTED)
     else:
         return JsonResponse(data, status=HTTP_200_OK)
 
 
+
+
+
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def options(request):
     data = {}
-
+    status = ''
     try:
         data = { 
             'username' : request.POST.get('username'),
@@ -139,12 +73,50 @@ def options(request):
             'notificationMethod' : request.POST.get('notificationMethod'),
             'notificationTriggers' : request.POST.getlist('notificationTriggers')
         }
-        updateoptions(data)
     except Exception as e:
         print("Error: Failed Request on %s", e)
-
     
-    return JsonResponse(data)
+    status = updateoptions(data)
+    if status == True:
+        return JsonResponse(data, status=HTTP_200_OK)
+    else:
+        return HttpResponse(status=HTTP_400_BAD_REQUEST)
+
+
+
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def changecredentials(request):
+    data = {}
+    status = ''
+    
+    try:
+        data = { 
+            'username' : request.POST.get('username'),
+            'newpassword' : request.POST.get('newpassword'),
+        }
+    except Exception as e:
+        print("Error: Failed Request on %s", e)
+    
+    status = changepassword(data)
+    if status == True:
+        u = User.objects.get(username=data['username'])
+        u.set_password(data['newpassword'])
+        u.save()
+
+        message = {
+            'username' : request.POST.get('username'),
+            'status' : "Successfully changed password"
+        }
+
+        return JsonResponse(message,status=HTTP_200_OK)
+    else:
+        return HttpResponse(status=HTTP_400_BAD_REQUEST)
+    
+
 
 
 @csrf_exempt
@@ -157,16 +129,15 @@ def updatepassword(request):
     try:
         data = {
             'username' : request.POST.get('username'),
-            'newPassword' : request.POST.get('newPassword')
+            'password' : request.POST.get('password')
         }
     except Exception as e:
         print("[views.py] Error: Failed Request on %s", e)
 
-    print("[views.py] About to change password...")
     status = changepassword(data)
     if status:
         user = User.objects.get(username=data['username'])
-        user.set_password(data['newpassword'])
+        user.set_password(data['password'])
         user.save()
 
         message = {
@@ -182,6 +153,8 @@ def updatepassword(request):
 
 
 @csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def monitorplants(request):
     data = {}
 
@@ -203,3 +176,4 @@ def monitorplants(request):
 
     
     return JsonResponse(data)
+    

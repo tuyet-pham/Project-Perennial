@@ -7,8 +7,8 @@ import qs from "qs";
 export async function userLogin(params){
     await axios.post('users/login/', qs.stringify(params))
     .then(function(response) {
-        setToken(response.data.token);
-        setUsername(response.data.username);
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('username', response.data.username);
         console.log(response);
         return true;
     })
@@ -24,20 +24,18 @@ export async function userLogin(params){
  * Logs the user out, localstorage will remove their username and their token
  * **/
 export async function userLogout(){
-    const params = {
-          username : getUsername(),
-          Authentication : 'Token ' + getToken(),
-    }
-
-    await axios.post('users/logout/', qs.stringify(params))
+    
+    await axios.post('users/logout/', qs.stringify(localStorage.getItem('username')), { 
+            headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
+        })
     .then(function(response) {
         console.log(response);
-        clearUser();
+        localStorage.clear();
         return true;
     })
     .catch(function(error) {
-        console.log('Error on Authentication, Token not accept to logout');
-        clearUser();
+        console.log(error);
+        localStorage.clear();
         return false;
     });
 }
@@ -65,36 +63,4 @@ export async function userRegister(params){
            return false;
         }
     });
-}
-
-
-
-//Setting a token object on Logging in correctly
-export function setToken(token){
-    localStorage.setItem('token', token);
-
-}
-
-
-//Setting a username object on Logging in correctly
-export function setUsername(thisUser){
-    localStorage.setItem('username', thisUser);
-
-}
-
-
-//Getting a username object on Logging in correctly
-export function getUsername(){
-    return localStorage.getItem('username');
-}
-
-
-//Getting a Token object on Logging in correctly
-export function getToken(){
-    return localStorage.getItem('token');
-}
-
-
-export function clearUser(){
-    localStorage.clear();
 }

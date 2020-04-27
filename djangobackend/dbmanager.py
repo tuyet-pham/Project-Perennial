@@ -78,22 +78,28 @@ Purpose : Used to find a user.
           (3). If the user doesn't exist returns False flag
 Returns : (1)users id, (2)False
 '''
-def findUsername(uname):
-    
+def findUsername(uname):  
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
             return True
-    
     return False
 
 
 
+'''
+@findusername()
+Param   : email
+Purpose : Used to find email.
+          (1). Checks to see if the email in couchdb.
+          (2). If the email exists then return a True flag
+          (3). If the email doesn't exist returns False flag
+Returns : (1)True, (2)False
+'''
 def findEmail(email):
     for user in users.view('_all_docs'):
         doc = users[user.id]
         if(doc['email'].lower() == email.lower()):
             return True
-    
     return False
 
 
@@ -164,8 +170,10 @@ def getuser(uname):
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
             return user
-    
     return False
+
+
+
 
 '''
 @updateoptions()
@@ -180,6 +188,9 @@ Returns : (1)updated revision number, (2)False
 def updateoptions(data):
 
     user = users.get(data['username'])
+    if user == '':
+        return False
+
     user['notificationMethod'] = data['notificationMethod']
     if data['notificationMethod'] == 'sms':
         user['phoneNum'] = data['phoneNum']
@@ -189,10 +200,9 @@ def updateoptions(data):
         user['phoneNum'] = None
 
     user['notificationTriggers'] = data['notificationTriggers']
-
     users.save(user)
 
-    return 1
+    return True
 
 '''
 @changepassword()
@@ -206,7 +216,6 @@ Returns : (1)True, (2)False
 def changepassword(data):
     username = data['username']
     password = data['password']
-    print("[dbmanager.py] changepassword()")
 
     user = users.get(username)
     if user == '' or user == None:
@@ -222,13 +231,6 @@ def changepassword(data):
 
     users.save(user)
     return True
-     
-
-
-def addplant(data):
-    print("Gottem")
-    #plant = PlantDevice(name=data['name'],species=data['species'],geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors'],wateringCoditionTrigger=data['wateringCoditionTrigger'],wateringConditionValue=data['wateringConditionValue'],additionalNotes=data['additionalNotes'])
-    #plant.store(plant_device)
 
 
 '''
@@ -247,7 +249,7 @@ def findPlantName(pName, pUser):
         print(doc['username'])
         if(doc['username'].lower() == pUser.lower()):
             if(doc['name'].lower() == pName.lower()):
-                return True
+                return plant.id
     
     return False
 
@@ -266,7 +268,8 @@ Returns : (1). Check to account/views if the plant device can be added or not
 def addPlant(data):
     pName = data['name']
     pUser = data['username']
-    if(findPlantName(pName, pUser) == False):
+    answer = findPlantName(pName, pUser)
+    if(answer == False):
         plant = PlantDevice(
             username=data['username'],
             name=data['name'],
@@ -279,8 +282,37 @@ def addPlant(data):
         print("Plant stored successfully")
         return True
     else:
-        print("Plant name exists")
+        doc = plant_device[answer]
+        doc['species'] = data['species']
+        doc['location'] = dict(geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors'])
+        doc['wateringConditionTrigger'] = data['wateringConditionTrigger']
+        doc['wateringConditionValue'] = data['wateringConditionValue']
+        doc['additionalNotes'] = data['additionalNotes']
+        plant_device.save(doc)
+
+        print("Plant updated successfully")
         return False
 
 
-# def addReading():
+
+
+'''
+@addPlant()
+Param   : data
+Purpose : change password
+Returns : True
+'''
+def changepassword(data):
+    user = users.get(data['username'])
+    if user == '':
+        return False
+    
+    hashpass = hashlib.sha256(data['password'].encode('utf-8')).hexdigest()
+    print(hashpass)
+    if user['hashpass'] != hashpass:
+        user['hashpass'] = hashpass
+    
+    users.save(user)
+
+    return True
+

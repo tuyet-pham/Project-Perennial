@@ -56,9 +56,8 @@ function Home() {
 /* Greet the user with their username */
 ////////////////////////////////////////
 
-function Greeting(props) {
-  const isLoggedIn = props.isLoggedIn; /*In theory, user should always be logged in on this page. */
-  if(isLoggedIn) {
+function Greeting() {
+  if(localStorage.getItem('username') !== null) {
     return <UserGreeting />
   }
   else {
@@ -66,8 +65,8 @@ function Greeting(props) {
   }
 }
 
-function UserGreeting(props) {
-  const username = props.username;
+function UserGreeting() {
+  const username = localStorage.getItem('username');
   return (
     <h1>Welcome, {username}!</h1>
   );
