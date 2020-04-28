@@ -3,19 +3,24 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { userRegister } from '../api/UserAPI'
 import { useHistory } from "react-router-dom";
 
-const validEmailRegex = RegExp(/^(([^<>()[].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+.)+[^<>()[\].,;:\s@"]{2,})$/i);
+const validEmailRegex = RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}/g);
 
 const validateForm = (errors, challenge) => {
   let valid = true;
-  if(errors.username.length === 0) {
+  if(errors.username.length > 0) {
+    console.log("username error")
     valid = false;
-  } else if (errors.email.length === 0) {
+  } else if (errors.email.length > 0) {
+    console.log("email error")
     valid = false;
-  } else if (errors.password_len.length === 0) {
+  } else if (errors.password_len.length > 0) {
+    console.log("password error")
     valid = false;
-  } else if (errors.password_conf.length === 0) {
+  } else if (errors.password_conf.length > 0) {
+    console.log("password confirm error")
     valid = false;
   } else if (challenge === false) {
+    console.log("challenge error")
     valid = false;
   }
 
@@ -43,6 +48,7 @@ function RegisterForm(props) {
 
     evt.preventDefault();
     const valid_form = validateForm(errors, challenge)
+    console.log("Valid Form: " + valid_form)
     if(valid_form){
       console.log('Submitting Form...');
       const params = {
@@ -92,6 +98,7 @@ function RegisterForm(props) {
           ? ''
           : 'Email is invalid!';
         setEmail(value);
+        console.log(validEmailRegex.test(value))
         break;
       case 'password':
         curerrors.password_len =
@@ -101,7 +108,7 @@ function RegisterForm(props) {
         curerrors.password_conf =
           rePassword === password
           ? ''
-          : 'Passwords must match!\n';
+          : 'Passwords must match!';
         setPassword(value);
         break;
       case 'password_conf':
