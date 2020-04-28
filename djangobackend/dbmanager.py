@@ -14,7 +14,6 @@ from uuid import uuid4
 import os, sys
 import hashlib
 
-
 db = Server("http://%s:%s@db_data:5984/" % (os.environ['COUCHDB_USER'],os.environ['COUCHDB_PASSWORD']))
 
 users = db['users']
