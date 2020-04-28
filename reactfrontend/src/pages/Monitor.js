@@ -85,8 +85,13 @@ function PlantCardList({ list }) {
         Loading plant list...
       </h2>
     )
-  }
-  else {
+  } else if(list == []) {
+    return (
+      <h2>
+        No plants found. Try adding a plant!
+      </h2>
+    )
+  } else {
     return (
       <div>
         {list.map(plant => (
