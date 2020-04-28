@@ -1,4 +1,4 @@
-''' 
+'''
  Use CouchDB to create a CouchDB client
  This is an independent manager for the database
  This is to hopefully consolidate the access to the db
@@ -11,7 +11,8 @@ from couchdb import Server
 from couchdb.mapping import Document, TextField, IntegerField, DateTimeField, DictField, Mapping
 from couchdb import http, json, util
 from uuid import uuid4
-import os, sys
+import os
+import sys
 import hashlib
 
 db = Server("http://%s:%s@db_data:5984/" % (os.environ['COUCHDB_USER'],os.environ['COUCHDB_PASSWORD']))
@@ -32,12 +33,15 @@ and use the key word <yourdocument>.store(<db_name>)
 newUser = User(username='John', email='John@gmail.com', hashpass='sr$5jgRGr774')
 newUser.store(users)
 '''
+
+
 class User(Document):
     username = TextField()
     email = TextField()
     hashpass = TextField()
     phoneNum = TextField()
     notificationMethod = TextField()
+
 
 class PlantDevice(Document):
     name = TextField()
@@ -81,12 +85,13 @@ def findUsername(uname):
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
             return True
+
     return False
 
 
 
 '''
-@findusername()
+@finEmail()
 Param   : email
 Purpose : Used to find email.
           (1). Checks to see if the email in couchdb.
@@ -100,6 +105,116 @@ def findEmail(email):
         if(doc['email'].lower() == email.lower()):
             return True
     return False
+
+
+def findPlantByUser(uname):
+    """Find plant by user.
+
+    Args:
+        uname (str): Username of user
+
+    Returns:
+        obj: Plants that belong to the user
+    """
+    mango = {
+        'selector': {'username': {"$eq": uname}},
+        'fields': ['_id', 'name', 'species', 'location', 'additionalNotes'],
+        'sort': ['name']
+    }
+
+    try:
+        devices = plant_device.find(mango)
+    except Exception as e:
+        print("Failed to get devices.", e)
+        if 'no_usable_index' in str(e):
+            design_doc = {
+                            "_id": "_design/name-index",
+                            "language": "query",
+                            "views": {
+                                "name-index": {
+                                "map": {
+                                    "fields": {
+                                    "name": "asc"
+                                    },
+                                    "partial_filter_selector": {}
+                                },
+                                "reduce": "_count",
+                                "options": {
+                                    "def": {
+                                    "fields": [
+                                        {
+                                        "name": "asc"
+                                        }
+                                    ]
+                                    }
+                                }
+                                }
+                            }
+                        }
+            plant_device.save(design_doc)
+            devices = plant_device.find(mango)
+        else:
+            devices = {}
+
+    return devices
+
+def findReadings(device_id, reading_type):
+    """Find readings by device ID
+
+    Args:
+        device_id (str): Device id
+        reading_type (str): Type of reading: "moisture" "availability" "pump"
+
+    Returns:
+        list[obj]: list with 1 most recent reading
+    """
+    mango = {
+        "selector": {
+            "device_id": device_id,
+            "type": reading_type
+        },
+        "sort": [
+            {
+                "time_reading": "desc"
+            }
+        ],
+        "limit": 1
+    }
+    try:
+        reading = plant_device_reading.find(mango)
+    except Exception as e:
+        print("Failed to get reading", e)
+        if 'no_usable_index' in str(e):
+            design_doc =  { "_id": "_design/time_reading_index",
+                            "language": "query",
+                            "views": {
+                                "time_reading-index": {
+                                "map": {
+                                    "fields": {
+                                        "time_reading": "desc"
+                                    },
+                                    "partial_filter_selector": {}
+                                },
+                                "reduce": "_count",
+                                "options": {
+                                    "def": {
+                                        "fields": [
+                                            {
+                                                "time_reading": "desc"
+                                            }
+                                        ]
+                                    }
+                                }
+                                }
+                            }
+                        }
+            plant_device_reading.save(design_doc)
+            reading = plant_device_reading.find(mango)
+        else:
+            reading = {}
+
+    return reading
+
 
 
 
@@ -165,7 +280,7 @@ Purpose : Used to find a user.
 Returns : (1)user object, (2)False
 '''
 def getuser(uname):
-    
+
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
             return user
@@ -193,7 +308,7 @@ def updateoptions(data):
     user['notificationMethod'] = data['notificationMethod']
     if data['notificationMethod'] == 'sms':
         user['phoneNum'] = data['phoneNum']
-        
+
     if data['notificationMethod'] == 'email':
         user['email'] = data['emailAddress']
         user['phoneNum'] = None
@@ -202,7 +317,6 @@ def updateoptions(data):
     users.save(user)
 
     return True
-
 
 
 '''
@@ -218,11 +332,11 @@ Returns : (1). Returns True to not push to database
 def findPlantName(pName, pUser):
     for plant in plant_device.view('_all_docs'):
         doc = plant_device[plant.id]
-        print(doc['username'])
-        if(doc['username'].lower() == pUser.lower()):
-            if(doc['name'].lower() == pName.lower()):
-                return plant.id
-    
+        if 'username' in doc:
+            print(doc['username'])
+            if(doc['username'].lower() == pUser.lower()):
+                if(doc['name'].lower() == pName.lower()):
+                    return True
     return False
 
 
@@ -267,9 +381,8 @@ def addPlant(data):
 
 
 
-
 '''
-@addPlant()
+@changepassword()
 Param   : data
 Purpose : change password
 Returns : True
