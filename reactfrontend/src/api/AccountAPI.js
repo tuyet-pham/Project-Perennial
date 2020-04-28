@@ -46,3 +46,15 @@ export async function options(params){
     });
 }
 
+
+export async function changepassword(params){
+    await axios.post('account/updatepassword/', qs.stringify(params), { 
+        headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
+    })
+    .then(function(response){
+        console.log(response);
+    })
+    .catch(function(error){
+        console.log(error);
+    })
+}

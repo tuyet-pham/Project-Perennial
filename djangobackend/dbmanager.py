@@ -318,6 +318,32 @@ def updateoptions(data):
 
     return True
 
+'''
+@changepassword()
+Param   : data[username, password]
+Purpose : Used to update a user's notification options.
+          (1). Finds revision number of user in DB.
+          (2). If password is different, update password.
+          (3). Post updated user object to user DB.
+Returns : (1)True, (2)False
+''' 
+def changepassword(data):
+    username = data['username']
+    password = data['password']
+
+    user = users.get(username)
+    if user == '' or user == None:
+        return False
+
+    hashpass = hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+    # From Tii's code: don't allow repeat passwords (is this necessary?)
+    if user['hashpass'] != hashpass:
+        user['hashpass'] = hashpass
+    ###
+
+    users.save(user)
+    return True
 
 '''
 @findPlantName()
@@ -379,26 +405,4 @@ def addPlant(data):
 
         print("Plant updated successfully")
         return False
-
-
-
-'''
-@changepassword()
-Param   : data
-Purpose : change password
-Returns : True
-'''
-def changepassword(data):
-    user = users.get(data['username'])
-    if user == '':
-        return False
-
-    hashpass = hashlib.sha256(data['newpassword'].encode('utf-8')).hexdigest()
-    print(hashpass)
-    if user['hashpass'] != hashpass:
-        user['hashpass'] = hashpass
-
-    users.save(user)
-
-    return True
 
