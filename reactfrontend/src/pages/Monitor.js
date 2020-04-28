@@ -13,12 +13,14 @@ function Monitor() {
 
   useEffect(() => {
     async function fetchPlants() {
-
+      // Fetch plants from back end
       let params = {
         username: getUsername()
       }
       console.log(params)
       let tmpPlantList = []
+
+      // Get plants using post to django
       await axios.post('account/monitorplants/', qs.stringify(params))
       .then(function(response) {
           console.log(response.data);
@@ -28,6 +30,7 @@ function Monitor() {
           console.log(error);
       });
 
+      // If there are plants set the plants object
       if (tmpPlantList) {
         console.log(tmpPlantList);
         setPlantList(tmpPlantList);
@@ -79,15 +82,19 @@ function PlantCardList({ list }) {
         Loading plant list...
       </h2>
     )
-  } else if(list === []) {
+  } else if(list.length === 0) {
     return (
       <h2>
+        <br />
+        <br />
         No plants found. Try adding a plant!
       </h2>
     )
   } else {
+    console.log(list)
     return (
       <div>
+
         {list.map(plant => (
           <PlantCard key={plant.key} plant={plant} />
         ))}
