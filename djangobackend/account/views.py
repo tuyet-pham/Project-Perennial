@@ -114,7 +114,7 @@ def updatepassword(request):
         }
 
         return JsonResponse(message,status=HTTP_200_OK)
-    
+
     else:
         return JsonResponse(data, status=HTTP_400_BAD_REQUEST)
 
@@ -177,9 +177,9 @@ def monitorplants(request):
                 if time_diff < 60:
                     plant['last_watered'] = 'A few seconds ago.'
                 elif time_diff < 3600:
-                    plant['last_watered'] = str(time_diff / 60) + ' minutes ago.'
+                    plant['last_watered'] = str(int(time_diff / 60)) + ' minutes ago.'
                 elif time_diff < 3600 * 48:
-                    plant['last_watered'] = str(time_diff / 60 / 60) + ' hours ago.'
+                    plant['last_watered'] = str(int(time_diff / 60 / 60)) + ' hours ago.'
                 else:
                     plant['last_watered'] = 'A long time ago.'
 
@@ -205,9 +205,9 @@ def monitorplants(request):
             if time_diff < 60:
                 plant['updated'] = 'A few seconds ago.'
             elif time_diff < 3600:
-                plant['updated'] = str(time_diff / 60) + ' minutes ago.'
+                plant['updated'] = str(int(time_diff / 60)) + ' minutes ago.'
             elif time_diff < 3600 * 48:
-                plant['updated'] = str(time_diff / 60 / 60) + ' hours ago.'
+                plant['updated'] = str(int(time_diff / 60 / 60)) + ' hours ago.'
             else:
                 plant['updated'] = 'A long time ago.'
             print("Seconds ago:", time_diff)
