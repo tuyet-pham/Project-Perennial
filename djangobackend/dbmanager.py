@@ -336,7 +336,6 @@ def changepassword(data):
         return False
 
     hashpass = hashlib.sha256(password.encode('utf-8')).hexdigest()
-    print("%s %s", username, hashpass)
 
     # From Tii's code: don't allow repeat passwords (is this necessary?)
     if user['hashpass'] != hashpass:
@@ -406,26 +405,4 @@ def addPlant(data):
 
         print("Plant updated successfully")
         return False
-
-
-
-'''
-@changepassword()
-Param   : data
-Purpose : change password
-Returns : True
-'''
-def changepassword(data):
-    user = users.get(data['username'])
-    if user == '':
-        return False
-    
-    hashpass = hashlib.sha256(data['password'].encode('utf-8')).hexdigest()
-    print(hashpass)
-    if user['hashpass'] != hashpass:
-        user['hashpass'] = hashpass
-
-    users.save(user)
-
-    return True
 

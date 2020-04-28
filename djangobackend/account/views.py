@@ -25,7 +25,7 @@ import sys
 from time import time
 sys.path.append('..')
 
-from dbmanager import addPlant, updateoptions, findPlantByUser, findReadings
+from dbmanager import addPlant, updateoptions, findPlantByUser, findReadings, changepassword
 
 @csrf_exempt
 @api_view(['POST'])
@@ -81,7 +81,7 @@ def options(request):
     if status == True:
         return JsonResponse(data, status=HTTP_200_OK)
     else:
-        return HttpResponse(status=HTTP_400_BAD_REQUEST)
+        return HttpResponse(data, status=HTTP_400_BAD_REQUEST)
 
 
 
@@ -103,6 +103,7 @@ def updatepassword(request):
         print("[views.py] Error: Failed Request on %s", e)
 
     status = changepassword(data)
+    print(status)
     if status:
         user = User.objects.get(username=data['username'])
         user.set_password(data['password'])
@@ -116,7 +117,7 @@ def updatepassword(request):
         return JsonResponse(message,status=HTTP_200_OK)
     
     else:
-        return JsonResponse(status=HTTP_400_BAD_REQUEST)
+        return JsonResponse(data, status=HTTP_400_BAD_REQUEST)
 
 
 
