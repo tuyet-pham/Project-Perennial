@@ -6,7 +6,7 @@ from django.db import models
 
 # csrf - Might need this later to provide Cross Site Request Forgery protection
 # As of right now it is ignored
-from django.views.decorators.csrf import csrf_exempt        
+from django.views.decorators.csrf import csrf_exempt
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -52,7 +52,7 @@ def addplants(request):
     if (addPlant(data) is False):
         check = False
     if (check is False):
-        return JsonResponse(data, status=HTTP_404_NOT_FOUND)
+        return JsonResponse(data, status=HTTP_202_ACCEPTED)
     else:
         return JsonResponse(data, status=HTTP_200_OK)
 
@@ -76,7 +76,7 @@ def options(request):
         }
     except Exception as e:
         print("Error: Failed Request on %s", e)
-    
+
     status = updateoptions(data)
     if status == True:
         return JsonResponse(data, status=HTTP_200_OK)
@@ -84,7 +84,7 @@ def options(request):
         return HttpResponse(status=HTTP_400_BAD_REQUEST)
 
 
-      
+
 
 @csrf_exempt
 @api_view(['POST'])

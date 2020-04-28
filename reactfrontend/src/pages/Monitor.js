@@ -3,25 +3,33 @@ import qs from "qs";
 import axios from 'axios';
 import { FaSeedling } from 'react-icons/fa';
 import PageTemplate from '../PageTemplate';
-import { getUsername } from '../api/UserAPI'
+import { useHistory } from "react-router-dom";
 
 function Monitor() {
   // Dummy data - remove when API is integrated.
   // Reference: https://www.robinwieruch.de/conditional-rendering-react
 
   const [plantList, setPlantList] = useState(null);
+  const history = useHistory();
 
   useEffect(() => {
+    if (localStorage.getItem('token') === null) {
+      alert("Your session has timed out");
+      history.push("/login");
+      localStorage.clear();
+    }
     async function fetchPlants() {
       // Fetch plants from back end
       let params = {
-        username: getUsername()
+        username: localStorage.getItem('username')
       }
       console.log(params)
       let tmpPlantList = []
 
       // Get plants using post to django
-      await axios.post('account/monitorplants/', qs.stringify(params))
+      await axios.post('account/monitorplants/', qs.stringify(params), {
+        headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
+      })
       .then(function(response) {
           console.log(response.data);
           tmpPlantList = response.data.plants;

@@ -81,7 +81,7 @@ Purpose : Used to find a user.
           (3). If the user doesn't exist returns False flag
 Returns : (1)users id, (2)False
 '''
-def findUsername(uname):  
+def findUsername(uname):
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
             return True
@@ -298,7 +298,7 @@ Purpose : Used to update a user's notification options.
           (3). If method is phone, update the user object with new phone number.
           (4). Post updated user object to user DB.
 Returns : (1)updated revision number, (2)False
-'''     
+'''
 def updateoptions(data):
 
     user = users.get(data['username'])
@@ -331,12 +331,13 @@ Returns : (1). Returns True to not push to database
 '''
 def findPlantName(pName, pUser):
     for plant in plant_device.view('_all_docs'):
+        print("id:", plant.id)
         doc = plant_device[plant.id]
         if 'username' in doc:
             print(doc['username'])
             if(doc['username'].lower() == pUser.lower()):
                 if(doc['name'].lower() == pName.lower()):
-                    return True
+                    return plant.id
     return False
 
 
@@ -391,12 +392,12 @@ def changepassword(data):
     user = users.get(data['username'])
     if user == '':
         return False
-    
+
     hashpass = hashlib.sha256(data['newpassword'].encode('utf-8')).hexdigest()
     print(hashpass)
     if user['hashpass'] != hashpass:
         user['hashpass'] = hashpass
-    
+
     users.save(user)
 
     return True
