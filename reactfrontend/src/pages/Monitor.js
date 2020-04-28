@@ -4,16 +4,10 @@ import axios from 'axios';
 import { FaSeedling } from 'react-icons/fa';
 import PageTemplate from '../PageTemplate';
 import { getUsername } from '../api/UserAPI'
-import { monitorplants } from '../api/AccountAPI'
 
 function Monitor() {
   // Dummy data - remove when API is integrated.
   // Reference: https://www.robinwieruch.de/conditional-rendering-react
-  const demo_plants_list = [
-    {key:0, name:"Ferngully", moisture:"31%", temperature:"75", humidity:"52", updated:"Wed Mar 25 2020 13:12:26", reservoirEmpty:0},
-    {key:1, name:"Mr. Cactus", moisture:"25%", temperature:"80", humidity:"70", updated:"Tue Mar 24 2020 12:00:31", reservoirEmpty:1},
-    {key:2, name:"Audrey 2.0", moisture:"69%", temperature:"95", humidity:"90", updated:"Mon Mar 23 2020 10:46:47", reservoirEmpty:0}
-  ];
 
   const [plantList, setPlantList] = useState(null);
 
@@ -85,7 +79,7 @@ function PlantCardList({ list }) {
         Loading plant list...
       </h2>
     )
-  } else if(list == []) {
+  } else if(list === []) {
     return (
       <h2>
         No plants found. Try adding a plant!
