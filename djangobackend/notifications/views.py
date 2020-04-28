@@ -25,8 +25,23 @@ from twilio.rest import Client
 
 
 
+'''
+@sms()
+api call requires body fields
+    (1). message
+    (2). phonenumber
+'''
 @csrf_exempt
 def sms(request):
+
+    message = ''
+    phonenumber = ''
+    try:
+        message = request.POST.get('message')
+        phonenumber = request.POST.get('phonenumber')
+    except Exception as e:
+        print(e)
+
 
     # Your Account Sid and Auth Token from twilio.com/console
     # DANGER! This is insecure. See http://twil.io/secure
@@ -36,20 +51,12 @@ def sms(request):
 
     message = client.messages \
                     .create(
-                        body= request.POST.get('message'),
+                        body= message,
                         from_='+12182315131',
-                        to='8178706288'
+                        to= phonenumber,
                     )
-
-    # data = {}
-    # try:
-    #     data = request.POST.get('device_id')
-    # except Exception as e:
-    #     print(e)
+   
     return HttpResponse(message.sid, status=HTTP_200_OK)
-
-
-
 
 
 @csrf_exempt
