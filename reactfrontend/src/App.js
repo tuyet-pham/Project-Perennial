@@ -19,7 +19,6 @@ function App() {
   return (
     <div className="App">
       <Router>
-        {/* <PageTemplate path="/" component={Home} /> */}
         <PageTemplate path="/home" component={Home} pageName="Project Perennial" />
         <PageTemplate path="/monitor" component={Monitor} pageName="Monitor" />
         <PageTemplate path="/add-plant" component={AddPlant} pageName="Add A Plant" />

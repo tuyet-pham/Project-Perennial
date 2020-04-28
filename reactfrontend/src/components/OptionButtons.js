@@ -49,8 +49,7 @@ function AccountOptions(props) {
     const handleLogout = (evt) => {
         evt.preventDefault();
         //alert user first?
-          
-        const route = userLogout();
+        userLogout();
         history.push("/login");
     }
 

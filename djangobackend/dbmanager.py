@@ -15,8 +15,7 @@ import os
 import sys
 import hashlib
 
-
-db = Server("http://%s:%s@db_data:5984/" % (os.environ['COUCHDB_USER'], os.environ['COUCHDB_PASSWORD']))
+db = Server("http://%s:%s@db_data:5984/" % (os.environ['COUCHDB_USER'],os.environ['COUCHDB_PASSWORD']))
 
 users = db['users']
 plant_device = db['plant_device']
@@ -83,7 +82,6 @@ Purpose : Used to find a user.
 Returns : (1)users id, (2)False
 '''
 def findUsername(uname):
-
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
             return True
@@ -92,12 +90,20 @@ def findUsername(uname):
 
 
 
+'''
+@finEmail()
+Param   : email
+Purpose : Used to find email.
+          (1). Checks to see if the email in couchdb.
+          (2). If the email exists then return a True flag
+          (3). If the email doesn't exist returns False flag
+Returns : (1)True, (2)False
+'''
 def findEmail(email):
     for user in users.view('_all_docs'):
         doc = users[user.id]
         if(doc['email'].lower() == email.lower()):
             return True
-
     return False
 
 
@@ -278,8 +284,10 @@ def getuser(uname):
     for user in users.view('_all_docs'):
         if user.id.lower() == uname.lower():
             return user
-
     return False
+
+
+
 
 '''
 @updateoptions()
@@ -291,12 +299,12 @@ Purpose : Used to update a user's notification options.
           (4). Post updated user object to user DB.
 Returns : (1)updated revision number, (2)False
 '''
-# def updateoptions(uname, uemail, uphone, umethod):
 def updateoptions(data):
-    # user = getuser(username)
-    # print(user)
 
     user = users.get(data['username'])
+    if user == '':
+        return False
+
     user['notificationMethod'] = data['notificationMethod']
     if data['notificationMethod'] == 'sms':
         user['phoneNum'] = data['phoneNum']
@@ -306,16 +314,9 @@ def updateoptions(data):
         user['phoneNum'] = None
 
     user['notificationTriggers'] = data['notificationTriggers']
-
     users.save(user)
 
-    return 1
-
-
-def addplant(data):
-    print("Gottem")
-    #plant = PlantDevice(name=data['name'],species=data['species'],geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors'],wateringCoditionTrigger=data['wateringCoditionTrigger'],wateringConditionValue=data['wateringConditionValue'],additionalNotes=data['additionalNotes'])
-    #plant.store(plant_device)
+    return True
 
 
 '''
@@ -330,13 +331,13 @@ Returns : (1). Returns True to not push to database
 '''
 def findPlantName(pName, pUser):
     for plant in plant_device.view('_all_docs'):
+        print("id:", plant.id)
         doc = plant_device[plant.id]
         if 'username' in doc:
             print(doc['username'])
             if(doc['username'].lower() == pUser.lower()):
                 if(doc['name'].lower() == pName.lower()):
-                    return True
-
+                    return plant.id
     return False
 
 
@@ -354,7 +355,8 @@ Returns : (1). Check to account/views if the plant device can be added or not
 def addPlant(data):
     pName = data['name']
     pUser = data['username']
-    if(findPlantName(pName, pUser) == False):
+    answer = findPlantName(pName, pUser)
+    if(answer == False):
         plant = PlantDevice(
             username=data['username'],
             name=data['name'],
@@ -367,8 +369,36 @@ def addPlant(data):
         print("Plant stored successfully")
         return True
     else:
-        print("Plant name exists")
+        doc = plant_device[answer]
+        doc['species'] = data['species']
+        doc['location'] = dict(geolocationCity=data['geolocationCity'],geolocationState=data['geolocationState'],indoorsOutdoors=data['indoorsOutdoors'])
+        doc['wateringConditionTrigger'] = data['wateringConditionTrigger']
+        doc['wateringConditionValue'] = data['wateringConditionValue']
+        doc['additionalNotes'] = data['additionalNotes']
+        plant_device.save(doc)
+
+        print("Plant updated successfully")
         return False
 
 
-# def addReading():
+
+'''
+@changepassword()
+Param   : data
+Purpose : change password
+Returns : True
+'''
+def changepassword(data):
+    user = users.get(data['username'])
+    if user == '':
+        return False
+
+    hashpass = hashlib.sha256(data['newpassword'].encode('utf-8')).hexdigest()
+    print(hashpass)
+    if user['hashpass'] != hashpass:
+        user['hashpass'] = hashpass
+
+    users.save(user)
+
+    return True
+
