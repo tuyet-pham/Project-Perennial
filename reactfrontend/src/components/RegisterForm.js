@@ -38,30 +38,30 @@ function RegisterForm(props) {
   const history = useHistory();
 
 
-  
+
   const handleSubmit = (evt) => {
 
     evt.preventDefault();
-    validateForm(errors, challenge)
-    ? console.log("Valid Form")
-    : console.log(errors);
-    if(challenge === true){
+    const valid_form = validateForm(errors, challenge)
+    if(valid_form){
       console.log('Submitting Form...');
       const params = {
           username : `${username}`,
           email : `${email}`,
           password : `${password}`,
       }
-      
-      
+
+
       const route = userRegister(params);
       if (route !== false) {
           history.push("/login");
       }
-      
-    }
-    else {
+
+    } else if (!challenge) {
       alert("You forgot about the Recaptcha!");
+    } else {
+      console.log(errors)
+      alert(errors.email + '\n' + errors.username + '\n' + errors.password_len + '\n' + errors.password_conf)
     }
   };
 
@@ -95,14 +95,18 @@ function RegisterForm(props) {
         break;
       case 'password':
         curerrors.password_len =
-          value.length < 10
-            ? 'Password must be at least 10 characters!'
+          value.length < 8
+            ? 'Password must be at least 8 characters!'
             : '';
+        curerrors.password_conf =
+          rePassword === password
+          ? ''
+          : 'Passwords must match!\n';
         setPassword(value);
         break;
       case 'password_conf':
         curerrors.password_conf =
-          value === { password }
+          value === password
           ? ''
           : 'Passwords must match!';
         setRepassword(value);

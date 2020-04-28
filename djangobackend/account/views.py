@@ -156,10 +156,6 @@ def monitorplants(request):
     """
     response = {}
     try:
-        # data = {
-        #     'username': request.POST.get('username')
-        # }
-
         # Get plants by username
         plants = list(findPlantByUser(request.POST.get('username')))
 
