@@ -103,7 +103,6 @@ def updatepassword(request):
         print("[views.py] Error: Failed Request on %s", e)
 
     status = changepassword(data)
-    print(status)
     if status:
         user = User.objects.get(username=data['username'])
         user.set_password(data['password'])
