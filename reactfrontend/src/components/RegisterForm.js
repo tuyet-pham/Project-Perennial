@@ -6,6 +6,9 @@ import { useHistory } from "react-router-dom";
 const validEmailRegex = RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}/g);
 
 const validateForm = (errors, challenge) => {
+  // Validate registration form
+  // Returns true if form can be a valid user
+  // Returns false if form is invalid
   let valid = true;
   if(errors.username.length > 0) {
     console.log("username error")
@@ -29,6 +32,9 @@ const validateForm = (errors, challenge) => {
 
 
 function RegisterForm(props) {
+  // Registration form component
+
+  // States
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
   const [ rePassword, setRepassword ] = useState("");
@@ -42,11 +48,11 @@ function RegisterForm(props) {
   });
   const history = useHistory();
 
-
-
   const handleSubmit = (evt) => {
+    // Handle form submit
 
     evt.preventDefault();
+    // Validate form. Submit if correct. Else throw errors.
     const valid_form = validateForm(errors, challenge)
     console.log("Valid Form: " + valid_form)
     if(valid_form){
@@ -56,22 +62,21 @@ function RegisterForm(props) {
           email : `${email}`,
           password : `${password}`,
       }
-
-
       const route = userRegister(params);
       if (route !== false) {
           history.push("/login");
       }
-
     } else if (!challenge) {
       alert("You forgot about the Recaptcha!");
     } else {
+      // Non recaptcha errors
       console.log(errors)
       alert(errors.email + '\n' + errors.username + '\n' + errors.password_len + '\n' + errors.password_conf)
     }
   };
 
   const capChange = (val) => {
+    // Handle form change for recaptcha
     console.log("Captcha Value: ", val);
     val === null
     ? setChallenge(false)
@@ -79,52 +84,55 @@ function RegisterForm(props) {
   };
 
   const onChange = (event) => {
+    // Handle form change for login form
     event.preventDefault();
     const { name, value } = event.target;
-    console.log(errors);
     let curerrors = errors;
 
+    // validate for errors and set errors object
     switch(name) {
       case 'username':
         curerrors.username =
-          value.length < 5
-          ? 'Username must be 5 characters long!'
+        value.length < 5
+        ? 'Username must be 5 characters long!'
           : '';
         setUsername(value);
         break;
-      case 'email':
-        curerrors.email =
+        case 'email':
+          curerrors.email =
           validEmailRegex.test(value)
           ? ''
           : 'Email is invalid!';
-        setEmail(value);
-        console.log(validEmailRegex.test(value))
-        break;
-      case 'password':
-        curerrors.password_len =
-          value.length < 8
+          setEmail(value);
+          console.log(validEmailRegex.test(value))
+          break;
+          case 'password':
+            curerrors.password_len =
+            value.length < 8
             ? 'Password must be at least 8 characters!'
             : '';
-        curerrors.password_conf =
-          rePassword === password
-          ? ''
+            curerrors.password_conf =
+            rePassword === password
+            ? ''
+            : 'Passwords must match!';
+            setPassword(value);
+            break;
+            case 'password_conf':
+              curerrors.password_conf =
+              value === password
+              ? ''
           : 'Passwords must match!';
-        setPassword(value);
-        break;
-      case 'password_conf':
-        curerrors.password_conf =
-          value === password
-          ? ''
-          : 'Passwords must match!';
-        setRepassword(value);
-        break;
-      default:
-        break;
+          setRepassword(value);
+          break;
+          default:
+            break;
     }
 
-    setErrors(curerrors);
+  setErrors(curerrors);
+  console.log(errors);
   }
 
+  // Return form object
   return (
     <form onSubmit={handleSubmit}>
       <input
