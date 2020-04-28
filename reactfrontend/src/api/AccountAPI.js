@@ -29,8 +29,6 @@ export async function addPlant(params){
 }
 
 
-
-
 /** 
  * Changing the user's notifcation settings
  * **/

@@ -1,19 +1,62 @@
-import React, { useState } from 'react';
-import PageTemplate from '../PageTemplate';
+import React, { useState, useEffect } from 'react';
+import qs from "qs";
+import axios from 'axios';
 import { FaSeedling } from 'react-icons/fa';
+import PageTemplate from '../PageTemplate';
+import { useHistory } from "react-router-dom";
 
 function Monitor() {
   // Dummy data - remove when API is integrated.
   // Reference: https://www.robinwieruch.de/conditional-rendering-react
-  const demo_plants_list = [
-    {key:0, name:"Ferngully", moisture:"31%", temperature:"75", humidity:"52", updated:"Wed Mar 25 2020 13:12:26", reservoirEmpty:0},
-    {key:1, name:"Mr. Cactus", moisture:"25%", temperature:"80", humidity:"70", updated:"Tue Mar 24 2020 12:00:31", reservoirEmpty:1},
-    {key:2, name:"Audrey 2.0", moisture:"69%", temperature:"95", humidity:"90", updated:"Mon Mar 23 2020 10:46:47", reservoirEmpty:0}
-  ];
+
+  const [plantList, setPlantList] = useState(null);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (localStorage.getItem('token') === null) {
+      alert("Your session has timed out");
+      history.push("/login");
+      localStorage.clear();
+    }
+    async function fetchPlants() {
+      // Fetch plants from back end
+      let params = {
+        username: localStorage.getItem('username')
+      }
+      console.log(params)
+      let tmpPlantList = []
+
+      // Get plants using post to django
+      await axios.post('account/monitorplants/', qs.stringify(params), {
+        headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
+      })
+      .then(function(response) {
+          console.log(response.data);
+          tmpPlantList = response.data.plants;
+      })
+      .catch(function(error) {
+          console.log(error);
+      });
+
+      // If there are plants set the plants object
+      if (tmpPlantList) {
+        console.log(tmpPlantList);
+        setPlantList(tmpPlantList);
+      } else {
+        console.log("No plants found for this user!")
+        setPlantList([]);
+      }
+
+
+    }
+    // Get readings for each idx
+
+    fetchPlants();
+  }, []);
 
   return (
     <PageTemplate>
-      <PlantCardList list={demo_plants_list}/>
+      <PlantCardList list={plantList}/>
     </PageTemplate>
   );
 }
@@ -44,13 +87,22 @@ function PlantCardList({ list }) {
   if (!list) {
     return (
       <h2>
-        No plants have been registered yet.
+        Loading plant list...
       </h2>
     )
-  }
-  else {
+  } else if(list.length === 0) {
+    return (
+      <h2>
+        <br />
+        <br />
+        No plants found. Try adding a plant!
+      </h2>
+    )
+  } else {
+    console.log(list)
     return (
       <div>
+
         {list.map(plant => (
           <PlantCard key={plant.key} plant={plant} />
         ))}
@@ -96,19 +148,27 @@ function PlantCard({ plant }) {
         </div>
         <div className="col">
           <div className="row">
-            <b>Moisture: &nbsp;</b> 
-            {plant.moisture}
+            <b>Moisture: &nbsp;</b>
+            {plant.moisture}%
           </div>
           <div className="row">
-            <b>Temperature: &nbsp;</b> 
+            <b>Temperature: &nbsp;</b>
             {plant.temperature}
           </div>
           <div className="row">
-            <b>Humidity: &nbsp;</b> 
+            <b>Humidity: &nbsp;</b>
             {plant.humidity}
           </div>
           <div className="row">
-            <i> 
+            <b>Last Watered: &nbsp;</b>
+            {plant.last_watered}
+          </div>
+          <div className="row">
+            <b>Status: &nbsp;</b>
+            {plant.online}
+          </div>
+          <div className="row">
+            <i>
               Last updated {plant.updated}
             </i>
           </div>
