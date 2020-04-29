@@ -76,7 +76,7 @@ class TestUserViews(TestCase):
         print(response.status_code)
         print()
 
-    def test_login_ok_status(self):
+"""     def test_login_ok_status(self):
         request = self.factory.post(self.login_url)
         request.session = {}
         request.user = User.objects.create_user('test','test.com','test')
@@ -92,4 +92,4 @@ class TestUserViews(TestCase):
         response = logoutu(request)
         self.assertEquals(response.status_code, 200)
         print(response.status_code)
-        print()
+        print() """
