@@ -71,7 +71,7 @@ api call requires body fields
 def email(request):
 
     message = ''
-    reciever = ''
+    receiver = ''
     subject = 'Perennial Alert'
     try:
         message = request.POST.get('message')
