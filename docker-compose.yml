@@ -87,6 +87,9 @@ services:
       - ./watering_service/watering_service.py:/watering_service.py
     depends_on:
       - db
+      - mqttclient
+    links:
+      - djangobackend
     environment:
       - MQTT_BROKER=${MQTT_BROKER}
       - COUCHDB_USER=${COUCHDB_USER}
