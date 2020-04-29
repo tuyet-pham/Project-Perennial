@@ -59,14 +59,33 @@ def sms(request):
     return HttpResponse(message.sid, status=HTTP_200_OK)
 
 
+
+'''
+@email()
+api call requires body fields
+    (1). message
+    (2). reciever
+    (3). subject
+'''
 @csrf_exempt
 def email(request):
-	return requests.post(
-		"https://api.mailgun.net/v3/sandbox2abd532106654910aca06b63e6b4d46d.mailgun.org/messages",
-		auth=("api", "c053bfc0c16dc4f497192184e35cff4b-f135b0f1-542b57b9"),
-		data={"from": "Excited User <Avery@https://api.mailgun.net/v3/sandbox2abd532106654910aca06b63e6b4d46d.mailgun.org>",
-			"to": "averyclariday44@gmail.com",
-			"subject": "Mailgun Test",
-			"text": "Testing Mailgun"
-			}
-    )
+
+    message = ''
+    reciever = ''
+    subject = 'Perennial Alert'
+    try:
+        message = request.POST.get('message')
+        reciever = request.POST.get('reciever')
+        subject = request.POST.get('subject')
+    except Exception as e:
+        print(e)
+
+    r = requests.post(
+        "https://api.mailgun.net/v3/sandboxbd29fb16aaa2404288724db86f1f1c0c.mailgun.org/messages",
+        auth=("api", "dc1f071f9fc0a270465668e5ffaec2be-65b08458-0c101961"),
+        data={"from": "Perennial <mailgun@sandboxbd29fb16aaa2404288724db86f1f1c0c.mailgun.org>",
+              "to": [reciever],
+              "subject": subject,
+              "text": message})
+    
+    return HttpResponse(r.status_code)
