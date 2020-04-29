@@ -64,7 +64,7 @@ def sms(request):
 @email()
 api call requires body fields
     (1). message
-    (2). reciever
+    (2). receiver
     (3). subject
 '''
 @csrf_exempt
@@ -75,7 +75,7 @@ def email(request):
     subject = 'Perennial Alert'
     try:
         message = request.POST.get('message')
-        reciever = request.POST.get('reciever')
+        receiver = request.POST.get('receiver')
         subject = request.POST.get('subject')
     except Exception as e:
         print(e)
@@ -84,7 +84,7 @@ def email(request):
         "https://api.mailgun.net/v3/sandboxbd29fb16aaa2404288724db86f1f1c0c.mailgun.org/messages",
         auth=("api", "dc1f071f9fc0a270465668e5ffaec2be-65b08458-0c101961"),
         data={"from": "Perennial <mailgun@sandboxbd29fb16aaa2404288724db86f1f1c0c.mailgun.org>",
-              "to": [reciever],
+              "to": [receiver],
               "subject": subject,
               "text": message})
     
