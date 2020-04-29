@@ -139,3 +139,11 @@ def logoutUser(request):
             },
             status=HTTP_200_OK)
 
+
+
+@csrf_exempt
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+def is_logged_in(request):
+    return HttpResponse(request.user.is_authenticated, status=HTTP_200_OK)
+    

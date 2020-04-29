@@ -9,6 +9,8 @@ const notificationsStyle = {
   color: "yellow"
 };
 
+
+
 function Home() {
     return (
       <PageTemplate>

@@ -1,4 +1,4 @@
-"""djangobackend URL Configuration
+"""djangobackend URL Configuration.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -22,6 +22,6 @@ urlpatterns = [
     url(r'^monitorplants', views.monitorplants, name='monitorplants'),
     url(r'^addplants', views.addplants, name='addplants'),
     url(r'^options', views.options, name='options'),
-    url(r'^changecredentials', views.changecredentials, name='changecredentials'),
+    url(r'^updatepassword', views.updatepassword, name='updatepassword'),
 
 ]
