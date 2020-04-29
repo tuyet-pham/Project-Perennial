@@ -62,6 +62,7 @@ function RegisterForm(props) {
           email : `${email}`,
           password : `${password}`,
       }
+
       const route = userRegister(params);
       if (route !== false) {
           history.push("/login");
