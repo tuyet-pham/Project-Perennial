@@ -24,7 +24,7 @@ function Options() {
         emailAddress : `${emailAddress}`,
         phoneNum : `${phoneNum}`,
         notificationMethod : `${notificationMethod}`,
-        notificationTriggers: `${notificationTriggers}`
+        notificationTriggers: notificationTriggers,
       }
 
       if (localStorage.getItem('token') === null) {
@@ -45,7 +45,7 @@ function Options() {
   }
 
   const getNotificationTriggers = () => {
-    const notificationTriggers = []
+    let notificationTriggers = []
 
     if (notificationBoxes[0].checked === true) {
       notificationTriggers.push('wateredPlant')
@@ -64,7 +64,7 @@ function Options() {
     var emailRegex = new RegExp("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[\\.][a-zA-Z]{2,}");
 
     let inputValid = ''
-    
+
     // Check for valid input.
     if (notificationMethod === '') {
       inputValid = "Please select a notification method."
@@ -94,5 +94,5 @@ function Options() {
     </PageTemplate>
   );
 }
-  
+
 export default Options;
