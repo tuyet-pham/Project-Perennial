@@ -49,7 +49,6 @@ def main():
             check_reservoir(device_id, username, device_name)
 
 
-
 def check_moisture(deviceid, check_value, username, device_name):
     """Check moisture level of device against watering value. Water if necessary.
 
@@ -72,6 +71,13 @@ def check_moisture(deviceid, check_value, username, device_name):
 
 
 def check_reservoir(deviceid, username, device_name):
+    """Check if the reservoir is empty. If empty check if user wants to be alerted. If so alert user.
+
+    Args:
+        deviceid (str): Device ID
+        username (str): Username of user the device belongs to
+        device_name (str): Name of the device
+    """
     # Query DB for reservoir value
     query = Query(readingdb, selector={'device_id': {'$eq': deviceid}, 'type': {'$eq': 'reservoir'}})
     result = query(sort=[{'time_reading': 'desc'}], limit=1)['docs']
