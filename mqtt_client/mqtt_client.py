@@ -42,6 +42,8 @@ def on_message(client, userdata, msg):
             values["moisture_level"] = payload
         elif topic == "availability":
             values["device_availability"] = payload
+        elif topic == "pumpstatus":
+            values["pump_status"] = payload
         else:
             return
 
