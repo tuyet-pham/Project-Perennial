@@ -249,3 +249,25 @@ def getsuggested(request):
         return JsonResponse(response, status=HTTP_404_NOT_FOUND)
     else:
         return JsonResponse(response, status=HTTP_200_OK)
+
+
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def deleteplant(request):
+    plant={}
+    try:
+        plant = {
+            'username' : request.POST.get('username')
+            'plantname' : request.POST.get('plantname')
+        }
+    except Exception as e:
+        print("Error: Failed Request on %s", e)
+    
+#    status = deletePlantByUser(plant)
+#    if status is False:
+#         return JsonResponse(response, status=HTTP_404_NOT_FOUND)
+#    else:
+    return JsonResponse(response, status=HTTP_200_OK)
