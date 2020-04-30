@@ -171,17 +171,24 @@ def monitorplants(request):
                 plant['online'] = 'Offline'
 
             # get last wattering time
-            pump = list(findReadings(plantid, "pump"))
+            pump = list(findReadings(plantid, "pumpstatus"))
             if pump:
                 time_reading = pump[0]['time_reading']
-                time_diff = int(time()) - last_update
+                time_diff = int(time()) - time_reading
                 if time_diff < 60:
+                    # Past minute
                     plant['last_watered'] = 'A few seconds ago.'
                 elif time_diff < 3600:
+                    # Past hour
                     plant['last_watered'] = str(int(time_diff / 60)) + ' minutes ago.'
                 elif time_diff < 3600 * 48:
+                    # Past 48 hours
                     plant['last_watered'] = str(int(time_diff / 60 / 60)) + ' hours ago.'
+                elif time_diff < 86400 * 7:
+                    # Past 7 days
+                    plant['last_watered'] = str(int(time_diff / 60 / 60 / 24)) + ' days ago.'
                 else:
+                    # Longer than 7 days
                     plant['last_watered'] = 'A long time ago.'
 
                 if time_reading > last_update:

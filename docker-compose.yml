@@ -1,7 +1,6 @@
 version: "3.2"
 
 services:
-
 # ---- Database
   db:
     container_name: db_data
@@ -50,12 +49,13 @@ services:
       - 3000:3000
     environment:
       - NODE_ENV=development
-    links: 
+    links:
       - db
       - djangobackend
     depends_on:
       - djangobackend
     command: npm start
+    restart: always
 
 # ---- Database data
   data:
@@ -67,7 +67,7 @@ services:
     links:
       - db
     depends_on:
-     - db
+      - db
     command: ./perennialData.sh
     environment:
       - HOST=${HOST}
@@ -75,11 +75,28 @@ services:
   mqttclient:
     build: ./mqtt_client
     volumes:
-     - ./mqtt_client:/code
+      - ./mqtt_client:/code
     depends_on:
-     - db
+      - db
     environment:
       - MQTT_BROKER=${MQTT_BROKER}
+      - COUCHDB_USER=${COUCHDB_USER}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
+    restart: always
+
+  wateringservice:
+    build: ./watering_service
+    volumes:
+      - ./watering_service/watering_service.py:/watering_service.py
+    depends_on:
+      - db
+      - mqttclient
+    links:
+      - djangobackend
+    environment:
+      - MQTT_BROKER=${MQTT_BROKER}
+      - COUCHDB_USER=${COUCHDB_USER}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
 
 # ---- Our volumes
 volumes:

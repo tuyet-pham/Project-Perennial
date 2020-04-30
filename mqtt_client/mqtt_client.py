@@ -49,7 +49,8 @@ def on_message(client, userdata, msg):
             else:
                 # empty
                 values["reservoir_empty"] = 1
-
+        elif topic == "pumpstatus":
+            values["pump_status"] = payload
         else:
             return
 
@@ -65,7 +66,7 @@ def on_message(client, userdata, msg):
 
     # Connect to DB
     try:
-        dbclient = CouchDB("admin", "1Tiqsc$pk", url='http://db:5984', connect=True)
+        dbclient = CouchDB(environ.get("COUCHDB_USER"), environ.get("COUCHDB_PASSWORD"), url='http://db:5984', connect=True)
         db = dbclient['plant_device_reading']
         document = db.create_document(reading)
         if document.exists():
