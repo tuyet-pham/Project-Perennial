@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+"""Watering Service.
+
+Checks plants to see if they need to be watered. Waters if necessary. Alerts user depending on settings.
+Built to be run by cron.
+"""
 # Python Modules
 from os import environ
 from time import time
@@ -11,9 +16,9 @@ import paho.mqtt.publish as mqtt
 import requests
 
 dbclient = dbclient = CouchDB(environ.get("COUCHDB_USER"),
-                                environ.get("COUCHDB_PASSWORD"),
-                                url='http://db:5984',
-                                connect=True)
+                              environ.get("COUCHDB_PASSWORD"),
+                              url='http://db:5984',
+                              connect=True)
 plantdb = dbclient['plant_device']
 readingdb = dbclient['plant_device_reading']
 usersdb = dbclient['users']
@@ -104,22 +109,34 @@ def water_plant(deviceid, username, device_name):
     if username in usersdb:
         user_doc = usersdb[username]
 
-        if "notificationMethod" in user_doc:
+        if "notificationMethod" in user_doc and 'wateredPlant' in user_doc['notificationTriggers']:
             notification_method = user_doc['notificationMethod']
             if notification_method == "email":
                 print("Sending notification by email.")
                 payload = {
                     'subject': device_name + ' has just been watered!',
                     'receiver': user_doc['email'],
-                    'message': 'Hello ' + username + '! \n\nYour device, named ' + device_name + ', was just watered!\n\n Thank you for using Project Perennial.\n\n'
+                    'message': 'Hello ' + username + '! \n\nYour device, ' + device_name + ', was just watered!\n\nThank you for using Project Perennial.\n\n'
                 }
                 print("Payload:", payload)
                 r = requests.post("http://djangobackend:8000/notifications/email/", data=payload)
-                print(r.json())
+                if r.status_code == 200:
+                    print("Sent notification by email.")
+                else:
+                    print("Email sending failed.")
 
             elif notification_method == "sms":
                 print("Sending notification by sms")
-
+                payload = {
+                    "phonnumber": user_doc['phoneNum'],
+                    "message": device_name + " was just watered!"
+                }
+                print("Payload:", payload)
+                r = requests.post("http://djangobackend:8000/notifications/sms/", data=payload)
+                if r.status_code == 200:
+                    print("Sent notification by sms.")
+                else:
+                    print("SMS sending failed.")
 
 
 if __name__ == "__main__":
