@@ -1,5 +1,6 @@
 """Account views."""
 from __future__ import unicode_literals
+import traceback
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.db import models
@@ -191,8 +192,8 @@ def monitorplants(request):
             # Get reservoir status
             reservoir = list(findReadings(plantid, "reservoir"))
             if reservoir:
-                time_reading = pump[0]['time_reading']
-                if reservoir[0]['values']['empty']:
+                time_reading = reservoir[0]['time_reading']
+                if reservoir[0]['values']['reservoir_empty'] == 1:
                     plant['reservoirEmpty'] = 1
                 else:
                     plant['reservoirEmpty'] = 0
@@ -219,6 +220,7 @@ def monitorplants(request):
 
     except Exception as e:
         print("Error: Failed Request on", e)
+        traceback.print_exc()
 
     return JsonResponse(response)
 
