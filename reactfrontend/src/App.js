@@ -16,15 +16,18 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 
 function App() {
+
+  const isLoggedIn = false;
+
   return (
     <div className="App">
       <Router>
         {/* <PageTemplate path="/" component={Home} /> */}
-        <PageTemplate path="/home" component={Home} pageName="Project Perennial" />
-        <PageTemplate path="/monitor" component={Monitor} pageName="Monitor" />
-        <PageTemplate path="/add-plant" component={AddPlant} pageName="Add A Plant" />
-        <PageTemplate path="/options" component={Options} pageName="Options" />
-        <LoginTemplate path="/login" component={Login} pageName="Login" />
+        <PageTemplate path="/home" component={Home} pageName="Project Perennial" isLoggedIn={isLoggedIn}/>
+        <PageTemplate path="/monitor" component={Monitor} pageName="Monitor" isLoggedIn={isLoggedIn}/>
+        <PageTemplate path="/add-plant" component={AddPlant} pageName="Add A Plant" isLoggedIn={isLoggedIn}/>
+        <PageTemplate path="/options" component={Options} pageName="Options" isLoggedIn={isLoggedIn}/>
+        <LoginTemplate path="/login" component={Login} pageName="Login"/>
         <LoginTemplate path="/sign-up" component={Register} pageName="Sign Up" />
       </Router>
     </div>
