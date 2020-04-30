@@ -22,7 +22,7 @@ from rest_framework.status import (
 )
 # Download the helper library from https://www.twilio.com/docs/python/install
 from twilio.rest import Client
-
+import os
 
 
 '''
@@ -45,8 +45,8 @@ def sms(request):
 
     # Your Account Sid and Auth Token from twilio.com/console
     # DANGER! This is insecure. See http://twil.io/secure
-    account_sid = 'AC86cceba053bbfa4cd601df202da97b13'
-    auth_token = '2de74e4a63cae341bde395e9714e59a1'
+    account_sid =  os.environ['TWILLIO_ACC_SID']
+    auth_token = os.environ['TWILLIO_AUTH_TOKEN']
     client = Client(account_sid, auth_token)
 
     message = client.messages \
@@ -82,7 +82,7 @@ def email(request):
 
     r = requests.post(
         "https://api.mailgun.net/v3/sandboxbd29fb16aaa2404288724db86f1f1c0c.mailgun.org/messages",
-        auth=("api", "dc1f071f9fc0a270465668e5ffaec2be-65b08458-0c101961"),
+        auth=("api", os.environ['MAIL_GUN_APIKEY']),
         data={"from": "Perennial <mailgun@sandboxbd29fb16aaa2404288724db86f1f1c0c.mailgun.org>",
               "to": [receiver],
               "subject": subject,
