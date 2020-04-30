@@ -74,14 +74,15 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
     'http://djangobackend:8000',
+    'http://wateringservice',
 )
 
 ROOT_URLCONF = 'urls'
 
 DATABASES = {
-    'default': { 
-        'ENGINE': 'django.db.backends.sqlite3', 
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'), 
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -141,4 +142,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-REST_SESSION_LOGIN = False 
+REST_SESSION_LOGIN = False
