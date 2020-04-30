@@ -42,6 +42,13 @@ def on_message(client, userdata, msg):
             values["moisture_level"] = payload
         elif topic == "availability":
             values["device_availability"] = payload
+        elif topic == "reservoir":
+            # If high moisture there is water. If low moisture there is not.
+            if float(payload) >= 50.0:
+                values["reservoir_empty"] = 0
+            else:
+                # empty
+                values["reservoir_empty"] = 1
         elif topic == "pumpstatus":
             values["pump_status"] = payload
         else:
