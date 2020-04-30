@@ -6,7 +6,7 @@ declare -p | grep -Ev 'BASHOPTS|BASH_VERSINFO|EUID|PPID|SHELLOPTS|UID' > /contai
 
 echo "SHELL=/bin/bash
 BASH_ENV=/container.env
-* * * * * /watering_service.py >> /var/log/cron.log 2>&1
+* * * * * python3 /watering_service.py >> /var/log/cron.log 2>&1
 #Extra blank line" > scheduler.txt
 
 touch /var/log/cron.log
