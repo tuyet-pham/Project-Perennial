@@ -24,7 +24,7 @@ function Options() {
         emailAddress : `${emailAddress}`,
         phoneNum : `${phoneNum}`,
         notificationMethod : `${notificationMethod}`,
-        notificationTriggers: notificationTriggers,
+        notificationTriggers: `${notificationTriggers}`
       }
 
       if (localStorage.getItem('token') === null) {
@@ -45,7 +45,7 @@ function Options() {
   }
 
   const getNotificationTriggers = () => {
-    let notificationTriggers = []
+    const notificationTriggers = []
 
     if (notificationBoxes[0].checked === true) {
       notificationTriggers.push('wateredPlant')

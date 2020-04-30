@@ -73,8 +73,9 @@ def options(request):
             'emailAddress': request.POST.get('emailAddress'),
             'phoneNum': request.POST.get('phoneNum'),
             'notificationMethod': request.POST.get('notificationMethod'),
-            'notificationTriggers': request.POST.getlist('notificationTriggers')
+            'notificationTriggers': request.POST.get('notificationTriggers')
         }
+        data['notificationTriggers'] = data['notificationTriggers'].split(",")
     except Exception as e:
         print("Error: Failed Request on %s", e)
 
