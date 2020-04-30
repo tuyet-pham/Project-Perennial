@@ -128,7 +128,7 @@ def water_plant(deviceid, username, device_name):
             elif notification_method == "sms":
                 print("Sending notification by sms")
                 payload = {
-                    "phonnumber": user_doc['phoneNum'],
+                    "phonenumber": user_doc['phoneNum'],
                     "message": device_name + " was just watered!"
                 }
                 print("Payload:", payload)
