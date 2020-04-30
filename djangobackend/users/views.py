@@ -1,22 +1,17 @@
 from __future__ import unicode_literals
 from django.http import HttpResponse, JsonResponse
-from rest_framework.response import Response
-from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
-
-
-from django.db import models
-
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+# 
 # Might need this later to provide Cross Site Request Forgery protection
 # As of right now it is ignored
-
 from django.views.decorators.csrf import csrf_exempt        
-from django.core import serializers
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, AnonymousUser
 
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view, permission_classes, renderer_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
@@ -30,7 +25,10 @@ from dbmanager import authenticateUser
 from dbmanager import adduser
 
 
+
 @csrf_exempt
+@api_view(["POST"])
+@permission_classes((AllowAny,))
 def registerUser(request):
      
     username = ''
@@ -50,9 +48,9 @@ def registerUser(request):
 
     # if both true
     if status == '3':
-        return JsonResponse({"type": status}, status=HTTP_404_NOT_FOUND)
+        return JsonResponse({"type": status}, status=HTTP_400_NOT_FOUND)
     elif status == '2':
-        return JsonResponse({"type": status}, status=HTTP_404_NOT_FOUND)
+        return JsonResponse({"type": status}, status=HTTP_400_NOT_FOUND)
     else:
         user = authenticate(request, username=username, password=password)
         if user is None:
@@ -75,6 +73,8 @@ Purpose : Used to find a user.
 Returns : (1)users id, (2)False
 '''
 @csrf_exempt
+@api_view(["POST"])
+@permission_classes((AllowAny,))
 def loginUser(request):
     
     username = ''
@@ -121,12 +121,12 @@ def loginUser(request):
         return JsonResponse({'error': 'Invalid Credentials'}, status=HTTP_404_NOT_FOUND)
 
 
-        
 
+
+@csrf_exempt
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def logoutUser(request):
-    route = "/login"
-
     try:
        request.user.auth_token.delete()
     except (AttributeError, ObjectDoesNotExist):
@@ -135,15 +135,15 @@ def logoutUser(request):
     logout(request)
     return JsonResponse(
             {
-                "username": username,
-                "route" : route,
+                "user": "logged out",
             },
             status=HTTP_200_OK)
 
 
 
-
-
-# def current(request):
-#     return HttpResponse("getting current")
-
+@csrf_exempt
+# @api_view(['POST'])
+# @permission_classes([IsAuthenticated])
+def is_logged_in(request):
+    return HttpResponse(request.user.is_authenticated)
+    

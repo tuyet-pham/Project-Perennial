@@ -13,11 +13,30 @@ import AddPlant from './pages/AddPlant';
 import Options from './pages/Options';
 import Home from './pages/Home';
 import Login from './pages/Login'
-import Register from './pages/Register'
+import Register from './pages/Register';
+import axios from 'axios';
+import qs from "qs";
 
 function App() {
 
-  const isLoggedIn = false;
+  async function userAuthenticate(){
+    await axios.post('users/authenticate/', qs.stringify(localStorage.getItem('username')), { 
+        headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
+    })
+    .then(function(response) {
+        console.log(response)
+        alert("Authenticated")
+        return response.data
+    })
+    .catch(function(response) {
+        console.log(response)
+        alert("Error authenticating")
+        return response.data
+    })
+  }
+
+  const isLoggedIn = userAuthenticate();
+  console.log(isLoggedIn)
 
   return (
     <div className="App">

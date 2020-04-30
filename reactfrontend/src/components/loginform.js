@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { userLogin } from '../api/UserAPI'
-import { getToken } from '../api/UserAPI'
-
 import { useHistory } from "react-router-dom";
 
 
@@ -18,30 +16,23 @@ function LoginForm(props) {
     if(challenge === true){
 
       console.log('Submitting Form...');
-      
+
       const params = {
         username : `${username}`,
         password : `${password}`,
       }
-      
-      
-      const route = userLogin(params);
-      if (route === false) {
-         alert("Invalid Credentials. Try again.")
-      }
-      else{
-        if (getToken() === ''){
-          alert('Stop hacking');
-        }
-        else{
+
+      userLogin(params);
+
+      setTimeout(() => {
+        if (localStorage.getItem('token') !== null){
           history.push("/home");
         }
-      }
+      }, 1000);
     }
     else{
       alert("You forgot about the Recaptcha!");
     }
-
   }
 
   const capChange = (val) => {
