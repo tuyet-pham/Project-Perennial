@@ -142,8 +142,12 @@ def logoutUser(request):
 
 
 @csrf_exempt
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def is_logged_in(request):
-    return HttpResponse(request.user.is_authenticated)
-    
+    isloggedIn = request.user.is_authenticated
+    if isloggedIn is False:
+        return HttpResponse(status=HTTP_404_NOT_FOUND)
+    elif isloggedIn is True:
+        return HttpResponse(status=HTTP_200_OK)
+

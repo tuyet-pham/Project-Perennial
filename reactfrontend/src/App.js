@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import {
@@ -19,38 +19,50 @@ import qs from "qs";
 
 function App() {
 
+  const [isLoggedIn, setisLoggedIn] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   async function userAuthenticate(){
     await axios.post('users/authenticate/', qs.stringify(localStorage.getItem('username')), { 
         headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
     })
     .then(function(response) {
         console.log(response)
-        alert("Authenticated")
-        return response.data
-    })
+        setisLoggedIn(true)
+        setIsAuthenticated(true)
+      })
     .catch(function(response) {
         console.log(response)
-        alert("Error authenticating")
-        return response.data
+        setisLoggedIn(false)
+        setIsAuthenticated(true)
     })
   }
 
-  const isLoggedIn = userAuthenticate();
-  console.log(isLoggedIn)
+  // userAuthenticate()
 
-  return (
-    <div className="App">
-      <Router>
-        {/* <PageTemplate path="/" component={Home} /> */}
-        <PageTemplate path="/home" component={Home} pageName="Project Perennial" isLoggedIn={isLoggedIn}/>
-        <PageTemplate path="/monitor" component={Monitor} pageName="Monitor" isLoggedIn={isLoggedIn}/>
-        <PageTemplate path="/add-plant" component={AddPlant} pageName="Add A Plant" isLoggedIn={isLoggedIn}/>
-        <PageTemplate path="/options" component={Options} pageName="Options" isLoggedIn={isLoggedIn}/>
-        <LoginTemplate path="/login" component={Login} pageName="Login"/>
-        <LoginTemplate path="/sign-up" component={Register} pageName="Sign Up" />
-      </Router>
-    </div>
-  );
+  useEffect(() => {
+    userAuthenticate()
+    console.log(isLoggedIn)
+  }, []);
+
+  if(isAuthenticated) {
+    return (
+      <div className="App">
+        <Router>
+          {/* <PageTemplate path="/" component={Home} /> */}
+          <PageTemplate path="/home" component={Home} pageName="Project Perennial" isLoggedIn={isLoggedIn}/>
+          <PageTemplate path="/monitor" component={Monitor} pageName="Monitor" isLoggedIn={isLoggedIn}/>
+          <PageTemplate path="/add-plant" component={AddPlant} pageName="Add A Plant" isLoggedIn={isLoggedIn}/>
+          <PageTemplate path="/options" component={Options} pageName="Options" isLoggedIn={isLoggedIn}/>
+          <LoginTemplate path="/login" component={Login} pageName="Login"/>
+          <LoginTemplate path="/sign-up" component={Register} pageName="Sign Up" />
+        </Router>
+      </div>
+    );
+  }
+  else {
+    return(<div></div>)
+  }
 }
 
 export default App;
