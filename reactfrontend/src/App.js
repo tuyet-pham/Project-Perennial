@@ -5,6 +5,7 @@ import {
   BrowserRouter as Router,
   // Switch,
   // Route
+  Redirect
 } from 'react-router-dom';
 import PageTemplate from './PageTemplate';
 import LoginTemplate from './LoginTemplate'
@@ -38,19 +39,15 @@ function App() {
     })
   }
 
-  // userAuthenticate()
-
-  useEffect(() => {
-    userAuthenticate()
-    console.log(isLoggedIn)
-  }, []);
+  userAuthenticate()
 
   if(isAuthenticated) {
     return (
       <div className="App">
         <Router>
-          {/* <PageTemplate path="/" component={Home} /> */}
-          <PageTemplate path="/home" component={Home} pageName="Project Perennial" isLoggedIn={isLoggedIn}/>
+          {/* <Redirect path="/"  to={{pathname:"/home"}} /> */}
+          {/* <PageTemplate path="/home" component={Home} pageName="Project Perennial" isLoggedIn={isLoggedIn}/> */}
+          <PageTemplate path="/(home|)/" component={Home} pageName="Project Perennial" isLoggedIn={isLoggedIn}/>
           <PageTemplate path="/monitor" component={Monitor} pageName="Monitor" isLoggedIn={isLoggedIn}/>
           <PageTemplate path="/add-plant" component={AddPlant} pageName="Add A Plant" isLoggedIn={isLoggedIn}/>
           <PageTemplate path="/options" component={Options} pageName="Options" isLoggedIn={isLoggedIn}/>
