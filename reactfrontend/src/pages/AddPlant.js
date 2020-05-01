@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PageTemplate from '../PageTemplate';
-import { FaCamera} from 'react-icons/fa';
 import { addPlant } from '../api/AccountAPI'
 import { useHistory } from "react-router-dom";
+import './addplant.css';
+import qs from "qs";
+import axios from 'axios';
 
 
 function AddPlant() {
@@ -41,7 +43,36 @@ function AddPlant() {
       else{
         addPlant(params);
       }
+
     }
+
+    const handleSuggestion = (event) => {
+      if (localStorage.getItem('token') === null) {
+        alert("Your session has timed out");
+        history.push("/login");
+        localStorage.clear();
+      }
+      const { name, value } = event.target;
+
+      setSpecies(value)
+
+      const params = { 
+        planttype : `${value}`,
+      }
+  
+        // Get plants using post to django
+      axios.post('account/getsuggested/', qs.stringify(params), {
+        headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
+      })
+      .then(function(response) {
+          document.getElementById('moistureValue').value = parseFloat(response.data.suggestedmoisture)*100;
+      })
+      .catch(function(error) {
+          console.log(error);
+      });
+    };
+
+
 
     // Forms with hooks reference: https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/
     return (
@@ -50,45 +81,85 @@ function AddPlant() {
           <div className="container-fluid">
             <div className="col form-container">
               <div id="basic-info" className="row">
-                <div className="col-3">
-                  <div className="empty-picture-icon" onClick={addPlantIcon}>
-                    <FaCamera />
-                  </div>
-                </div>
-                <div className="col-9">
-                  <input 
+                <div className="col">
+                  <input
                     type="text"
-                    placeholder="Name..."
+                    placeholder="Plant Name"
                     onChange={event => setName(event.target.value)}
                   />
                 </div>
               </div>
 
-              <br />
-
               <h2>
                 Species
               </h2>
-              <div id="species-info" className="row">
+              <div id="species-info" className="row" >
                 <div className="col">
-                  <select name="species" defaultValue="" onChange={event => setSpecies(event.target.value)}>
+                  <select name="species" defaultValue="" onChange={handleSuggestion}>
                     <option value="" disabled>Select species...</option>
-                    <option value="Aloe vera">Aloe Vera</option>
+                    <option value="African violet">African violet</option>
+                    <option value="Baby’s tears">Baby’s tears</option>
+                    <option value="Begonia">Begonia</option>
+                    <option value="Coleus">Coleus</option>
+                    <option value="Impatiens">Impatiens</option>
+                    <option value="Lucky Bamboo">Lucky Bamboo</option>
+                    <option value="Philodendron">Philodendron</option>
+                    <option value="Spiderwort">Spiderwort</option>
+                    <option value="Tropicanna Canna">Tropicanna Canna</option>
+                    <option value="Blue Camassia">Blue Camassia</option>
+                    <option value="Bee Balm">Bee Balm</option>
+                    <option value="Phlox carolina">Phlox carolina</option>
+                    <option value="Butterfly weed">Butterfly weed</option>
+                    <option value="Siberian iris">Siberian iris</option>
+                    <option value="Hibiscus">Hibiscus</option>
+                    <option value="Meadow rue">Meadow rue</option>
+                    <option value="Ostrich fern">Ostrich fern</option>
+                    <option value="Cardinal flower">Cardinal flower</option>
+                    <option value="Ligularia">Ligularia</option>
+                    <option value="Carex">Carex</option>
+                    <option value="Blue flag">Blue flag</option>
+                    <option value="Bog arum">Bog arum</option>
+                    <option value="Cattail">Cattail</option>
+                    <option value="Cordgrass">Cordgrass</option>
+                    <option value="Flowering rush">Flowering rush</option>
+                    <option value="Golden club">Golden club</option>
+                    <option value="Hardy arum">Hardy arum</option>
+                    <option value="Horsetail">Horsetail</option>
+                    <option value="Japanese water iris">Japanese water iris</option>
+                    <option value="Marsh marigold">Marsh marigold</option>
+                    <option value="Southern blue flag">Southern blue flag</option>
+                    <option value="Spike rush">Spike rush</option>
+                    <option value="Sweet flag">Sweet flag</option>
+                    <option value="Water canna">Water canna</option>
+                    <option value="Water iris">Water iris</option>
+                    <option value="Yellow flag">Yellow flag</option>
+                    <option value="Button bush">Button bush</option>
+                    <option value="Red osier dogwood">Red osier dogwood</option>
+                    <option value="Tartarian dogwood">Tartarian dogwood</option>
+                    <option value="Winterberry">Winterberry</option>
+                    <option value="Yaupon holly">Yaupon holly</option>
+                    <option value="Calla lily">Calla lily</option>
+                    <option value="Louisiana iris">Louisiana iris</option>
+                    <option value="Chinese globeflower">Chinese globeflower</option>
+                    <option value="Egyptian papyrus">Egyptian papyrus</option>
                     <option value="Iris">Iris</option>
-                    <option value="Grass">Grass</option>
+                    <option value="Aloe vera">Aloe vera</option>
+                    <option value="Succulent">Succulent</option>
+                    <option value="Aloe spirillis">Aloe spirillis</option>
+                    <option value="Cactus">Cactus</option>
+                    <option value="Candelabra">Candelabra</option>
+                    <option value="Spider plant">Spider plan</option>
+                    <option value="Green onion">Green onion</option>
+                    <option value="Basil">Basil</option>
+                    <option value="Rosemary">Rosemary</option>
+                    <option value="Rubber plant">Rubber plant</option>
                     <option value="Orchid">Orchid</option>
+                    <option value="Snake plant">Snake plant</option>
+                    <option value="Pothos">Pothos</option>
+                    <option value="Dracaena">Dracaena</option>
                   </select>
                 </div>
               </div>
-              <div className="row">
-                <div className="col">
-                  <a href="/add-plant">
-                    View suggested watering conditions...
-                  </a>
-                </div>
-              </div>
-
-              <br />
 
               <h2>
                 Geographic location
@@ -101,8 +172,9 @@ function AddPlant() {
                     onChange={event => setGeolocationCity(event.target.value)}
                   />
                 </div>
+
                 <div className="col">
-                  <select name="state" defaultValue="" onChange={event => setGeolocationState(event.target.value)}>
+                  <select name="state" onChange={event => setGeolocationState(event.target.value)}>
                     <option value="" disabled>State</option>
                     <option value="AL">AL</option>
                     <option value="AK">AK</option>
@@ -199,20 +271,14 @@ function AddPlant() {
                   {/* Conditional render */}
               </div>
 
-              <br />
-
               <h2>
                 Additional notes
               </h2>
               <div id="additional-notes" className="row" onChange={event => setAdditionalNotes(event.target.value)} >
                 <div className="col">
-                  <label>
                     <textarea placeholder="Add a note..." />
-                  </label>
                 </div>
               </div>
-
-              <br />
 
               <button type="submit" value="Submit" className="btn btn-primary" onClick={handleSubmit}>
                 Submit
@@ -231,37 +297,34 @@ function SetWateringConditions(props) {
     return (
       <b>
         Water after 
-        <input 
+        <input
           type="number"
-          placeholder="14"
+          placeholder="14 days"
           min="1"
           max="365"
           onChange={event => props.setWateringConditionValue(event.target.value)}
         />
-        days.
       </b>
     )
   }
   else {
     return (
       <b>
-        Water at 
-        <input 
+        Water at
+        <br/>
+        <input
+          id="moistureValue"
           type="number"
-          placeholder="0"
+          placeholder="0 % moisture"
           min="0"
           max="99"
           onChange={event => props.setWateringConditionValue(event.target.value)}
         />
-        % moisture.
       </b>
     )
   }
 
 }
 
-function addPlantIcon() {
-  alert("Add plant icon");
-}
 
 export default AddPlant;

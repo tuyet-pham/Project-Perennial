@@ -26,7 +26,10 @@ import sys
 from time import time
 sys.path.append('..')
 
-from dbmanager import addPlant, updateoptions, findPlantByUser, findReadings, changepassword
+from dbmanager import addPlant, updateoptions, findPlantByUser, findReadings, changepassword, findPlantByType
+
+
+
 
 @csrf_exempt
 @api_view(['POST'])
@@ -56,6 +59,7 @@ def addplants(request):
         return JsonResponse(data, status=HTTP_202_ACCEPTED)
     else:
         return JsonResponse(data, status=HTTP_200_OK)
+
 
 
 
@@ -232,3 +236,26 @@ def monitorplants(request):
 
     return JsonResponse(response)
 
+
+
+
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def getsuggested(request):
+
+    planttype = ''
+    response = {}
+    try:
+        planttype = request.POST.get('planttype')
+    except Exception as e:
+        print("Error: Failed Request on %s", e)
+    
+    level = findPlantByType(planttype)
+    response = {'suggestedmoisture': level}
+    if level is False:
+        return JsonResponse(response, status=HTTP_404_NOT_FOUND)
+    else:
+        return JsonResponse(response, status=HTTP_200_OK)

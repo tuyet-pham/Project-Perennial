@@ -23,5 +23,5 @@ urlpatterns = [
     url(r'^addplants', views.addplants, name='addplants'),
     url(r'^options', views.options, name='options'),
     url(r'^updatepassword', views.updatepassword, name='updatepassword'),
-
+    url(r'^getsuggested', views.getsuggested, name='getsuggested'),
 ]
