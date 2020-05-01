@@ -26,11 +26,21 @@ import sys
 from time import time
 sys.path.append('..')
 
-from dbmanager import addPlant, updateoptions, findPlantByUser, findReadings, changepassword, findPlantByType
+from dbmanager import addPlant, updateoptions, findPlantByUser, findReadings, changepassword, findPlantByType, deletePlantByUser
 
 
 
-
+"""
+@addplants()
+Param   : request
+Purpose : Used to receive plant_device data from front-end
+          (1). Does a request.POST.get to get data from front-end
+          (2). Calls addPlant() with param data that contains plant device info
+          (3). If addPlant() returns false, plant was updated
+          (4). If addPlant() returns true, plant was newly added
+Returns : (1). If false returns JsonResponse that contains data and 202 response
+          (2). If true returns JsonResponse that contains data and 200 response
+"""
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -64,7 +74,17 @@ def addplants(request):
 
 
 
-
+"""
+@options()
+Param   : request
+Purpose : Used to receive options data from front-end
+          (1). Does a request.POST.get to get data from front-end
+          (2). Calls updateoptions() with param data that contains options info
+          (3). If updateoptions() returns false, options was not updated
+          (4). If updateoptions() returns true, options was updated
+Returns : (1). If false returns HttpResponse that contains data and 400 response
+          (2). If true returns JsonResponse that contains data and 200 response
+"""
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -92,7 +112,17 @@ def options(request):
 
 
 
-
+"""
+@updatepassword()
+Param   : request
+Purpose : Used to receive updated password data from front-end
+          (1). Does a request.POST.get to get data from front-end
+          (2). Calls changepassword() with param data that contains updated password info
+          (3). If changepassword() returns false, password was not updated
+          (4). If changepassword() returns true, password was updated and message is sent to front end
+Returns : (1). If false returns JsonResponse that contains data and 400 response
+          (2). If true returns JsonResponse that contains data and 200 response and message to user
+"""
 @csrf_exempt
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -259,3 +289,35 @@ def getsuggested(request):
         return JsonResponse(response, status=HTTP_404_NOT_FOUND)
     else:
         return JsonResponse(response, status=HTTP_200_OK)
+
+
+
+"""
+@deleteplant()
+Param   : request
+Purpose : Used to receive plant name that will get deleted from front-end
+          (1). Does a request.POST.get to get data from front-end
+          (2). Calls deletePlantByUser() with param data that contains plant name and username info
+          (3). If deletePlantByUser() returns false, plantname was not deleted
+          (4). If deletePlantByUser() returns true, plantname was deleted
+Returns : (1). If false returns JsonResponse that contains data and 404 response
+          (2). If true returns JsonResponse that contains data and 200 response
+"""
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def deleteplant(request):
+    plant={}
+    try:
+        plant = {
+            'username': request.POST.get('username'),
+            'name': request.POST.get('name')
+        }
+    except Exception as e:
+        print("Error: Failed Request on %s", e)
+    
+    status = deletePlantByUser(plant)
+    if status is False:
+            return JsonResponse(plant, status=HTTP_404_NOT_FOUND)
+    else:
+        return JsonResponse(plant, status=HTTP_200_OK)
