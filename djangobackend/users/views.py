@@ -48,9 +48,9 @@ def registerUser(request):
 
     # if both true
     if status == '3':
-        return JsonResponse({"type": status}, status=HTTP_400_NOT_FOUND)
+        return JsonResponse({"type": status}, status=HTTP_400_BAD_REQUEST)
     elif status == '2':
-        return JsonResponse({"type": status}, status=HTTP_400_NOT_FOUND)
+        return JsonResponse({"type": status}, status=HTTP_400_BAD_REQUEST)
     else:
         user = authenticate(request, username=username, password=password)
         if user is None:
