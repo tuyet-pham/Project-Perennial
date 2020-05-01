@@ -53,7 +53,7 @@ function AddPlant() {
         history.push("/login");
         localStorage.clear();
       }
-
+      setSpecies(event)
       console.log({species})
       
       const params = { 
@@ -94,7 +94,7 @@ function AddPlant() {
               </h2>
               <div id="species-info" className="row" >
                 <div className="col">
-                  <select name="species" defaultValue="" onChange={event => {setSpecies(event.target.value); handleSuggestion()}}>
+                  <select name="species" defaultValue="" onChange={event => {handleSuggestion(event.target.value)}}>
                     <option value="" disabled>Select species...</option>
                     <option value="African violet">African violet</option>
                     <option value="Baby’s tears">Baby’s tears</option>
@@ -173,7 +173,7 @@ function AddPlant() {
                 </div>
 
                 <div className="col">
-                  <select name="state" defaultValue="" onChange={event => setGeolocationState(event.target.value)}>
+                  <select name="state" onChange={event => setGeolocationState(event.target.value)}>
                     <option value="" disabled>State</option>
                     <option value="AL">AL</option>
                     <option value="AK">AK</option>
@@ -309,7 +309,8 @@ function SetWateringConditions(props) {
   else {
     return (
       <b>
-        Water at 
+        Water at
+        <br/>
         <input
           id="moistureValue"
           type="number"
