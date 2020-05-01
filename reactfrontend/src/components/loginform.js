@@ -10,7 +10,7 @@ function LoginForm(props) {
   const [challenge, setChallenge] = useState(false)
   const history = useHistory();
 
-  const handleSubmit = (evt) => {
+  async function handleSubmit(evt) {
     evt.preventDefault();
 
     if(challenge === true){
@@ -22,13 +22,13 @@ function LoginForm(props) {
         password : `${password}`,
       }
 
-      userLogin(params);
+      await userLogin(params);
 
-      setTimeout(() => {
-        if (localStorage.getItem('token') !== null){
-          history.push("/home");
-        }
-      }, 1000);
+      // setTimeout(() => {
+      //   if (localStorage.getItem('token') !== null){
+      //     history.push("/home");
+      //   }
+      // }, 1000);
     }
     else{
       alert("You forgot about the Recaptcha!");

@@ -1,36 +1,40 @@
 import React from 'react';
 import './App.css';
-import {Route} from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import { FaLeaf } from 'react-icons/fa';
 
-const LoginTemplate = ({component: Component, ...rest}) => {
+const LoginTemplate = ({component: Component, isLoggedIn, ...rest}) => {
   return (
-    <Route {...rest} component={matchProps => (
-      <div className="LoginTemplate">
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="login-circle">
-            <FaLeaf size={108} className="login-icon" aria-label="Project Perennial Icon"/>
+    <Route {...rest} component={matchProps => 
+      isLoggedIn ? (
+        <Redirect to={{ pathname:'/home', state: {from: matchProps.location}}} />
+      ) : (
+        <div className="LoginTemplate">
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="login-circle">
+              <FaLeaf size={108} className="login-icon" aria-label="Project Perennial Icon"/>
+              </div>
             </div>
-          </div>
-          <div className="row justify-content-center login-spacer-bot">
-            <div className="col-12">
-            <h1><b>Project Perennial</b></h1>
+            <div className="row justify-content-center login-spacer-bot">
+              <div className="col-12">
+              <h1><b>Project Perennial</b></h1>
+              </div>
             </div>
-          </div>
-          <div className="row justify-content-center">
-            <div className="col-12">
-              <h4>{ rest.pageName }</h4>
+            <div className="row justify-content-center">
+              <div className="col-12">
+                <h4>{ rest.pageName }</h4>
+              </div>
             </div>
-          </div>
-          <div className="row justify-content-center">
-            <div className="col-12">
-              <Component {...matchProps} />
+            <div className="row justify-content-center">
+              <div className="col-12">
+                <Component {...matchProps} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    )} />
+      )
+    } />
   );
 };
 

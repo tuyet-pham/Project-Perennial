@@ -20,8 +20,8 @@ import qs from "qs";
 
 function App() {
 
-  const [isLoggedIn, setisLoggedIn] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState("");
+  const [isUserChecked, setIsUserChecked] = useState(false);
 
   async function userAuthenticate(){
     await axios.post('users/authenticate/', qs.stringify(localStorage.getItem('username')), { 
@@ -29,19 +29,21 @@ function App() {
     })
     .then(function(response) {
         console.log(response)
-        setisLoggedIn(true)
-        setIsAuthenticated(true)
+        setIsLoggedIn(true)
+        setIsUserChecked(true)
       })
     .catch(function(response) {
         console.log(response)
-        setisLoggedIn(false)
-        setIsAuthenticated(true)
+        setIsLoggedIn(false)
+        setIsUserChecked(true)
     })
   }
 
-  userAuthenticate()
+  useEffect(() => {
+    userAuthenticate()
+  }, [])
 
-  if(isAuthenticated) {
+  if(isUserChecked) {
     return (
       <div className="App">
         <Router>
@@ -50,9 +52,9 @@ function App() {
           <PageTemplate path="/(home|)/" component={Home} pageName="Project Perennial" isLoggedIn={isLoggedIn}/>
           <PageTemplate path="/monitor" component={Monitor} pageName="Monitor" isLoggedIn={isLoggedIn}/>
           <PageTemplate path="/add-plant" component={AddPlant} pageName="Add A Plant" isLoggedIn={isLoggedIn}/>
-          <PageTemplate path="/options" component={Options} pageName="Options" isLoggedIn={isLoggedIn}/>
-          <LoginTemplate path="/login" component={Login} pageName="Login"/>
-          <LoginTemplate path="/sign-up" component={Register} pageName="Sign Up" />
+          <PageTemplate path="/options" component={Options} pageName="Options" isLoggedIn={isLoggedIn} />
+          <LoginTemplate path="/login" component={Login} pageName="Login" isLoggedIn={isLoggedIn}/>
+          <LoginTemplate path="/sign-up" component={Register} pageName="Sign Up" isLoggedIn={isLoggedIn} />
         </Router>
       </div>
     );
