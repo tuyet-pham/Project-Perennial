@@ -406,3 +406,33 @@ def addPlant(data):
         print("Plant updated successfully")
         return False
 
+
+
+
+'''
+@findtype()
+Param   : planttype
+Purpose : Finding the plant's moisture level
+Returns : (1).moisture level
+'''
+def findPlantByType(planttype):
+    for plant in plant_types.view('_all_docs'):
+        doc = plant_types[plant.id]
+        if 'min_moisture' in doc:
+            if doc['plant'] == planttype:
+                value = doc['min_moisture']
+                print(value)
+                return value
+    
+    return False
+
+def deletePlantByUser(plant):
+    print("Plant Name:",plant['name'])
+    for plants in plant_device.view('_all_docs'):
+        doc = plant_device[plants.id]
+        if 'username' in doc:
+            if(doc['username'].lower() == plant['username'].lower()):
+                if(doc['name'].lower() == plant['name'].lower()):
+                    plant_device.delete(doc)
+                    return True
+    return False

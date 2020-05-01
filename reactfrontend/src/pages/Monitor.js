@@ -5,6 +5,7 @@ import { FaSeedling } from 'react-icons/fa';
 import PageTemplate from '../PageTemplate';
 import { useHistory } from "react-router-dom";
 import { useAlert } from 'react-alert'
+import { deletePlant } from '../api/AccountAPI'
 
 function Monitor() {
   // Dummy data - remove when API is integrated.
@@ -132,54 +133,80 @@ function ReservoirStatus({ reservoirEmpty }) {
 /* Props: individual plant object */
 function PlantCard({ plant }) {
   const [expandStatus, setExpandStatus] = useState(0);
+  const history = useHistory();
+  const handleDelete = (event) => {
+    event.preventDefault()
+
+    const params = {
+      name: `${plant.name}`,
+      username: `${localStorage.getItem('username')}`,
+    }
+
+    if (localStorage.getItem('token') === null) {
+      alert("Your session has timed out");
+      history.push("/login");
+      localStorage.clear();
+    }
+    else{
+      deletePlant(params);
+      window.location.reload();
+    }
+  }
 
   if(expandStatus === 1) {
     return (
-      <div className={"container " + ( expandStatus === 1 ? "monitor-plant-card-expanded" : "monitor-plant-card" )} onClick={() => expandStatus === 1 ? setExpandStatus(0) : setExpandStatus(1)}>
-        <div className="row">
-          <div className="col-3">
-            <div className="empty-picture-icon" style={{color:"#72bb53"}}>
-              <FaSeedling />
+      <div>
+        <div className={"container " + ( expandStatus === 1 ? "monitor-plant-card-expanded" : "monitor-plant-card" )} onClick={() => expandStatus === 1 ? setExpandStatus(0) : setExpandStatus(1)}>
+          <div className="row">
+            <div className="col-3">
+              <div className="empty-picture-icon" style={{color:"#72bb53"}}>
+                <FaSeedling />
+              </div>
+            </div>
+            <div className="col-9">
+              <h3 style={{bottom:"0", position:"absolute"}}>
+                {plant.name}
+              </h3>
             </div>
           </div>
-          <div className="col-9">
-            <h3 style={{bottom:"0", position:"absolute"}}>
-              {plant.name}
-            </h3>
+          <div className="col">
+            <div className="row">
+              <b>Moisture: &nbsp;</b>
+              {plant.moisture}%
+            </div>
+            <div className="row">
+              <b>Temperature: &nbsp;</b>
+              {plant.temperature}
+            </div>
+            <div className="row">
+              <b>Humidity: &nbsp;</b>
+              {plant.humidity}
+            </div>
+            <div className="row">
+              <b>Last Watered: &nbsp;</b>
+              {plant.last_watered}
+            </div>
+            <div className="row">
+              <b>Status: &nbsp;</b>
+              {plant.online}
+            </div>
+            <div className="row">
+              <i>
+                Last updated {plant.updated}
+              </i>
+            </div>
           </div>
-        </div>
-        <div className="col">
-          <div className="row">
-            <b>Moisture: &nbsp;</b>
-            {plant.moisture}%
-          </div>
-          <div className="row">
-            <b>Temperature: &nbsp;</b>
-            {plant.temperature}
-          </div>
-          <div className="row">
-            <b>Humidity: &nbsp;</b>
-            {plant.humidity}
-          </div>
-          <div className="row">
-            <b>Last Watered: &nbsp;</b>
-            {plant.last_watered}
-          </div>
-          <div className="row">
-            <b>Status: &nbsp;</b>
-            {plant.online}
-          </div>
-          <div className="row">
-            <i>
-              Last updated {plant.updated}
-            </i>
-          </div>
-        </div>
 
-        <ReservoirStatus reservoirEmpty={plant.reservoirEmpty}/>
+          <ReservoirStatus reservoirEmpty={plant.reservoirEmpty}/>
 
-        <ExpandCollapseText expanded={expandStatus}/>
+          <ExpandCollapseText expanded={expandStatus}/>
+        </div>
+        <div className="button-container">
+          <div className="delete-buttons" onClick={handleDelete}>
+          Delete
+        </div>
       </div>
+  </div>
     );
   }
   else {

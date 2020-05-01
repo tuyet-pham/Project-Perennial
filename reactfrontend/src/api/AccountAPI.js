@@ -19,6 +19,7 @@ export async function addPlant(params, alert){
         {
             alert.success("Plant Updated")
         }
+        window.location.reload();
         return true;
     })
     .catch(function(error) {
@@ -57,4 +58,21 @@ export async function changepassword(params){
     .catch(function(error){
         console.log(error);
     })
+}
+
+/** 
+ * Deletes plants from database
+ * **/
+export async function deletePlant(params){
+    await axios.post('account/deleteplant/', qs.stringify(params), { 
+        headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
+    })
+    .then(function(response) {
+        console.log(response);
+        return true;
+    })
+    .catch(function(error) {
+        console.log(error);
+        return false;
+    });
 }
