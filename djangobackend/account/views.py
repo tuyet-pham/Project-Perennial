@@ -1,5 +1,6 @@
 """Account views."""
 from __future__ import unicode_literals
+import traceback
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.db import models
@@ -174,17 +175,24 @@ def monitorplants(request):
                 plant['online'] = 'Offline'
 
             # get last wattering time
-            pump = list(findReadings(plantid, "pump"))
+            pump = list(findReadings(plantid, "pumpstatus"))
             if pump:
                 time_reading = pump[0]['time_reading']
-                time_diff = int(time()) - last_update
+                time_diff = int(time()) - time_reading
                 if time_diff < 60:
+                    # Past minute
                     plant['last_watered'] = 'A few seconds ago.'
                 elif time_diff < 3600:
+                    # Past hour
                     plant['last_watered'] = str(int(time_diff / 60)) + ' minutes ago.'
                 elif time_diff < 3600 * 48:
+                    # Past 48 hours
                     plant['last_watered'] = str(int(time_diff / 60 / 60)) + ' hours ago.'
+                elif time_diff < 86400 * 7:
+                    # Past 7 days
+                    plant['last_watered'] = str(int(time_diff / 60 / 60 / 24)) + ' days ago.'
                 else:
+                    # Longer than 7 days
                     plant['last_watered'] = 'A long time ago.'
 
                 if time_reading > last_update:
@@ -195,8 +203,8 @@ def monitorplants(request):
             # Get reservoir status
             reservoir = list(findReadings(plantid, "reservoir"))
             if reservoir:
-                time_reading = pump[0]['time_reading']
-                if reservoir[0]['values']['empty']:
+                time_reading = reservoir[0]['time_reading']
+                if reservoir[0]['values']['reservoir_empty'] == 1:
                     plant['reservoirEmpty'] = 1
                 else:
                     plant['reservoirEmpty'] = 0
@@ -223,6 +231,7 @@ def monitorplants(request):
 
     except Exception as e:
         print("Error: Failed Request on", e)
+        traceback.print_exc()
 
     return JsonResponse(response)
 
