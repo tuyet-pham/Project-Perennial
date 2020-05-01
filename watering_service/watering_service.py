@@ -90,7 +90,7 @@ def check_reservoir(deviceid, username, device_name):
             if username in usersdb:
                 user_doc = usersdb[username]
 
-                if "notificationMethod" in user_doc and 'wateredPlant' in user_doc['notificationTriggers']:
+                if "notificationMethod" in user_doc and 'emptyreservoir' in user_doc['notificationTriggers']:
                     # Notify user
                     notification_method = user_doc['notificationMethod']
                     if notification_method == "email":
