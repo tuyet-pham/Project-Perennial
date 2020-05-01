@@ -3,6 +3,7 @@ import PageTemplate from '../PageTemplate';
 import { FaCamera} from 'react-icons/fa';
 import { addPlant } from '../api/AccountAPI'
 import { useHistory } from "react-router-dom";
+import { useAlert } from 'react-alert'
 
 
 function AddPlant() {
@@ -17,11 +18,13 @@ function AddPlant() {
     const [additionalNotes, setAdditionalNotes] = useState("");
     const history = useHistory();
 
-    // Handle submission 
+    const alert = useAlert()
+
+    // Handle submission
     const handleSubmit = (event) => {
       event.preventDefault()
-      
-      const params = { 
+
+      const params = {
         name : `${name}`,
         username: `${localStorage.getItem('username')}`,
         species : `${species}`,
@@ -32,14 +35,14 @@ function AddPlant() {
         wateringConditionValue :`${wateringConditionValue}`,
         additionalNotes :`${additionalNotes}`
       }
-      
+
       if (localStorage.getItem('token') === null) {
-        alert("Your session has timed out");
+        alert.error("Your session has timed out");
         history.push("/login");
         localStorage.clear();
       }
       else{
-        addPlant(params);
+        addPlant(params, alert);
       }
     }
 
@@ -56,7 +59,7 @@ function AddPlant() {
                   </div>
                 </div>
                 <div className="col-9">
-                  <input 
+                  <input
                     type="text"
                     placeholder="Name..."
                     onChange={event => setName(event.target.value)}
@@ -95,7 +98,7 @@ function AddPlant() {
               </h2>
               <div id="geographic-data" className="row">
                 <div className="col">
-                  <input 
+                  <input
                     type="text"
                     placeholder="City name..."
                     onChange={event => setGeolocationCity(event.target.value)}
@@ -230,8 +233,8 @@ function SetWateringConditions(props) {
   if(props.wateringConditionTrigger === "time") {
     return (
       <b>
-        Water after 
-        <input 
+        Water after
+        <input
           type="number"
           placeholder="14"
           min="1"
@@ -245,8 +248,8 @@ function SetWateringConditions(props) {
   else {
     return (
       <b>
-        Water at 
-        <input 
+        Water at
+        <input
           type="number"
           placeholder="0"
           min="0"
@@ -261,7 +264,7 @@ function SetWateringConditions(props) {
 }
 
 function addPlantIcon() {
-  alert("Add plant icon");
+  console.log("Add plant icon");
 }
 
 export default AddPlant;

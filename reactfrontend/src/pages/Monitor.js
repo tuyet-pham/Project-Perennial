@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FaSeedling } from 'react-icons/fa';
 import PageTemplate from '../PageTemplate';
 import { useHistory } from "react-router-dom";
+import { useAlert } from 'react-alert'
 
 function Monitor() {
   // Dummy data - remove when API is integrated.
@@ -11,10 +12,11 @@ function Monitor() {
 
   const [plantList, setPlantList] = useState(null);
   const history = useHistory();
+  const alert = useAlert()
 
   useEffect(() => {
     if (localStorage.getItem('token') === null) {
-      alert("Your session has timed out");
+      alert.error("Your session has timed out");
       history.push("/login");
       localStorage.clear();
     }
