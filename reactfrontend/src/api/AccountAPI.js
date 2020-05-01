@@ -19,6 +19,7 @@ export async function addPlant(params){
         {
             alert("Plant Updated Successfully!");
         }
+        window.location.reload();
         return true;
     })
     .catch(function(error) {
