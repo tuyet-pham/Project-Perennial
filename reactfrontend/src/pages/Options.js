@@ -64,7 +64,7 @@ function Options() {
     var emailRegex = new RegExp("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[\\.][a-zA-Z]{2,}");
 
     let inputValid = ''
-    
+
     // Check for valid input.
     if (notificationMethod === '') {
       inputValid = "Please select a notification method."
@@ -94,5 +94,5 @@ function Options() {
     </PageTemplate>
   );
 }
-  
+
 export default Options;
