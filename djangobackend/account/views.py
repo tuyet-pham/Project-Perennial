@@ -231,3 +231,21 @@ def monitorplants(request):
 
     return JsonResponse(response)
 
+
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def manualwater(request):
+    response = {}
+    try:
+        # planttype = {
+        #     "plant": request.POST.get('plantname'),
+        #     "username": request.POST.get('username')
+        # }
+        plantid = request.POST.get('plantid')
+    except Exception as e:
+        print("Error: Failed Request on %s", e)
+
+    return JsonResponse(plant, status=HTTP_200_OK)
+
