@@ -19,7 +19,7 @@ function Home() {
           <div>
             <br />
             <Greeting />
-            <Notifications />
+            {/* <Notifications /> */}
           </div>
           <br />
           <br />

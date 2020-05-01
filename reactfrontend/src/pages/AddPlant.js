@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PageTemplate from '../PageTemplate';
 import { addPlant } from '../api/AccountAPI'
 import { useHistory } from "react-router-dom";
+import { useAlert } from 'react-alert'
 import './addplant.css';
 import qs from "qs";
 import axios from 'axios';
@@ -19,11 +20,13 @@ function AddPlant() {
     const [additionalNotes, setAdditionalNotes] = useState("");
     const history = useHistory();
 
-    // Handle submission 
+    const alert = useAlert()
+
+    // Handle submission
     const handleSubmit = (event) => {
       event.preventDefault()
-      
-      const params = { 
+
+      const params = {
         name : `${name}`,
         username: `${localStorage.getItem('username')}`,
         species : `${species}`,
@@ -34,14 +37,14 @@ function AddPlant() {
         wateringConditionValue :`${wateringConditionValue}`,
         additionalNotes :`${additionalNotes}`
       }
-      
+
       if (localStorage.getItem('token') === null) {
-        alert("Your session has timed out");
+        alert.error("Your session has timed out");
         history.push("/login");
         localStorage.clear();
       }
       else{
-        addPlant(params);
+        addPlant(params, alert);
       }
 
     }
@@ -56,10 +59,10 @@ function AddPlant() {
 
       setSpecies(value)
 
-      const params = { 
+      const params = {
         planttype : `${value}`,
       }
-  
+
         // Get plants using post to django
       axios.post('account/getsuggested/', qs.stringify(params), {
         headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
@@ -166,7 +169,7 @@ function AddPlant() {
               </h2>
               <div id="geographic-data" className="row">
                 <div className="col">
-                  <input 
+                  <input
                     type="text"
                     placeholder="City name..."
                     onChange={event => setGeolocationCity(event.target.value)}
@@ -296,7 +299,7 @@ function SetWateringConditions(props) {
   if(props.wateringConditionTrigger === "time") {
     return (
       <b>
-        Water after 
+        Water after
         <input
           type="number"
           placeholder="14 days"

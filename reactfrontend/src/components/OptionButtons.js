@@ -4,7 +4,7 @@ import NotificationData from './NotificationData';
 import { userLogout } from '../api/UserAPI';
 import { useHistory } from "react-router-dom";
 import { changepassword } from '../api/AccountAPI';
-
+import { useAlert } from 'react-alert'
 
 
 function OptionButtons(props) {
@@ -12,6 +12,7 @@ function OptionButtons(props) {
     const [menuString, setMenuString] = useState('toplayer');
     const [newPassword, setNewPassword] = useState('')
     const [validated, setValidated] = useState(false)
+    const alert = useAlert()
 
     const username = localStorage.getItem('username')
     const params = {
@@ -21,13 +22,13 @@ function OptionButtons(props) {
 
     const handlePasswordChange = () => {
         if (validated === false) {
-            alert("Invalid input. Make sure your passwords match and are at least 8 characters long.")
+            alert.error("Invalid input. Make sure your passwords match and are at least 8 characters long.")
         }
         else {
             changepassword(params)
-            alert("Password updated.")
+            alert.success("Password updated.")
         }
-        
+
     }
 
     if (menuString === 'toplayer') {
@@ -51,7 +52,7 @@ function OptionButtons(props) {
         );
     }
 }
-  
+
 function TopLayerOptions(props) {
 // Account options or notification options
     return (
@@ -69,7 +70,7 @@ function TopLayerOptions(props) {
         </div>
     );
 }
-  
+
 function AccountOptions(props) {
     const history = useHistory();
     const handleLogout = (evt) => {
@@ -101,7 +102,7 @@ function AccountOptions(props) {
         </div>
     );
 }
-  
+
 function NotificationOptions(props) {
 // What to notify (checklist) and email/SMS settings
 
@@ -177,9 +178,9 @@ function ChangePassword(props) {
         <div>
             <div className="options-container">
                 <div>
-                    <input 
+                    <input
                         className="login-input"
-                        type="password" 
+                        type="password"
                         name="newPassword"
                         placeholder="New password"
                         value={props.newPassword}
@@ -187,9 +188,9 @@ function ChangePassword(props) {
                         required
                     />
                     <br />
-                    <input 
+                    <input
                         className="login-input"
-                        type="password" 
+                        type="password"
                         name="confirmPassword"
                         placeholder="Confirm password"
                         value={confirmPassword}

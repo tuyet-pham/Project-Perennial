@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FaSeedling } from 'react-icons/fa';
 import PageTemplate from '../PageTemplate';
 import { useHistory } from "react-router-dom";
+import { useAlert } from 'react-alert'
 import { deletePlant } from '../api/AccountAPI'
 
 function Monitor() {
@@ -12,10 +13,11 @@ function Monitor() {
 
   const [plantList, setPlantList] = useState(null);
   const history = useHistory();
+  const alert = useAlert()
 
   useEffect(() => {
     if (localStorage.getItem('token') === null) {
-      alert("Your session has timed out");
+      alert.error("Your session has timed out");
       history.push("/login");
       localStorage.clear();
     }
@@ -134,12 +136,12 @@ function PlantCard({ plant }) {
   const history = useHistory();
   const handleDelete = (event) => {
     event.preventDefault()
-    
-    const params = { 
+
+    const params = {
       name: `${plant.name}`,
       username: `${localStorage.getItem('username')}`,
     }
-    
+
     if (localStorage.getItem('token') === null) {
       alert("Your session has timed out");
       history.push("/login");
