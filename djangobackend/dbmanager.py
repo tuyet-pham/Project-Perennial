@@ -425,3 +425,14 @@ def findPlantByType(planttype):
                 return value
     
     return False
+
+def deletePlantByUser(plant):
+    print("Plant Name:",plant['name'])
+    for plants in plant_device.view('_all_docs'):
+        doc = plant_device[plants.id]
+        if 'username' in doc:
+            if(doc['username'].lower() == plant['username'].lower()):
+                if(doc['name'].lower() == plant['name'].lower()):
+                    plant_device.delete(doc)
+                    return True
+    return False
