@@ -47,17 +47,17 @@ function AddPlant() {
     }
 
     const handleSuggestion = (event) => {
-      
       if (localStorage.getItem('token') === null) {
         alert("Your session has timed out");
         history.push("/login");
         localStorage.clear();
       }
-      setSpecies(event)
-      console.log({species})
-      
+      const { name, value } = event.target;
+
+      setSpecies(value)
+
       const params = { 
-        planttype : `${species}`,
+        planttype : `${value}`,
       }
   
         // Get plants using post to django
@@ -70,8 +70,9 @@ function AddPlant() {
       .catch(function(error) {
           console.log(error);
       });
-    
     };
+
+
 
     // Forms with hooks reference: https://rangle.io/blog/simplifying-controlled-inputs-with-hooks/
     return (
@@ -94,7 +95,7 @@ function AddPlant() {
               </h2>
               <div id="species-info" className="row" >
                 <div className="col">
-                  <select name="species" defaultValue="" onChange={event => {handleSuggestion(event.target.value)}}>
+                  <select name="species" defaultValue="" onChange={handleSuggestion}>
                     <option value="" disabled>Select species...</option>
                     <option value="African violet">African violet</option>
                     <option value="Baby’s tears">Baby’s tears</option>
