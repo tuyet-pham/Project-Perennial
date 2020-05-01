@@ -33,6 +33,7 @@ def main():
         device_id = doc['_id']
         print(device_id)
         if 'wateringConditionTrigger' in doc:
+            # Check to water
             username = doc['username']
             trigger = doc['wateringConditionTrigger']
             check_value = doc['wateringConditionValue']
@@ -43,6 +44,9 @@ def main():
                 check_moisture(device_id, check_value, username, device_name)
             elif trigger == 'time':
                 check_time(device_id, check_value, username, device_name)
+
+            # Check reservoir
+            check_reservoir(device_id, username, device_name)
 
 
 def check_moisture(deviceid, check_value, username, device_name):
@@ -64,6 +68,57 @@ def check_moisture(deviceid, check_value, username, device_name):
         print("Readging:", result)
         if float(result['values']['moisture_level']) <= float(check_value):
             water_plant(deviceid, username, device_name)
+
+
+def check_reservoir(deviceid, username, device_name):
+    """Check if the reservoir is empty. If empty check if user wants to be alerted. If so alert user.
+
+    Args:
+        deviceid (str): Device ID
+        username (str): Username of user the device belongs to
+        device_name (str): Name of the device
+    """
+    # Query DB for reservoir value
+    query = Query(readingdb, selector={'device_id': {'$eq': deviceid}, 'type': {'$eq': 'reservoir'}})
+    result = query(sort=[{'time_reading': 'desc'}], limit=1)['docs']
+
+    if len(result) > 0:
+        result = result[0]
+        print("Reservoir Reading:", result)
+        if result['values']['reservoir_empty'] == 1:
+            # Check if user wants to be alerted
+            if username in usersdb:
+                user_doc = usersdb[username]
+
+                if "notificationMethod" in user_doc and 'emptyreservoir' in user_doc['notificationTriggers']:
+                    # Notify user
+                    notification_method = user_doc['notificationMethod']
+                    if notification_method == "email":
+                        print("Sending notification by email.")
+                        payload = {
+                            'subject': device_name + ' is out of water!',
+                            'receiver': user_doc['email'],
+                            'message': 'Hello ' + username + '! \n\nYour device, ' + device_name + ', has an empty reservoir!\n\nThank you for using Project Perennial.\n\n'
+                        }
+                        print("Payload:", payload)
+                        r = requests.post("http://djangobackend:8000/notifications/email/", data=payload)
+                        if r.status_code == 200:
+                            print("Sent notification by email.")
+                        else:
+                            print("Email sending failed.")
+
+                    elif notification_method == "sms":
+                        print("Sending notification by sms")
+                        payload = {
+                            "phonenumber": user_doc['phoneNum'],
+                            "message": device_name + " is out of water!"
+                        }
+                        print("Payload:", payload)
+                        r = requests.post("http://djangobackend:8000/notifications/sms/", data=payload)
+                        if r.status_code == 200:
+                            print("Sent notification by sms.")
+                        else:
+                            print("SMS sending failed.")
 
 
 def check_time(deviceid, check_value, username, device_name):

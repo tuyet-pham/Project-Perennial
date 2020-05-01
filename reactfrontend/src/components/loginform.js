@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { userLogin } from '../api/UserAPI'
 import { useHistory } from "react-router-dom";
+import { useAlert } from 'react-alert'
 
 
 function LoginForm(props) {
@@ -10,7 +11,9 @@ function LoginForm(props) {
   const [challenge, setChallenge] = useState(false)
   const history = useHistory();
 
-  async function handleSubmit(evt) {
+  const alert = useAlert()
+
+  const handleSubmit = (evt) => {
     evt.preventDefault();
 
     if(challenge === true){
@@ -22,7 +25,7 @@ function LoginForm(props) {
         password : `${password}`,
       }
 
-      await userLogin(params);
+      userLogin(params, alert);
 
       // setTimeout(() => {
       //   if (localStorage.getItem('token') !== null){
@@ -31,7 +34,7 @@ function LoginForm(props) {
       // }, 1000);
     }
     else{
-      alert("You forgot about the Recaptcha!");
+      alert.error("You forgot about the Recaptcha!");
     }
   }
 
