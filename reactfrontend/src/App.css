@@ -15,7 +15,32 @@
 /* Buttons on home page */
 
 .button-container {
-  display: flex; /* This lets buttons scale to screen */
+  display: flex;  /*This lets buttons scale to screen */
+}
+
+.delete-buttons{
+  color: white;
+  font-size: x-large;
+  min-height: 45px;
+  margin: auto;
+  padding: 5px;
+  background-color: #c74c3b;
+  box-shadow: 0 0 0pt 1pt #b1d898; /* rounded corners on outline */
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.water-buttons{
+  color: white;
+  font-size: x-large;
+  min-height: 45px;
+  max-height: 45px;
+  margin: auto;
+  padding: 5px;
+  background-color: #4CAF50;
+  box-shadow: 0 0 0pt 1pt #b1d898; /* rounded corners on outline */
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .home-buttons {

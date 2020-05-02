@@ -1,4 +1,7 @@
 django
-djangorestframework 
+djangorestframework
 django-cors-headers
 couchdb
+requests
+twilio
+paho-mqtt

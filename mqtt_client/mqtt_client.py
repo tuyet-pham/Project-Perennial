@@ -42,6 +42,15 @@ def on_message(client, userdata, msg):
             values["moisture_level"] = payload
         elif topic == "availability":
             values["device_availability"] = payload
+        elif topic == "reservoir":
+            # If high moisture there is water. If low moisture there is not.
+            if float(payload) >= 50.0:
+                values["reservoir_empty"] = 0
+            else:
+                # empty
+                values["reservoir_empty"] = 1
+        elif topic == "pumpstatus":
+            values["pump_status"] = payload
         else:
             return
 
@@ -57,7 +66,7 @@ def on_message(client, userdata, msg):
 
     # Connect to DB
     try:
-        dbclient = CouchDB("admin", "1Tiqsc$pk", url='http://db:5984', connect=True)
+        dbclient = CouchDB(environ.get("COUCHDB_USER"), environ.get("COUCHDB_PASSWORD"), url='http://db:5984', connect=True)
         db = dbclient['plant_device_reading']
         document = db.create_document(reading)
         if document.exists():
