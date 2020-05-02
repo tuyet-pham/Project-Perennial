@@ -22,7 +22,10 @@ from rest_framework.status import (
     HTTP_202_ACCEPTED
 )
 
+import paho.mqtt.publish as mqtt
+
 import sys
+from os import environ
 from time import time
 sys.path.append('..')
 
@@ -268,7 +271,40 @@ def monitorplants(request):
 
 
 
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def manualwater(request):
+    """Manually water plant.
 
+    Args:
+        request (obj): Request object
+
+    Returns:
+        json: Json response
+    """
+    print("Watering Manually")
+    try:
+        # planttype = {
+        #     "plant": request.POST.get('plantname'),
+        #     "username": request.POST.get('username')
+        # }
+        deviceid = request.POST.get('plantid')
+        username = request.POST.get('username')
+        print("Plantid:", deviceid)
+
+        devices = findPlantByUser(username)
+
+        for device in devices:
+            if device.id == deviceid:
+                topic = "perennial/" + deviceid + "/pump"
+                mqtt.single(topic, payload="manualpump", hostname=environ.get("MQTT_BROKER"))
+
+    except Exception as e:
+        print("Error: Failed Request on %s", e)
+        return JsonResponse({"error": str(e)}, status=HTTP_400_BAD_REQUEST)
+
+    return JsonResponse({"plantid": deviceid}, status=HTTP_200_OK)
 
 
 @csrf_exempt
@@ -282,7 +318,7 @@ def getsuggested(request):
         planttype = request.POST.get('planttype')
     except Exception as e:
         print("Error: Failed Request on %s", e)
-    
+
     level = findPlantByType(planttype)
     response = {'suggestedmoisture': level}
     if level is False:
@@ -315,7 +351,7 @@ def deleteplant(request):
         }
     except Exception as e:
         print("Error: Failed Request on %s", e)
-    
+
     status = deletePlantByUser(plant)
     if status is False:
             return JsonResponse(plant, status=HTTP_404_NOT_FOUND)
