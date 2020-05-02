@@ -1,0 +1,6 @@
+projectperennial.com  {
+    proxy / reactfrontend:3000 {
+        transparent
+    }
+    log stdout
+}

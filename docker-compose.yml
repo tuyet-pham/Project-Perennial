@@ -98,6 +98,22 @@ services:
       - COUCHDB_USER=${COUCHDB_USER}
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
 
+  caddy:
+    image: abiosoft/caddy:latest
+    ports:
+      - 443:443
+      - 80:80
+    restart: always
+    volumes:
+      - ./Caddyfile:/etc/Caddyfile
+      - ./caddy:/root/.caddy
+      - ./srv:/srv
+    depends_on:
+      - reactfrontend
+    environment:
+      - ACME_AGREE=true
+      - ENABLE_TELEMETRY
+
 # ---- Our volumes
 volumes:
   db:
