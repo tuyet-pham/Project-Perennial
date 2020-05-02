@@ -77,7 +77,8 @@ function AccountOptions(props) {
         evt.preventDefault();
         //alert user first?
         userLogout();
-        history.push("/login");
+        // history.push("/login");
+        window.location.reload(true)
     }
 
 
