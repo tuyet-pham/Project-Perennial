@@ -60,19 +60,37 @@ export async function changepassword(params){
     })
 }
 
-/** 
+/**
  * Deletes plants from database
  * **/
-export async function deletePlant(params){
-    await axios.post('account/deleteplant/', qs.stringify(params), { 
+export async function deletePlant(params, alert){
+    await axios.post('account/deleteplant/', qs.stringify(params), {
         headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
     })
     .then(function(response) {
         console.log(response);
+        alert.success("Plant deleted")
         return true;
     })
     .catch(function(error) {
         console.log(error);
+        alert.error("Request failed")
         return false;
     });
+}
+
+export async function waterPlant(params, alert) {
+    await axios.post('account/manualwater/', qs.stringify(params), {
+        headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
+    })
+    .then(function(response) {
+        console.log(response);
+        alert.success("Plant watered");
+        return true;
+    })
+    .catch(function(error) {
+        alert.error("Request failed")
+        console.log(error);
+        return false;
+    })
 }
