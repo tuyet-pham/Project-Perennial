@@ -3,6 +3,7 @@ import PageTemplate from '../PageTemplate';
 import OptionButtons from '../components/OptionButtons';
 import { options } from '../api/AccountAPI';
 import { useHistory } from "react-router-dom";
+import { useAlert } from 'react-alert'
 
 
 function Options() {
@@ -11,6 +12,7 @@ function Options() {
   const [emailAddress, setEmailAddress] = useState('');
   const [notificationBoxes, setNotificationBoxes] = useState ([]);
   const history = useHistory();
+  const alert = useAlert()
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -28,17 +30,17 @@ function Options() {
       }
 
       if (localStorage.getItem('token') === null) {
-        alert("Your session has timed out");
+        alert.error("Your session has timed out");
         history.push("/login");
         localStorage.clear();
       }
       else{
         const status = options(params)
         if(status === false){
-          alert("Failed to update : Unauthorized");
+          alert.error("Failed to update : Unauthorized");
         }
         else{
-          alert('Notification preferences updated.')
+          alert.success('Notification preferences updated.')
         }
       }
     }
@@ -64,7 +66,7 @@ function Options() {
     var emailRegex = new RegExp("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[\\.][a-zA-Z]{2,}");
 
     let inputValid = ''
-    
+
     // Check for valid input.
     if (notificationMethod === '') {
       inputValid = "Please select a notification method."
@@ -79,7 +81,7 @@ function Options() {
     }
 
     if(inputValid !== '') {
-      alert(inputValid)
+      alert.error(inputValid)
       return(false)
     }
 
@@ -89,10 +91,10 @@ function Options() {
   return (
     <PageTemplate>
         <div>
-          <OptionButtons handleSubmit={handleSubmit} notificationMethod={notificationMethod} setNotificationMethod={setNotificationMethod} setEmailAddress={setEmailAddress} setPhoneNum={setPhoneNum} setNotificationBoxes={setNotificationBoxes}/> {/*I know it's ugly, please avert your eyes. */}
+          <OptionButtons handleSubmit={handleSubmit} notificationMethod={notificationMethod} setNotificationMethod={setNotificationMethod} setEmailAddress={setEmailAddress} setPhoneNum={setPhoneNum} setNotificationBoxes={setNotificationBoxes} /> {/*I know it's ugly, please avert your eyes. */}
         </div>
     </PageTemplate>
   );
 }
-  
+
 export default Options;

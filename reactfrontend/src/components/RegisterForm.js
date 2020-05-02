@@ -3,6 +3,8 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { userRegister } from '../api/UserAPI'
 import { useHistory } from "react-router-dom";
 
+import { useAlert } from 'react-alert'
+
 const validEmailRegex = RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}/g);
 
 const validateForm = (errors, challenge) => {
@@ -47,6 +49,7 @@ function RegisterForm(props) {
       password_conf: '',
   });
   const history = useHistory();
+  const alert = useAlert()
 
   const handleSubmit = (evt) => {
     // Handle form submit
@@ -63,16 +66,16 @@ function RegisterForm(props) {
           password : `${password}`,
       }
 
-      const route = userRegister(params);
+      const route = userRegister(params, alert);
       if (route !== false) {
           history.push("/login");
       }
     } else if (!challenge) {
-      alert("You forgot about the Recaptcha!");
+      alert.error("You forgot about the Recaptcha!");
     } else {
       // Non recaptcha errors
       console.log(errors)
-      alert(errors.email + '\n' + errors.username + '\n' + errors.password_len + '\n' + errors.password_conf)
+      alert.error(errors.email + '\n' + errors.username + '\n' + errors.password_len + '\n' + errors.password_conf)
     }
   };
 

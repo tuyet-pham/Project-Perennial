@@ -48,9 +48,9 @@ def registerUser(request):
 
     # if both true
     if status == '3':
-        return JsonResponse({"type": status}, status=HTTP_400_NOT_FOUND)
+        return JsonResponse({"type": status}, status=HTTP_400_BAD_REQUEST)
     elif status == '2':
-        return JsonResponse({"type": status}, status=HTTP_400_NOT_FOUND)
+        return JsonResponse({"type": status}, status=HTTP_400_BAD_REQUEST)
     else:
         user = authenticate(request, username=username, password=password)
         if user is None:
@@ -142,8 +142,12 @@ def logoutUser(request):
 
 
 @csrf_exempt
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def is_logged_in(request):
-    return HttpResponse(request.user.is_authenticated, status=HTTP_200_OK)
-    
+    isloggedIn = request.user.is_authenticated
+    if isloggedIn is False:
+        return HttpResponse(status=HTTP_404_NOT_FOUND)
+    elif isloggedIn is True:
+        return HttpResponse(status=HTTP_200_OK)
+
