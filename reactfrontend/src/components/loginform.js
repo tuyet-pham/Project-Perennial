@@ -27,11 +27,11 @@ function LoginForm(props) {
 
       userLogin(params, alert);
 
-      setTimeout(() => {
-        if (localStorage.getItem('token') !== null){
-          history.push("/home");
-        }
-      }, 1000);
+      // setTimeout(() => {
+      //   if (localStorage.getItem('token') !== null){
+      //     history.push("/home");
+      //   }
+      // }, 1000);
     }
     else{
       alert.error("You forgot about the Recaptcha!");

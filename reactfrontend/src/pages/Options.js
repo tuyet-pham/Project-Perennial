@@ -91,7 +91,7 @@ function Options() {
   return (
     <PageTemplate>
         <div>
-          <OptionButtons handleSubmit={handleSubmit} notificationMethod={notificationMethod} setNotificationMethod={setNotificationMethod} setEmailAddress={setEmailAddress} setPhoneNum={setPhoneNum} setNotificationBoxes={setNotificationBoxes}/> {/*I know it's ugly, please avert your eyes. */}
+          <OptionButtons handleSubmit={handleSubmit} notificationMethod={notificationMethod} setNotificationMethod={setNotificationMethod} setEmailAddress={setEmailAddress} setPhoneNum={setPhoneNum} setNotificationBoxes={setNotificationBoxes} /> {/*I know it's ugly, please avert your eyes. */}
         </div>
     </PageTemplate>
   );

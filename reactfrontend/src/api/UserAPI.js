@@ -64,3 +64,22 @@ export async function userRegister(params, alert){
         }
     });
 }
+
+/** 
+ * Authenticate that the user is logged in
+ * **/
+// export async function userAuthenticate(){
+//     await axios.post('users/authenticate/', qs.stringify(localStorage.getItem('username')), { 
+//         headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
+//     })
+//     .then(function(response) {
+//         console.log(response)
+//         alert("Authenticated")
+//         return true
+//     })
+//     .catch(function(response) {
+//         console.log(response)
+//         alert("Error authenticating")
+//         return false
+//     })
+// }
