@@ -22,7 +22,10 @@ from rest_framework.status import (
     HTTP_202_ACCEPTED
 )
 
+import paho.mqtt.publish as mqtt
+
 import sys
+from os import environ
 from time import time
 sys.path.append('..')
 
@@ -272,17 +275,36 @@ def monitorplants(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def manualwater(request):
-    response = {}
+    """Manually water plant.
+
+    Args:
+        request (obj): Request object
+
+    Returns:
+        json: Json response
+    """
+    print("Watering Manually")
     try:
         # planttype = {
         #     "plant": request.POST.get('plantname'),
         #     "username": request.POST.get('username')
         # }
-        plantid = request.POST.get('plantid')
+        deviceid = request.POST.get('plantid')
+        username = request.POST.get('username')
+        print("Plantid:", deviceid)
+
+        devices = findPlantByUser(username)
+
+        for device in devices:
+            if device.id == deviceid:
+                topic = "perennial/" + deviceid + "/pump"
+                mqtt.single(topic, payload="manualpump", hostname=environ.get("MQTT_BROKER"))
+
     except Exception as e:
         print("Error: Failed Request on %s", e)
+        return JsonResponse({"error": str(e)}, status=HTTP_400_BAD_REQUEST)
 
-    return JsonResponse(plant, status=HTTP_200_OK)
+    return JsonResponse({"plantid": deviceid}, status=HTTP_200_OK)
 
 
 @csrf_exempt

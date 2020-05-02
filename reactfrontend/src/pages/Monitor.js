@@ -5,7 +5,7 @@ import { FaSeedling } from 'react-icons/fa';
 import PageTemplate from '../PageTemplate';
 import { useHistory } from "react-router-dom";
 import { useAlert } from 'react-alert'
-import { deletePlant } from '../api/AccountAPI'
+import { deletePlant, waterPlant } from '../api/AccountAPI'
 
 function Monitor() {
   // Dummy data - remove when API is integrated.
@@ -132,10 +132,12 @@ function ReservoirStatus({ reservoirEmpty }) {
 
 /* Props: individual plant object */
 function PlantCard({ plant }) {
+  console.log(plant)
   const [expandStatus, setExpandStatus] = useState(0);
   const history = useHistory();
+  const alert = useAlert()
   const handleDelete = (event) => {
-    event.preventDefault()
+    event.preventDefault();
 
     const params = {
       name: `${plant.name}`,
@@ -143,14 +145,32 @@ function PlantCard({ plant }) {
     }
 
     if (localStorage.getItem('token') === null) {
-      alert("Your session has timed out");
+      alert.error("Your session has timed out");
       history.push("/login");
       localStorage.clear();
     }
     else{
-      deletePlant(params);
+      deletePlant(params, alert);
       window.location.reload();
     }
+  }
+
+  async function handleWater(event) {
+    event.preventDefault();
+
+    const params = {
+      plantid: `${plant._id}`,
+      username: `${localStorage.getItem('username')}`,
+    }
+
+    if (localStorage.getItem('token') === null) {
+      alert.error("Your session has timed out");
+      history.push("/login");
+      localStorage.clear();
+    }
+    await waterPlant(params, alert)
+
+
   }
 
   if(expandStatus === 1) {
@@ -202,6 +222,7 @@ function PlantCard({ plant }) {
           <ExpandCollapseText expanded={expandStatus}/>
         </div>
         <div className="button-container">
+          <div className="water-buttons" onClick={handleWater}>Water</div>
           <div className="delete-buttons" onClick={handleDelete}>
           Delete
         </div>
