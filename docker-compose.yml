@@ -49,6 +49,7 @@ services:
       - 3000:3000
     environment:
       - NODE_ENV=development
+      - DANGEROUSLY_DISABLE_HOST_CHECK=true
     links:
       - db
       - djangobackend
