@@ -221,10 +221,10 @@ function PlantCard({ plant }) {
 
           <ExpandCollapseText expanded={expandStatus}/>
         </div>
-        <div className="button-container">
-          <div className="water-buttons" onClick={handleWater}>Water</div>
-          <div className="delete-buttons" onClick={handleDelete}>
-          Delete
+        <div className="container">
+          <div className="row">
+            <div className="water-buttons col-lg-2 col-4" onClick={handleWater}>Water</div>
+            <div className="delete-buttons col-lg-2 col-4" onClick={handleDelete}>Delete</div>
         </div>
       </div>
   </div>
