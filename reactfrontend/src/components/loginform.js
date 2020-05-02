@@ -35,7 +35,7 @@ function LoginForm(props) {
         //     history.push("/home");
         //   }
         // }, 1000);
-        window.location.reload(true)
+        setTimeout(() => {  window.location.reload(true) }, 2000);
       }
       else{
         alert.error("You forgot about the Recaptcha!");
